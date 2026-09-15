@@ -86,19 +86,52 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>YTDown is a web application for downloading audio or video from YouTube, supporting both single videos and
-            entire playlists.</p>
-        <p>The front end is built with React, JavaScript, and HTML, while a Python/FastAPI backend handles fetching
-            and preparing the downloads.</p>
+        <p>YTDown is a self-hosted web app for downloading YouTube content from the browser — a single video or an
+            entire playlist, as MP3 audio at 192 kbps or MP4 video at best available quality. It is deliberately a
+            local tool rather than a service: no ads, no registration, no rate limits and no tracking, started with
+            one <code>./start.sh</code> that provisions both sides and brings up the FastAPI backend on port 8000 and
+            the Vite frontend on port 5173.</p>
+        <p>The flow is built around inspecting before downloading. <code>POST /api/info</code> first resolves the URL
+            into metadata — title, thumbnail, duration, and for a playlist the full track listing — which the
+            frontend renders as a preview so the user can confirm what they're about to pull. Only then does
+            <code>POST /api/download/start</code> kick off a background task and return a <code>task_id</code>.
+            Progress arrives over a <strong>Server-Sent Events</strong> stream at
+            <code>/api/download/progress/{task_id}</code>, fed directly by yt-dlp's progress hook, and the finished
+            artefact is retrieved from <code>/api/download/file/{task_id}</code>. A playlist download is bundled
+            server-side into a single ZIP archive, so grabbing forty tracks is still one click and one file.</p>
+        <p>The backend is a compact FastAPI application wrapping yt-dlp, with ffmpeg doing the audio extraction and
+            format conversion, and it publishes interactive Swagger documentation at <code>/docs</code> — the API is
+            usable on its own, not just as a private backend for the UI. The frontend is React on Vite, split into
+            four focused components: a URL input, a video preview, a playlist track list and a download panel, over a
+            clean dark theme. The Vite config proxies <code>/api</code> to port 8000 so the two halves behave as one
+            origin in development.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Single video or full playlist</strong> — the same input accepts either; playlists are
+                resolved into their track listing before anything is downloaded.</li>
+            <li><strong>Audio or video</strong> — MP3 at 192 kbps via ffmpeg extraction, or MP4 at the best available
+                quality.</li>
+            <li><strong>Metadata preview first</strong> — <code>/api/info</code> returns title, thumbnail, duration
+                and playlist contents so the user confirms the target before the download starts.</li>
+            <li><strong>Playlists bundled as ZIP</strong> — every track of a playlist is packaged server-side into a
+                single archive, so a forty-track download is still one file to save.</li>
+            <li><strong>Real-time progress over SSE</strong> — a Server-Sent Events stream driven by yt-dlp's
+                progress hook keeps the UI in step with the actual transfer instead of showing a placeholder
+                spinner.</li>
+            <li><strong>Background task model</strong> — the download runs detached and is addressed by
+                <code>task_id</code>, so the HTTP request never blocks and the page stays responsive.</li>
+            <li><strong>Interactive API docs</strong> — FastAPI's Swagger UI at <code>/docs</code> documents all four
+                endpoints, making the backend usable independently of the web UI.</li>
+            <li><strong>One-command startup</strong> — <code>start.sh</code> creates the virtualenv, installs Python
+                and Node dependencies on first run, starts both servers and shuts them down cleanly together.</li>
+            <li><strong>Component-split frontend</strong> — URL input, video preview, playlist tracks and download
+                panel are separate React components over a dark theme, with Vite proxying <code>/api</code> to the
+                backend.</li>
+            <li><strong>Private by construction</strong> — everything runs locally; there is no account, no server
+                logging and no third-party download service in the path.</li>
         </ul>
     </section>
 
@@ -107,23 +140,43 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>Javascript</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the backend: URL resolution, the background download tasks, the per-task progress state
+                    and the ZIP bundling of playlist downloads.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Exposes the four endpoints (info, start, progress stream, file retrieval), handles the SSE
+                    response and auto-generates the Swagger documentation at <code>/docs</code>.</p>
             </div>
             <div class="project-stack-item">
-                <h3>HTML</h3>
-                <p>Why/how it was used.</p>
+                <h3>yt-dlp</h3>
+                <p>The download engine — metadata extraction for the preview, the actual media transfer, and the
+                    progress callback that drives the SSE stream.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Server-Sent Events</h3>
+                <p>Streams per-task progress from server to browser over a plain HTTP connection, avoiding the
+                    polling loop a REST-only design would need.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React</h3>
+                <p>Builds the UI from four components — URL input, video preview, playlist track list and download
+                    panel — holding the task state that the SSE stream updates.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite</h3>
+                <p>Dev server and bundler for the frontend, configured to proxy <code>/api</code> to the FastAPI
+                    backend on port 8000.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>ffmpeg</h3>
+                <p>Performs the audio extraction and the MP3 encoding at 192 kbps, and the muxing for video
+                    downloads.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Uvicorn</h3>
+                <p>The ASGI server running the FastAPI app, launched by <code>start.sh</code> alongside the frontend
+                    dev server.</p>
             </div>
         </div>
     </section>

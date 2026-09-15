@@ -86,18 +86,62 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>IGDown is a web application that lets users download Instagram reels directly from their browser.</p>
-        <p>The project pairs a React front end with a FastAPI backend, which handles the Python logic needed to
-            fetch and serve the requested reel.</p>
+        <p>IGDown is a self-hosted web application for downloading Instagram Reels as MP4 video or MP3 audio. It runs
+            entirely on the user's own machine — no ads, no upload limits, no third-party service in the middle — and
+            is started with a single <code>start.sh</code> that checks the toolchain, provisions both environments on
+            first run, and launches the FastAPI backend on port 8000 and the Vite dev server on port 5173
+            together.</p>
+        <p>The interesting part is the job model. A download is not a blocking HTTP request: <code>POST
+            /api/download</code> validates the URL, registers a job and immediately returns a
+            <code>job_id</code>. The actual work is handed to a <code>ThreadPoolExecutor</code> capped at four
+            workers, with job state kept in memory behind a <code>threading.Lock</code>. The browser then opens
+            <code>GET /api/progress/{job_id}</code>, a <strong>Server-Sent Events</strong> stream that pushes status,
+            percentage, transfer speed and ETA as yt-dlp reports them, and closes itself when the job reaches a
+            terminal state. Only once the status is <code>done</code> does the frontend hit <code>GET
+            /api/file/{job_id}</code>, which returns the file as an attachment. The upshot is a progress bar that
+            reflects the real download rather than an animation, and a UI that never freezes on a long reel.</p>
+        <p>The backend is a properly separated FastAPI app — <code>models.py</code> for the Pydantic request and
+            response schemas, one router per endpoint under <code>routes/</code>, and the yt-dlp integration, job
+            registry and cleanup isolated in <code>services/downloader.py</code> — with a pytest suite covering the
+            downloader, the models and the routes. Files are deleted automatically ten minutes after completion, so
+            the machine doesn't accumulate downloads, and an invalid Instagram link is rejected with a 422 before any
+            work starts.</p>
+        <p>The frontend is React with TypeScript on Vite. The download flow lives in a single
+            <code>useDownload</code> hook implemented as an SSE state machine, feeding a small set of components — a
+            download card, a progress bar, a toast system and a theme toggle. Light and dark themes are driven by CSS
+            custom properties and persisted in <code>localStorage</code>, URL errors surface inline as you type, and
+            the Vite dev server proxies <code>/api</code> to the backend so the whole thing behaves as one origin in
+            development.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Reels as MP4 or MP3</strong> — the same URL can be pulled as video or extracted to audio, with
+                ffmpeg handling the MP3 conversion server-side.</li>
+            <li><strong>Real-time progress over SSE</strong> — a Server-Sent Events stream pushes percentage,
+                transfer speed and ETA straight from yt-dlp's progress hook, and terminates itself when the job
+                finishes or fails.</li>
+            <li><strong>Non-blocking job model</strong> — the download request returns a <code>job_id</code>
+                immediately and the work runs in a four-worker <code>ThreadPoolExecutor</code>, with shared job state
+                guarded by a <code>threading.Lock</code>.</li>
+            <li><strong>Automatic cleanup</strong> — finished files are deleted ten minutes after completion, so a
+                long-running instance never fills the disk.</li>
+            <li><strong>URL validation with inline feedback</strong> — non-Instagram or malformed links are rejected
+                with a 422 before a job is created, and the error is shown next to the field rather than as a
+                dead end.</li>
+            <li><strong>Dark / light theme</strong> — a toggle backed by CSS custom properties, persisted in
+                <code>localStorage</code> across sessions.</li>
+            <li><strong>One-command startup</strong> — <code>start.sh</code> verifies Python ≥ 3.9, Node ≥ 18 and
+                ffmpeg, creates the virtualenv and installs both dependency sets on first run, then starts backend
+                and frontend together and stops them together on Ctrl+C.</li>
+            <li><strong>Tested backend</strong> — a pytest suite covers the downloader service, the Pydantic models
+                and the HTTP routes.</li>
+            <li><strong>Clean separation</strong> — Pydantic schemas, one router per endpoint and the yt-dlp
+                integration each live in their own module, so the download engine can be swapped without touching
+                the API surface.</li>
+            <li><strong>Fully local</strong> — nothing leaves the machine except the request to Instagram itself:
+                no account, no tracking, no third-party download service.</li>
         </ul>
     </section>
 
@@ -106,23 +150,41 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>Javascript</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <p>Powers the backend: the job registry, the thread-pool execution model, the progress hook that
+                    feeds the SSE stream and the scheduled cleanup of finished files.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Exposes the three endpoints (create job, stream progress, fetch file), validates requests through
+                    Pydantic models, and manages startup/shutdown through the lifespan hook.</p>
             </div>
             <div class="project-stack-item">
-                <h3>HTML</h3>
-                <p>Why/how it was used.</p>
+                <h3>yt-dlp</h3>
+                <p>The actual download engine, wrapped in <code>services/downloader.py</code>; its progress callback
+                    is what produces the percentage, speed and ETA the UI displays.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Server-Sent Events</h3>
+                <p>A one-way stream from server to browser carrying job status updates — lighter than WebSockets for
+                    this shape of problem, and it closes itself when the job reaches a terminal state.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React + TypeScript</h3>
+                <p>Builds the interface around a <code>useDownload</code> hook implemented as an SSE state machine,
+                    with typed components for the download card, progress bar, toasts and theme toggle.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite</h3>
+                <p>Provides the dev server and build pipeline, and proxies <code>/api</code> to the FastAPI backend
+                    so frontend and backend share one origin during development.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>ffmpeg</h3>
+                <p>Extracts and encodes the audio track when a reel is requested as MP3.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>pytest</h3>
+                <p>Covers the downloader service, the request/response models and the API routes.</p>
             </div>
         </div>
     </section>

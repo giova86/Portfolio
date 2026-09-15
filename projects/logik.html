@@ -84,19 +84,56 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Logik is a desktop implementation of Mastermind, the classic code-breaking boardgame created by Mordecai
-            Meirowitz in 1970.</p>
-        <p>It is written in Python with a TKinter graphical interface, bringing the game's guess-and-feedback
-            mechanics to a native desktop window.</p>
+        <p>Logik is a desktop implementation of Mastermind, the code-breaking board game designed by Mordecai
+            Meirowitz in 1970, written in Python with a Tkinter interface. The program plays codemaker: it draws a
+            secret sequence of four pegs from a palette of eight colours, repeats allowed, and the player has ten
+            attempts to reproduce it.</p>
+        <p>The whole board is rendered from Tkinter <code>Canvas</code> primitives rather than images — each peg is a
+            drawn oval, which is what lets the app recolour individual pegs in place as the player works. A peg is
+            set by clicking it: each click advances that slot to the next colour in the palette and wraps around, so
+            a guess is composed entirely with the mouse and no colour picker is needed. The row currently in play is
+            marked with a highlighted border that moves down the board as attempts are used, and the status line
+            tracks "attempt n of 10".</p>
+        <p>Submitting a row runs the classic scoring: a black peg for each position that is exactly right, a white
+            peg for each colour that is present but misplaced. The routine does this in the two passes the game
+            requires — exact matches are removed from both the guess and the secret before colour-only matches are
+            counted — which is what keeps duplicated colours from being counted twice, the detail most naive
+            Mastermind implementations get wrong. An incomplete row raises a warning dialog instead of consuming an
+            attempt.</p>
+        <p>Around the board, a permanent side panel carries the colour legend and a feedback legend explaining what
+            black and white pegs mean, so the rules never need to be looked up elsewhere. The secret code sits at the
+            top of the window as four blank pegs and is revealed there when the game ends — won on the attempt that
+            matches all four, lost when the tenth is used — with the status line reporting how many attempts it took.
+            A "Nuova Partita" button restarts at any point. The game's parameters are constants at the top of the
+            file: the number of colours can be dialled from 4 to 8 to change the difficulty, alongside the code
+            length and the number of attempts.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Faithful Mastermind rules</strong> — a random four-peg secret drawn from eight colours with
+                repetitions allowed, and ten attempts to break it.</li>
+            <li><strong>Correct duplicate-aware scoring</strong> — black and white pegs are computed in two passes,
+                removing exact matches before counting misplaced colours, so repeated colours are never
+                double-counted.</li>
+            <li><strong>Click-to-cycle peg input</strong> — clicking a peg advances it through the palette and wraps
+                around, letting the player build a guess entirely on the board with no separate colour picker.</li>
+            <li><strong>Active-row highlighting</strong> — a coloured border marks the row in play and moves down as
+                attempts are consumed, with a status line showing "attempt n of 10".</li>
+            <li><strong>Full guess history</strong> — every submitted row stays on the board with its feedback pegs,
+                giving the deduction table the physical game provides.</li>
+            <li><strong>Permanent legends</strong> — a colour legend and a feedback legend ("colour and position
+                correct" / "colour only") sit in the side panel, so the notation is always on screen.</li>
+            <li><strong>Secret-code reveal</strong> — the four hidden pegs at the top of the window are filled in
+                when the game ends, win or lose, alongside a message reporting the number of attempts used.</li>
+            <li><strong>Input validation</strong> — submitting a row with empty slots opens a warning dialog rather
+                than wasting one of the ten attempts.</li>
+            <li><strong>Adjustable difficulty</strong> — <code>NUM_COLORS</code>, <code>CODE_LENGTH</code> and
+                <code>NUM_GUESSES</code> are constants at the top of the file; dropping the palette from 8 to 4
+                colours makes an easier game with no other change.</li>
+            <li><strong>Canvas-drawn board</strong> — pegs are drawn shapes, not image assets, so the app is a single
+                dependency-free script that recolours pieces in place.</li>
         </ul>
     </section>
 
@@ -105,11 +142,23 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>A single ~230-line script: secret-code generation with <code>random.choices</code>, the
+                    peg-cycling input model, the two-pass feedback algorithm and the end-of-game logic, all inside one
+                    <code>MastermindGUI</code> class.</p>
             </div>
             <div class="project-stack-item">
-                <h3>TKinter</h3>
-                <p>Why/how it was used.</p>
+                <h3>Tkinter</h3>
+                <p>Builds the entire desktop window by subclassing <code>tk.Tk</code> — the ten-row board, the side
+                    control panel, the buttons and the status line — with no third-party UI dependency.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tkinter Canvas</h3>
+                <p>Draws every peg as an oval and rebinds click events per slot, which is how pegs are recoloured in
+                    place and how the feedback markers are rendered at a smaller size beside each row.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>tkinter.messagebox</h3>
+                <p>Provides the modal warning shown when the player tries to submit an incomplete row.</p>
             </div>
         </div>
     </section>

@@ -83,19 +83,60 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Playlist Downloader is a web app that lets users download playlists from YouTube or Spotify quickly and
-            easily, without juggling separate command-line tools.</p>
-        <p>Users can pick the format and quality that best suit their needs, all from a simple browser-based
-            interface built with Streamlit.</p>
+        <p>Playlist Downloader is a Streamlit web app that downloads whole playlists as tagged MP3 files, from either
+            Spotify or YouTube. The interface is two tabs and one field: paste a playlist URL, press Download, and
+            watch the per-track progress; an "Open Download Folder" button opens the destination directly in the host
+            OS file manager when the run finishes.</p>
+        <p>The Spotify path is the more involved of the two, because Spotify does not serve audio. The app
+            authenticates against the Spotify Web API with <code>spotipy</code> using client-credentials from a local
+            <code>config.ini</code>, walks the playlist and writes out a reference file of every track with its title,
+            artist, album and cover-art URL. Each track is then resolved to a YouTube result by searching
+            "<em>artist – title</em>" through <code>youtube-search</code>, with up to ten retries per track before it
+            is skipped. The chosen video is downloaded with <code>yt-dlp</code> at best available audio quality and
+            converted to 192 kbps MP3 by ffmpeg. The track is then <strong>re-tagged from the Spotify metadata</strong>
+            rather than from YouTube's: <code>mutagen</code> writes the ID3 frames and embeds the album artwork
+            fetched from Spotify as an APIC frame, so the resulting library has correct titles, artists and covers
+            instead of whatever the uploader happened to name the video.</p>
+        <p>The YouTube path is direct: the playlist is expanded with yt-dlp, each entry is downloaded as best audio
+            and converted to MP3, with a progress hook reporting each track's state back into the Streamlit
+            placeholder as the run proceeds. Downloads are organised into a folder named after the playlist under
+            <code>downloads/</code>.</p>
+        <p>For long Spotify playlists the app can parallelise: a multicore handler splits the track list into
+            segments and downloads them across multiple processes, keeping a configurable number of cores free as
+            buffer. Progress is streamed live into the page through Streamlit placeholders, invalid URLs are caught
+            and reported as toasts rather than tracebacks, and the folder-opening helper dispatches on the operating
+            system. The whole UI is custom-styled with injected CSS over a pirate-themed header.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Two sources, one interface</strong> — Spotify and YouTube playlists are handled in separate
+                tabs of the same app, both producing MP3 files in a folder named after the playlist.</li>
+            <li><strong>Spotify-accurate metadata</strong> — tracks are resolved to YouTube for the audio, but titles,
+                artists and album art come from the Spotify API, so the tags are right even when the video's own
+                title is not.</li>
+            <li><strong>Embedded album artwork</strong> — the cover image is fetched from Spotify and written into
+                each MP3 as an ID3 APIC frame with <code>mutagen</code>.</li>
+            <li><strong>Automatic YouTube matching with retries</strong> — each Spotify track is searched as
+                "artist – title" with up to ten attempts before being skipped, so one bad lookup doesn't abort the
+                playlist.</li>
+            <li><strong>192 kbps MP3 conversion</strong> — yt-dlp pulls best available audio and ffmpeg post-processors
+                handle both the MP3 encoding and the metadata write-back.</li>
+            <li><strong>Multicore downloading</strong> — long Spotify playlists are split into segments and processed
+                across multiple cores, with a configurable buffer of cores left free and an optional cap.</li>
+            <li><strong>Live per-track progress</strong> — a Streamlit placeholder is updated with the track currently
+                downloading and a yt-dlp progress hook feeds status back during the transfer.</li>
+            <li><strong>Open-folder shortcut</strong> — a button opens the downloads directory in the host file
+                manager, dispatching on the detected operating system.</li>
+            <li><strong>Resilient input handling</strong> — malformed or non-playlist URLs are caught and surfaced as
+                toast warnings instead of stack traces, and Spotify playlist IDs are extracted from full share
+                links.</li>
+            <li><strong>External credential configuration</strong> — Spotify client id, secret and username live in a
+                git-ignored <code>config.ini</code> created from a distributed template, keeping secrets out of the
+                code.</li>
+            <li><strong>Custom-styled UI</strong> — injected CSS and a themed header replace the default Streamlit
+                look.</li>
         </ul>
     </section>
 
@@ -104,11 +145,42 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>Orchestrates the whole pipeline: playlist expansion, the reference-file format, the search/download
+                    /tag loop, the multicore segmentation and the OS-specific folder opener.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Streamlit</h3>
-                <p>Why/how it was used.</p>
+                <p>Provides the two-tab UI, the URL inputs, the buttons and the live status placeholders, plus the
+                    injected CSS that restyles the page.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>spotipy</h3>
+                <p>Authenticates with client credentials against the Spotify Web API and walks the playlist to collect
+                    each track's title, artist, album and cover-art URL.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>yt-dlp</h3>
+                <p>Downloads the audio for both paths — the matched YouTube video for a Spotify track, or the playlist
+                    entries directly — and runs the ffmpeg post-processors.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>youtube-search</h3>
+                <p>Resolves each Spotify track to a YouTube URL by querying "artist – title" and taking the best
+                    result, with a retry budget per track.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>mutagen</h3>
+                <p>Writes the ID3 tags on the finished MP3 and embeds the Spotify album artwork as an APIC frame.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>ffmpeg</h3>
+                <p>Extracts and encodes the audio to 192 kbps MP3 and writes the container metadata, invoked through
+                    yt-dlp's post-processor chain.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>multiprocessing</h3>
+                <p>Splits long playlists into per-core segments so several tracks download in parallel, with a
+                    configurable core budget.</p>
             </div>
         </div>
     </section>

@@ -76,30 +76,75 @@
             <p class="project-tagline">Real time face recognition. Identify people in real time providing extra information.</p>
             <div class="project-tech">
                 <span class="tech-tag">Python</span>
-                <span class="tech-tag">Mediapipe</span>
+                <span class="tech-tag">dlib</span>
                 <span class="tech-tag">OpenCV</span>
-                <span class="tech-tag">SVM</span>
+                <span class="tech-tag">NumPy</span>
             </div>
         </div>
     </section>
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Face Recognition is a real-time computer vision tool that identifies people from a video feed and
-            surfaces extra information about each recognized person.</p>
-        <p>Faces are detected and tracked frame by frame, then matched against known identities so the relevant
-            information can be displayed alongside each face as it appears.</p>
-        <p>It relies on Mediapipe and OpenCV for face detection and image processing, with a Support Vector
-            Machine classifier handling the recognition step.</p>
+        <p>Face Recognition is a real-time identification system built on a live camera feed. It detects every face
+            in frame, matches it against a local database of known people, and overlays a cyberpunk-style HUD showing
+            who each person is, how confident the match is, their avatar, and whatever extra information has been
+            recorded about them — birthday and social handles.</p>
+        <p>The recognition core is <code>face_recognition</code> (dlib): each known image is converted into a
+            128-dimensional face encoding, and every frame's detected faces are encoded and matched against that
+            database by nearest distance, which is then turned into a percentage confidence. Detection runs on a
+            downscaled copy of the frame — 25 % by default, tunable — while the HUD is drawn at full resolution, so
+            the app stays interactive without giving up output quality.</p>
+        <p>What makes it practical rather than a demo is that the database manages itself. Adding a person is just
+            dropping images into <code>known_people/</code> named <code>Name.jpg</code>,
+            <code>Name_1.jpg</code>, <code>Name_2.jpg</code> — the name is parsed from the filename and multiple
+            images of the same person are merged to improve accuracy. On launch the app hashes the folder, and if
+            anything was added or removed it rebuilds the encodings into <code>model.csv</code> / <code>names.csv</code>,
+            crops a new avatar for each new person into <code>known_avatar/</code>, and deletes avatars for people
+            who are gone. If nothing changed, the cached model is reused and startup is instant; <code>-f</code>
+            forces a rebuild anyway.</p>
+        <p>The HUD is the visible half of the project. Each face gets neon targeting brackets — cyan for a known
+            person, red for an unknown one — a floating label chip with name and match confidence, the person's
+            avatar drawn beside the face and joined to it by a glowing magenta link, and a translucent data panel
+            listing name, confidence, birthday and social handles read from <code>info.csv</code>. A status bar along
+            the bottom carries a blinking scan indicator, the live face count and the current FPS. The whole look is
+            driven by a single <code>THEME</code> dictionary, so colours and geometry are re-skinnable without
+            touching the recognition code. A companion Instaloader scraper can bootstrap the known-people folder from
+            an Instagram follower list.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Real-time recognition</strong> — faces are detected, encoded and matched against the local
+                database on every frame from any connected camera, with a live FPS readout.</li>
+            <li><strong>Confidence scoring</strong> — the nearest-neighbour distance from the 128-d encoding is
+                converted into a match percentage shown next to each name, so borderline identifications are
+                visible rather than silently asserted.</li>
+            <li><strong>Self-managing database</strong> — the app hashes <code>known_people/</code> on launch and
+                rebuilds avatars and encodings only when images were added or removed; otherwise the cached model in
+                <code>model.csv</code> / <code>names.csv</code> is reused for an instant start.</li>
+            <li><strong>Multi-image enrolment</strong> — several photos of the same person
+                (<code>Name_1.jpg</code>, <code>Name_2.jpg</code>, …) are collapsed onto one identity, improving
+                robustness to pose and lighting; names are derived from the filenames, with no manual labelling
+                step.</li>
+            <li><strong>Automatic avatar generation</strong> — the first image of each person is cropped around the
+                detected face into an avatar, a default <code>Unknown.jpg</code> is generated for unrecognised faces,
+                and stale avatars are cleaned up.</li>
+            <li><strong>Cyberpunk HUD overlay</strong> — neon targeting brackets (cyan known / red unknown), a
+                floating name-and-confidence chip, the avatar tethered to the face by a glowing link, a translucent
+                data panel and a bottom status bar with a blinking scan indicator and face count.</li>
+            <li><strong>Extra person data</strong> — an optional <code>info.csv</code> (name, birthday, Facebook,
+                Instagram) is joined to each recognised face and rendered in the data panel; a template is created on
+                first run.</li>
+            <li><strong>Performance/accuracy trade-off exposed</strong> — <code>--rescale</code> controls the
+                detection downscale factor (0.25 by default) so the same code runs on a laptop webcam or a
+                high-resolution feed.</li>
+            <li><strong>Full CLI</strong> — camera id, known-people folder, rescale factor, avatar size and forced
+                model rebuild are all command-line flags.</li>
+            <li><strong>Re-skinnable theme</strong> — every colour and HUD dimension lives in a single
+                <code>THEME</code> dictionary at the top of <code>app.py</code>.</li>
+            <li><strong>Instagram bootstrap scraper</strong> — an Instaloader-based helper can pull profile pictures
+                from a follower list to populate the known-people folder.</li>
         </ul>
     </section>
 
@@ -108,19 +153,37 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>The whole application in a single ~750-line <code>app.py</code>: database hashing, avatar
+                    management, model caching, the frame loop and every HUD drawing helper.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Mediapipe</h3>
-                <p>Why/how it was used.</p>
+                <h3>face_recognition (dlib)</h3>
+                <p>Provides face detection and the 128-dimensional encodings used for identification, along with the
+                    distance metric that becomes the displayed confidence score.</p>
             </div>
             <div class="project-stack-item">
                 <h3>OpenCV</h3>
-                <p>Why/how it was used.</p>
+                <p>Captures the camera stream, downscales frames for detection and draws the entire HUD — brackets,
+                    avatars, connector lines, translucent panels and text — onto the full-resolution frame.</p>
             </div>
             <div class="project-stack-item">
-                <h3>SVM</h3>
-                <p>Why/how it was used.</p>
+                <h3>NumPy</h3>
+                <p>Handles the encoding arrays and the distance computation between the live face and every entry in
+                    the cached model.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>pandas</h3>
+                <p>Reads and writes the CSV-backed store — <code>model.csv</code>, <code>names.csv</code> and the
+                    optional <code>info.csv</code> with each person's birthday and social handles.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Pillow</h3>
+                <p>Crops and resizes the avatar images generated from the known-people photographs.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Instaloader</h3>
+                <p>Powers the optional scraper that collects profile pictures from an Instagram follower list to
+                    seed the known-people database.</p>
             </div>
         </div>
     </section>

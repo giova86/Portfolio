@@ -87,19 +87,84 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>LLM Wiki is a second-brain web application, built following guidelines popularized by Andrej Karpathy for
-            organizing knowledge with the help of language models.</p>
-        <p>It combines a Python and FastAPI backend, capable of talking to LLMs served through Ollama, with a React
-            front end for browsing and interacting with the wiki.</p>
+        <p>LLM-Wiki is a full-stack implementation of Andrej Karpathy's LLM-Wiki concept: a "second brain" that
+            deliberately rejects chunk-and-embed RAG. Instead of slicing documents into fragments and retrieving them
+            by vector similarity, the LLM acts as writer, editor and linter over a <strong>flat directory of clean
+            Markdown pages</strong>. New sources are <em>merged into</em> existing pages rather than indexed as
+            disconnected chunks, so knowledge compounds — and what you end up with is a plain-text wiki you can open
+            in any editor, Obsidian included, not an opaque vector database.</p>
+        <p>Storage is three layers under <code>data/</code>. <code>raw/</code> holds the uploaded sources, immutable
+            and never modified by the app. <code>wiki/</code> is the knowledge base itself: one topic per Markdown
+            file, strict slug filenames, <code>#&nbsp;Title</code> always on the first line, cross-links in
+            <code>[[slug]]</code> syntax, plus two automatically maintained navigation pages —
+            <code>index.md</code>, a categorised catalogue with a one-line summary per page, and <code>log.md</code>,
+            a chronological activity record. <code>config.json</code> holds connection settings and the inference
+            profiles.</p>
+        <p>Three pipelines operate on that store. <strong>Ingest</strong> extracts text from a dropped
+            <code>.pdf</code>, <code>.docx</code>, <code>.md</code>, <code>.txt</code> or <code>.json</code>, has the
+            model atomicise it into topics, then merges each topic into an existing page or creates a new slug, and
+            finally revises <code>index.md</code> and appends to <code>log.md</code>. <strong>Lint</strong> is a
+            periodic health pass: it repairs missing titles and broken <code>[[links]]</code>, flags orphan pages,
+            deduplicates and merges overlapping pages, inserts missing cross-references and reports what it did.
+            <strong>Chat</strong> answers questions strictly from the wiki — with no vector store anywhere: the model
+            reads <code>index.md</code> to decide which pages are relevant, then reads those pages in full, and cites
+            its sources as clickable <code>[[slug]]</code> badges that pop the exact page open.</p>
+        <p>Because ingest/lint and chat want opposite sampling behaviour, the app runs <strong>two inference
+            profiles</strong> over the same model: profile A (processing) at temperature 0.1, top-k 10, top-p 0.1 for
+            deterministic editing, and profile B (conversational) at 0.7 / 40 / 0.9 for fluent answers. Both are
+            editable per-parameter in Settings. Any OpenAI-compatible endpoint works — LM Studio and Ollama presets
+            for fully local operation, or any custom base URL including hosted providers — switchable at any time,
+            and <code>top_k</code> is passed via <code>extra_body</code> so providers that ignore it still work.
+            Prompts ask the model to wrap its output in a <code>```markdown</code> fence and the backend extracts only
+            that block, which discards the chain-of-thought that smaller local and reasoning models emit.</p>
+        <p>The FastAPI backend is cleanly modularised — config store, LLM client with profile routing, text
+            extraction, the wiki page store, SQLite chat history, an ingest manifest, all prompts in one file, the
+            pipelines, and one router per resource — and pipeline runs stream their logs and progress over SSE rather
+            than blocking the UI. The React frontend gives three pages (Settings, Workspace, Chat) with full page and
+            file management, a light/dark theme, and a logo that swaps with it. A single <code>start.sh</code> builds
+            the venv, installs both sides, frees ports 8000/5173 and launches everything.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>No vector database</strong> — retrieval works by having the model read a maintained
+                <code>index.md</code> catalogue to pick pages, then read those pages in full; there are no
+                embeddings, no chunks and no similarity search anywhere in the system.</li>
+            <li><strong>Knowledge that compounds</strong> — ingesting a new source merges its content into existing
+                pages instead of appending another isolated fragment, so a topic gets richer rather than
+                duplicated.</li>
+            <li><strong>Ingest pipeline</strong> — PDF, DOCX, Markdown, TXT and JSON are extracted, atomicised into
+                topics by the LLM, merged or created as slugged pages, and reflected into <code>index.md</code> and
+                <code>log.md</code>.</li>
+            <li><strong>Lint pipeline</strong> — a maintenance pass that fixes missing titles and broken
+                <code>[[links]]</code>, flags orphans, deduplicates overlapping pages, inserts missing
+                cross-references and produces a report.</li>
+            <li><strong>Grounded chat with citations</strong> — answers are synthesised strictly from wiki pages and
+                carry clickable <code>[[slug]]</code> citation badges that open the exact source page in a modal.</li>
+            <li><strong>Dual inference profiles</strong> — a strict low-temperature profile for ingest and lint and a
+                fluid higher-temperature one for chat, each with its own temperature, top-k, top-p and penalties,
+                fully editable in Settings.</li>
+            <li><strong>Any OpenAI-compatible backend</strong> — LM Studio and Ollama presets for running entirely
+                offline on local hardware, or any custom base URL including hosted providers, with a
+                "fetch models" button to populate the model list.</li>
+            <li><strong>Markdown fence extraction</strong> — the backend keeps only the <code>```markdown</code> block
+                from each response, so chain-of-thought output from small local or reasoning models never leaks into
+                the wiki.</li>
+            <li><strong>Obsidian-compatible store</strong> — flat Markdown files with <code>[[slug]]</code> links open
+                natively as an Obsidian vault, and empty dangling-link stubs are ignored rather than listed as
+                phantom pages.</li>
+            <li><strong>Full content management</strong> — every wiki page and raw source can be searched, viewed,
+                edited (pages) or downloaded (sources) and deleted from the UI, with an ingest manifest tracking what
+                has already been processed.</li>
+            <li><strong>Live pipeline progress over SSE</strong> — runs stream their logs and a progress bar to the
+                browser instead of blocking, and a second run of the same kind is rejected with a 409.</li>
+            <li><strong>Context-window budgeting</strong> — the configured context size is used to decide how much
+                document or page text fits into a single prompt.</li>
+            <li><strong>Persistent chat history</strong> — conversations are stored in SQLite and can be listed,
+                reopened and deleted.</li>
+            <li><strong>Light/dark theme</strong> — class-based, persisted and broadcast by event, with a logo that
+                swaps to match.</li>
         </ul>
     </section>
 
@@ -107,28 +172,52 @@
         <h2>Tech stack</h2>
         <div class="project-stack-grid">
             <div class="project-stack-item">
-                <h3>LLM</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>Ollama</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>Javascript</h3>
-                <p>Why/how it was used.</p>
-            </div>
-            <div class="project-stack-item">
-                <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the backend as focused modules: the dual-profile config store, the wiki page/index/log
+                    store, text extraction, the ingest manifest, the prompt library and the two pipelines.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Serves the <code>/api</code> surface — settings, files, wiki pages, pipelines and chats — one
+                    router per resource, with SSE endpoints for pipeline progress and Swagger docs at
+                    <code>/docs</code>.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>OpenAI-compatible LLM client</h3>
+                <p>A single client with profile routing and JSON coercion, pointed at LM Studio, Ollama or any
+                    hosted provider; <code>top_k</code> is passed through <code>extra_body</code> so providers that
+                    don't support it degrade cleanly.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Ollama / LM Studio</h3>
+                <p>The local inference backends the app is designed around, letting the entire second brain — sources,
+                    pages and model — stay on the user's own machine.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Markdown as the data layer</h3>
+                <p>The wiki <em>is</em> the storage format: slugged files, <code>#&nbsp;Title</code> first lines,
+                    <code>[[slug]]</code> cross-links and generated <code>index.md</code> / <code>log.md</code>
+                    navigation pages — readable, diffable and editable outside the app.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SQLite</h3>
+                <p>Stores chat conversations and their messages, the only part of the system that isn't plain
+                    files.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React</h3>
+                <p>Builds the three-page frontend — Settings, Workspace and Chat — with Markdown rendering, citation
+                    badges, wiki and raw-file modals, and a persisted light/dark theme.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Server-Sent Events</h3>
+                <p>Streams pipeline logs and progress to the browser so ingest and lint runs are observable while
+                    they happen.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Document extractors</h3>
+                <p>PDF, DOCX, Markdown, TXT and JSON parsers normalise every uploaded source into plain text before
+                    the LLM ever sees it.</p>
             </div>
         </div>
     </section>

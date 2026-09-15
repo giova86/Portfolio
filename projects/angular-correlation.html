@@ -79,7 +79,7 @@
                 <span class="tech-tag">Python</span>
                 <span class="tech-tag">Streamlit</span>
                 <span class="tech-tag">Nuclear Physics</span>
-                <span class="tech-tag">Plotly</span>
+                <span class="tech-tag">Matplotlib</span>
             </div>
             <div class="project-links">
                 <a href="https://angularcorrelation.streamlit.app" class="card-button" target="_blank">Live
@@ -90,19 +90,70 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Angular Correlation is a physics application that analyzes and simulates the directional relationship
-            between two gamma rays emitted in cascade during nuclear decay processes.</p>
-        <p>Built with Streamlit and Plotly, it turns the underlying nuclear physics into interactive visualizations,
-            letting users explore how the emission angles of the two gamma rays correlate with one another.</p>
+        <p>Angular Correlation is a Streamlit application for computing, plotting and fitting γ-γ angular
+            correlations in nuclear physics. When an excited nucleus de-excites through a cascade of two gamma rays,
+            the direction of the second photon is not isotropic with respect to the first: the angular distribution
+            <em>W(θ)</em> encodes the spins of the three nuclear levels involved and the multipolarities of the two
+            transitions. This app turns that measurement into an interactive workflow — declare the decay scheme, get
+            the theoretical correlation, upload the experimental counts, and read off the fitted coefficients.</p>
+        <p>The interface is split into three tabs. <em>Theory</em> is a full write-up of the formalism, rendered in
+            LaTeX: the Legendre expansion of W(θ), the truncation rule for k<sub>max</sub>, the definition of the
+            A<sub>kk</sub> coefficients as a product of the two A<sub>k</sub>, the mixing ratio δ, the F-coefficients
+            in terms of Wigner 3j and 6j symbols, and the correction for finite-volume detectors through the
+            attenuation coefficients Q<sub>k</sub>. <em>Analysis</em> is the working tool. <em>About Me</em> closes
+            the app with the author's details.</p>
+        <p>In the Analysis tab the user declares the cascade: energy, character (E or M) and multipolarity L, L′ of
+            each of the two transitions — with a mixing ratio δ when a transition is mixed — plus spin and parity of
+            the initial, intermediate and final level. From this, <code>k_max()</code> decides whether the Legendre
+            series truncates at k = 2 or k = 4, and <code>A_kk()</code> evaluates the theoretical coefficients exactly
+            using <code>sympy.physics.wigner</code>'s 3j and 6j symbols — symbolic angular-momentum algebra rather
+            than tabulated values. The app immediately draws the theoretical W(θ) curve and a generated level-scheme
+            diagram of the cascade alongside the numerical A<sub>kk</sub>.</p>
+        <p>The second half is the experimental fit. The user enters the detector attenuation coefficients Q<sub>2</sub>
+            and Q<sub>4</sub> and uploads a CSV of measured data (<code>theta</code>, <code>count</code>,
+            <code>error_count</code>, <code>norm</code>, <code>error_norm</code>). The effective W(θ), normalised at
+            θ = π/2 and attenuated by Q<sub>2</sub>/Q<sub>4</sub>, is fitted to the points with
+            <code>scipy.optimize.curve_fit</code>, returning A<sub>22</sub> and A<sub>44</sub> with the uncertainties
+            taken from the covariance matrix. When one of the transitions is mixed, the app goes one step further and
+            scans δ over the full arctan space in 10 000 steps, plotting the χ² curve to locate the minimum and then
+            drawing the A<sub>22</sub>/A<sub>44</sub> correlation ellipse — which is how the mixing ratio is actually
+            extracted from data. Sample CSVs for the classic <sup>152</sup>Eu and <sup>60</sup>Co cascades ship with
+            the app, and it is deployed publicly on Streamlit Community Cloud.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Exact theoretical coefficients</strong> — A<sub>kk</sub> is computed from Wigner 3j and 6j
+                symbols via <code>sympy.physics.wigner</code>, so the F-coefficients are evaluated symbolically
+                rather than interpolated from published tables.</li>
+            <li><strong>Automatic series truncation</strong> — <code>k_max = min(2I, L₁+L₁′, L₂+L₂′)</code> is derived
+                from the declared scheme, so the app knows on its own whether the correlation stops at k = 2 or
+                extends to k = 4.</li>
+            <li><strong>Mixed-multipolarity support</strong> — each transition can be declared pure or mixed (M+E);
+                a mixed transition exposes its own δ and is handled correctly inside A<sub>k</sub>.</li>
+            <li><strong>Generated level scheme</strong> — the app draws the three-level decay diagram with spins,
+                parities, transition energies and multipolarities directly from the inputs, as a figure you can drop
+                into a report.</li>
+            <li><strong>Experimental CSV fit</strong> — upload measured counts with their errors and normalisation;
+                the effective W(θ) is fitted with <code>scipy.optimize.curve_fit</code> and A<sub>22</sub>,
+                A<sub>44</sub> are reported with 1σ uncertainties from the covariance matrix.</li>
+            <li><strong>Finite-detector correction</strong> — user-supplied attenuation coefficients Q<sub>2</sub>
+                and Q<sub>4</sub> enter the fitted function, so the comparison between theory and measurement is done
+                on the effective correlation actually observed by real detectors.</li>
+            <li><strong>χ² scan over the mixing ratio</strong> — δ is swept over 10 000 points across arctan space to
+                map the χ² landscape and locate its minimum, the standard way of extracting δ from an angular
+                correlation measurement.</li>
+            <li><strong>A<sub>22</sub>–A<sub>44</sub> correlation plot</strong> — the theoretical locus traced by
+                varying δ is drawn against the fitted point and its error bars, giving a visual consistency check
+                between the measurement and the assumed spin sequence.</li>
+            <li><strong>Built-in theory reference</strong> — a full LaTeX derivation of the formalism, with
+                bibliography, sits in the first tab so the tool is usable as teaching material and not just as a
+                calculator.</li>
+            <li><strong>Sample datasets</strong> — pre-labelled CSVs for <sup>152</sup>Eu (220, 320, 342 keV) and
+                <sup>60</sup>Co cascades are bundled for testing and demonstration.</li>
+            <li><strong>Public deployment</strong> — hosted on Streamlit Community Cloud, usable from a browser with
+                no local install.</li>
         </ul>
     </section>
 
@@ -111,19 +162,42 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>The whole application, cleanly split into <code>app.py</code> (UI and input parsing only) and
+                    <code>functions.py</code> (every physics computation and figure), so the numerical core can be
+                    reused or tested independently of Streamlit.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Streamlit</h3>
-                <p>Why/how it was used.</p>
+                <p>Provides the three-tab layout, the widget grid for the decay scheme, LaTeX rendering of the
+                    formalism, the CSV uploader and the data table — and hosts the app publicly on Streamlit
+                    Community Cloud.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Nuclear Physics</h3>
-                <p>Why/how it was used.</p>
+                <h3>SymPy</h3>
+                <p><code>sympy.physics.wigner</code> supplies the Wigner 3j and 6j symbols behind the F-coefficients,
+                    giving exact angular-momentum algebra instead of tabulated approximations.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Plotly</h3>
-                <p>Why/how it was used.</p>
+                <h3>SciPy</h3>
+                <p><code>optimize.curve_fit</code> performs the weighted non-linear least-squares fit of the
+                    effective W(θ) to the experimental points and returns the covariance matrix used for the
+                    uncertainties.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>NumPy</h3>
+                <p>Evaluates the Legendre expansion, builds the 10 000-point δ grid for the χ² scan and handles all
+                    the array arithmetic behind the plots.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Matplotlib</h3>
+                <p>Renders every figure the app produces: the theoretical W(θ), the generated level scheme, the fit
+                    against the experimental points, the χ² curve and the A<sub>22</sub>–A<sub>44</sub>
+                    correlation.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>pandas</h3>
+                <p>Parses the uploaded CSV of experimental counts and displays it as an inspectable table before the
+                    fit runs.</p>
             </div>
         </div>
     </section>

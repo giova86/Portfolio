@@ -85,19 +85,69 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Lego - Web Application converts any uploaded picture into a Lego-brick-style rendition, ready to be
-            downloaded and shared on social networks.</p>
-        <p>A React front end drives the upload and preview experience, while a Python/FastAPI backend performs the
-            image conversion.</p>
+        <p>Camera Bricks (the <em>Lego Web Application</em>) converts any photograph into brick-mosaic art. Upload an
+            image, pick a colour palette, a brick style and a level of detail, and the app returns the picture rebuilt
+            out of studs — as a framed Polaroid-style JPEG, as a raw image without the frame, and optionally as a
+            printable PDF with numbered assembly instructions. It is a full-stack app: a React/Vite frontend and a
+            FastAPI backend, launched together by a single <code>start.sh</code>.</p>
+        <p>The conversion itself is done entirely with vectorised NumPy, which is why it returns in a fraction of a
+            second rather than looping over thousands of bricks. The image is first cropped to a whole number of
+            bricks, then reshaped into a five-dimensional block view so the average colour of every brick cell is
+            computed in one operation. Each average is matched to the nearest palette colour using a
+            <em>luminance-weighted</em> squared distance (0.30 R, 0.59 G, 0.11 B) rather than a plain Euclidean one,
+            so matches follow perceived brightness instead of raw RGB proximity. A single greyscale 30×30 brick
+            texture is then multiplied by every matched colour at once, producing shaded studs with their highlights
+            and shadows intact, and the resulting grid is transposed and reshaped into the final image. Optionally a
+            white border is added and the Camera Bricks logo composited into the bottom margin to give the Polaroid
+            look, and both the framed and unframed results come back base64-encoded together with the brick
+            dimensions and total brick count.</p>
+        <p>The instructions PDF is the second output. For every brick in the mosaic, a numbered cell is rendered in
+            that brick's colour — with the digit drawn in black or white depending on the cell's luminance so it stays
+            readable — producing a build grid, which is then stacked with a legend of 3D brick icons for each colour
+            actually used, and saved as a single PDF page.</p>
+        <p>Around that core the app offers 14 colour palettes (LEGO Classic, Warhol-style series, monochrome and
+            limited-colour scales), 4 brick styles (Circle, Square and their flat variants) and 3 detail levels (24,
+            48 or 96 bricks across). Palettes, brick textures and 3D icons are loaded from CSV and PNG assets once at
+            startup and held in memory caches, so a request never touches the disk. The frontend is React 18 with
+            Tailwind, drag-and-drop upload through react-dropzone, toasts via react-hot-toast, and a dark/light theme
+            persisted in <code>localStorage</code>. Uploaded images are processed in memory and never written to
+            disk.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>14 colour palettes</strong> — LEGO Classic, Warhol-inspired series, greyscale and monochrome
+                ramps, and reduced 10/20/50-colour sets, all loaded from CSV and listed through
+                <code>/api/palettes</code>.</li>
+            <li><strong>4 brick styles and 3 detail levels</strong> — Circle, Square, Circle Flat and Square Flat, at
+                24, 48 or 96 bricks across, trading resolution against buildability.</li>
+            <li><strong>Perception-weighted colour matching</strong> — each brick's average colour is matched to the
+                palette using a luminance-weighted squared distance (0.30/0.59/0.11), which tracks how the eye reads
+                brightness far better than plain RGB distance.</li>
+            <li><strong>Fully vectorised rendering</strong> — averaging, nearest-colour matching and brick
+                colourisation are single NumPy operations over the whole grid, so even a 96-wide mosaic renders
+                almost instantly.</li>
+            <li><strong>Textured studs, not flat squares</strong> — a greyscale brick texture is modulated by each
+                matched colour, so highlights and shading survive the recolouring and the result reads as physical
+                bricks.</li>
+            <li><strong>Polaroid framing</strong> — an optional proportional white border with the logo composited
+                into the bottom margin; both the framed and the unframed versions are returned in the same
+                response.</li>
+            <li><strong>Printable assembly instructions</strong> — <code>/api/instructions</code> generates a PDF
+                combining a numbered build grid (each cell in its own colour, the digit auto-contrasted against it)
+                with a legend of 3D brick icons for every colour used.</li>
+            <li><strong>In-memory asset caches</strong> — palettes, brick textures and 3D icons are loaded once
+                during the FastAPI lifespan startup, so requests never hit the filesystem.</li>
+            <li><strong>No data retention</strong> — uploads are processed in memory and returned base64-encoded;
+                nothing is written to disk or stored.</li>
+            <li><strong>Modern frontend</strong> — React 18 + Tailwind with drag-and-drop upload, toast feedback,
+                example images served from <code>/api/examples</code>, and a dark/light theme persisted in
+                <code>localStorage</code>.</li>
+            <li><strong>Documented API</strong> — five REST endpoints with Swagger docs at <code>/docs</code>,
+                accepting up to 20 MB JPG/PNG/WEBP uploads.</li>
+            <li><strong>One-command launch</strong> — <code>start.sh</code> brings up backend and frontend together
+                and prints both URLs.</li>
         </ul>
     </section>
 
@@ -106,15 +156,44 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the whole conversion pipeline — cropping to a whole brick grid, colour quantisation,
+                    brick compositing, Polaroid framing and PDF instruction generation.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Serves the five endpoints (palettes, brick types, examples, brickify, instructions), validates the
+                    multipart uploads and loads the static asset caches through its lifespan hook.</p>
             </div>
             <div class="project-stack-item">
-                <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <h3>NumPy</h3>
+                <p>The performance core: the 5-D reshape that averages every brick cell at once, the broadcast
+                    nearest-colour search over the palette, and the single-shot colourisation of the brick
+                    texture.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Pillow</h3>
+                <p>Composites the Polaroid border and logo, encodes the JPEG results, and assembles the multi-part
+                    instructions page into a PDF.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>OpenCV</h3>
+                <p>Handles image decoding, resizing and the cell rendering used to build the numbered instruction
+                    grid.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React 18 + Vite</h3>
+                <p>Builds the single-page frontend — upload, option selection, live preview and downloads — with Vite
+                    providing the dev server and production build.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tailwind CSS</h3>
+                <p>Styles the whole interface, including the dark/light theme whose choice is persisted in
+                    <code>localStorage</code>.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Axios, react-dropzone, react-hot-toast</h3>
+                <p>Handle the API calls, the drag-and-drop upload zone and the non-blocking success/error
+                    notifications.</p>
             </div>
         </div>
     </section>

@@ -78,7 +78,7 @@
             <div class="project-tech">
                 <span class="tech-tag">Python</span>
                 <span class="tech-tag">Streamlit</span>
-                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">Pillow</span>
             </div>
             <div class="project-links">
                 <a href="https://onepiecewanted.streamlit.app" class="card-button" target="_blank">Live Demo</a>
@@ -88,19 +88,53 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>One Piece - Wanted is a playful web app for fans of the anime/manga series that turns any uploaded photo
-            into a personalized "wanted" poster in the style of the show, complete with a custom bounty amount.</p>
-        <p>The interface is built with Streamlit, while OpenCV handles the image processing needed to compose the
-            uploaded photo onto the poster layout.</p>
+        <p>One Piece – Wanted is the Streamlit version of the wanted-poster generator: a single-page web app, deployed
+            publicly on Streamlit Community Cloud, that turns any photograph into a One Piece–style bounty poster.
+            Upload a picture, crop it, type a pirate name and a bounty in Berry, pick the capture condition, and
+            download the finished poster in full resolution.</p>
+        <p>The poster itself is composited with Pillow through the <code>one-piece-wanted-poster</code> library, which
+            supplies the parchment background, the typography and the layout of the original posters. The three
+            canonical capture conditions — <em>Dead or Alive</em>, <em>Only Dead</em>, <em>Only Alive</em> — are
+            exposed as a selector and printed onto the poster as chosen.</p>
+        <p>The detail that makes the result convincing is the pastel pre-processing applied to the photo before it is
+            placed on the poster. A single slider (0–100, with 30 suggested) drives a four-step transformation built
+            on Pillow's <code>ImageEnhance</code>: saturation is reduced by up to 50 %, brightness raised by up to
+            30 %, contrast softened by up to 30 %, and a semi-transparent white overlay is alpha-composited on top.
+            The combined effect pushes a sharp modern photograph towards the washed, hand-drawn look of a printed
+            bounty notice, instead of leaving an obviously photographic face pasted onto a drawn poster.</p>
+        <p>Around that, the app is a carefully styled Streamlit page rather than a default one: custom CSS overrides
+            the uploader and button chrome, a banner image heads the page, and a floating contact panel offers
+            Telegram, WhatsApp and email links rendered as HTML/CSS social buttons with base64-inlined icons. Image
+            cropping is handled by <code>streamlit_cropperjs</code>, the source and generated posters are shown side
+            by side for comparison, and generation failures surface as an inline error rather than a stack trace.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Browser-based poster generation</strong> — upload a photo and get a full-resolution One
+                Piece–style wanted poster back, with no install and no account.</li>
+            <li><strong>In-app cropping</strong> — an optional crop step via <code>streamlit_cropperjs</code> lets the
+                user frame the face correctly before the poster is composited.</li>
+            <li><strong>Four-stage pastel effect</strong> — one slider drives desaturation (up to −50 %), brightening
+                (up to +30 %), contrast softening (up to −30 %) and a translucent white overlay, matching the
+                photograph to the hand-drawn look of the source material.</li>
+            <li><strong>Name and bounty</strong> — a free-text pirate name and a numeric Berry bounty are typeset into
+                the poster's own layout.</li>
+            <li><strong>Capture conditions</strong> — Dead or Alive, Only Dead and Only Alive, selectable and printed
+                on the poster.</li>
+            <li><strong>Side-by-side preview</strong> — the uploaded image and the generated poster are shown in two
+                columns, so the effect of the settings is immediately visible.</li>
+            <li><strong>High-quality download</strong> — the finished poster is served through a download button as a
+                full-resolution image file.</li>
+            <li><strong>Custom-styled Streamlit UI</strong> — injected CSS restyles the uploader, buttons and layout
+                away from the framework defaults, with a banner header and custom typography.</li>
+            <li><strong>Floating contact panel</strong> — Telegram, WhatsApp and email buttons built as HTML/CSS with
+                base64-inlined icons, cached with <code>@st.cache_data</code>.</li>
+            <li><strong>Public deployment</strong> — hosted on Streamlit Community Cloud and reachable from any
+                browser.</li>
+            <li><strong>Graceful failure</strong> — an unusable upload or a rendering error is reported inline with a
+                readable message instead of crashing the page.</li>
         </ul>
     </section>
 
@@ -109,15 +143,33 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>The full application in a single <code>app.py</code>: the pastel transformation, the poster call,
+                    the image/byte conversions and the HTML generation for the contact panel.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Streamlit</h3>
-                <p>Why/how it was used.</p>
+                <p>Provides the page — uploader, text and numeric inputs, condition selector, intensity slider,
+                    two-column preview and download button — and hosts the app publicly on Community Cloud.</p>
             </div>
             <div class="project-stack-item">
-                <h3>OpenCV</h3>
-                <p>Why/how it was used.</p>
+                <h3>Pillow</h3>
+                <p><code>ImageEnhance</code> drives the saturation, brightness and contrast stages of the pastel
+                    effect, and <code>alpha_composite</code> applies the translucent white overlay; Pillow also
+                    handles the in-memory encoding of the result.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>one-piece-wanted-poster</h3>
+                <p>The rendering library that composites the parchment background, portrait, name, bounty and capture
+                    condition into the finished poster.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>streamlit_cropperjs</h3>
+                <p>Adds the interactive in-browser crop step, which Streamlit has no native widget for.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Custom HTML / CSS</h3>
+                <p>Injected through <code>st.markdown(unsafe_allow_html=True)</code> to restyle the uploader and
+                    buttons and to build the floating contact panel with base64-inlined icons.</p>
             </div>
         </div>
     </section>

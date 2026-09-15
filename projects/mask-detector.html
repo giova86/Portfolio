@@ -76,30 +76,65 @@
             <p class="project-tagline">Real time mask detector. Identify and analysis all faces looking for a covid mask.</p>
             <div class="project-tech">
                 <span class="tech-tag">Python</span>
-                <span class="tech-tag">Mediapipe</span>
+                <span class="tech-tag">TensorFlow</span>
+                <span class="tech-tag">Keras</span>
                 <span class="tech-tag">OpenCV</span>
-                <span class="tech-tag">SVM</span>
             </div>
         </div>
     </section>
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Mask Detector is a real-time computer vision tool built during the COVID-19 period to identify whether
-            people in a video feed are wearing a face mask.</p>
-        <p>Faces are detected and analyzed frame by frame, with each one classified as masked or unmasked, making
-            the tool suitable for quick visual compliance checks.</p>
-        <p>It combines Mediapipe and OpenCV for face detection and image processing with a Support Vector Machine
-            classifier for the mask/no-mask decision.</p>
+        <p>Mask Detector is a real-time computer-vision system, built during the COVID-19 period, that locates every
+            face in a video stream and classifies each one as wearing a mask or not. It runs on a live webcam, on a
+            recorded video file, or on a single still image, and annotates each detected face with a coloured
+            bounding box and the predicted label.</p>
+        <p>It is a two-stage pipeline, which is what makes it robust on crowded frames. The first stage is face
+            <em>detection</em>: each frame is turned into a 300×300 blob and passed through an OpenCV DNN Caffe
+            model — the ResNet-10 SSD face detector shipped as
+            <code>res10_300x300_ssd_iter_140000.caffemodel</code> — and every box above a 0.5 confidence threshold is
+            kept. The second stage is <em>classification</em>: each detected face is cropped, converted to RGB,
+            resized to 224×224, preprocessed and pushed through a custom Keras model that returns a mask / no-mask
+            probability. Splitting the two means the classifier never has to learn to localise faces, and the
+            detector never has to know anything about masks.</p>
+        <p>The classifier itself is a transfer-learning model trained by <code>training.py</code> on a balanced local
+            dataset of roughly 1 400 images (≈690 with a mask, ≈686 without). MobileNetV2 pre-trained on ImageNet is
+            used as a frozen feature extractor, with a custom head on top: average pooling (7×7), flatten, a 128-unit
+            ReLU dense layer, 0.5 dropout and a 2-way softmax. The base layers are frozen so only the head trains,
+            which is what allows a usable model to come out of a dataset this small. Training runs for 30 epochs with
+            Adam at a 1e-4 learning rate with decay, batch size 32, a stratified 70/30 split, live image augmentation
+            through <code>ImageDataGenerator</code>, TensorBoard logging, and a scikit-learn classification report at
+            the end. Trained models are saved as timestamped <code>.h5</code> files, and one pre-trained model ships
+            with the repository so the detector can be run without retraining.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Two-stage detect-then-classify pipeline</strong> — an SSD face detector finds every face in
+                the frame and a separate CNN classifies each crop, so multiple people are handled independently in
+                the same shot.</li>
+            <li><strong>Three input modes</strong> — live webcam, a local video file passed with <code>-i</code>, or
+                a single still image, all sharing the same inference code.</li>
+            <li><strong>Transfer learning on MobileNetV2</strong> — ImageNet weights are frozen and only a custom
+                classification head (AvgPool → Flatten → Dense 128 ReLU → Dropout 0.5 → Softmax 2) is trained, making
+                a ~1 400-image dataset sufficient.</li>
+            <li><strong>Confidence-thresholded detection</strong> — face boxes below 0.5 detector confidence are
+                discarded before classification, keeping false positives out of the classifier.</li>
+            <li><strong>Colour-coded annotation</strong> — each face is drawn with its bounding box and label in a
+                colour that reflects the prediction, giving an at-a-glance read on a crowded frame.</li>
+            <li><strong>Reproducible training script</strong> — <code>training.py</code> handles loading, 224×224
+                preprocessing, label binarisation, the stratified 70/30 split, augmentation, 30 epochs of Adam with
+                learning-rate decay and the final evaluation in one run.</li>
+            <li><strong>Live data augmentation</strong> — <code>ImageDataGenerator</code> applies rotation, zoom,
+                shift, shear and flip on the fly, expanding the effective size of a small dataset.</li>
+            <li><strong>Balanced bundled dataset</strong> — ~690 masked and ~686 unmasked training images are
+                included, so the model can be retrained from scratch out of the box.</li>
+            <li><strong>Timestamped model artefacts</strong> — each training run writes its own
+                <code>YYYY-MM-DD_HH:MM:SS.h5</code>, so models are never silently overwritten and runs stay
+                comparable.</li>
+            <li><strong>Training telemetry</strong> — a TensorBoard callback records the run and scikit-learn prints
+                a per-class precision/recall/F1 report on the held-out split.</li>
         </ul>
     </section>
 
@@ -108,19 +143,39 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>Three focused entry points — <code>training.py</code> to build the model,
+                    <code>test_video.py</code> for webcam and video inference, <code>test_picture.py</code> for
+                    single images — sharing the same preprocessing conventions.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Mediapipe</h3>
-                <p>Why/how it was used.</p>
+                <h3>TensorFlow / Keras</h3>
+                <p>Builds, trains and runs the classifier: the MobileNetV2 backbone, the custom head, the Adam
+                    optimiser with decay, the augmentation generator and the saved <code>.h5</code> artefacts.</p>
             </div>
             <div class="project-stack-item">
-                <h3>OpenCV</h3>
-                <p>Why/how it was used.</p>
+                <h3>MobileNetV2</h3>
+                <p>ImageNet-pretrained backbone used as a frozen feature extractor — light enough for real-time
+                    inference on CPU while giving the small dataset a strong starting representation.</p>
             </div>
             <div class="project-stack-item">
-                <h3>SVM</h3>
-                <p>Why/how it was used.</p>
+                <h3>OpenCV (DNN module)</h3>
+                <p>Runs the Caffe ResNet-10 SSD face detector via <code>cv2.dnn.readNet</code> and
+                    <code>blobFromImage</code>, captures the video stream and draws the boxes and labels.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>scikit-learn</h3>
+                <p>Provides the label binariser, the stratified train/test split and the final
+                    <code>classification_report</code> with per-class precision, recall and F1.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>imutils</h3>
+                <p>Supplies the dataset path walker and the <code>VideoStream</code> helper used by the inference
+                    scripts.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>NumPy</h3>
+                <p>Handles the image tensors, the batching of face crops and the array manipulation between the two
+                    inference stages.</p>
             </div>
         </div>
     </section>

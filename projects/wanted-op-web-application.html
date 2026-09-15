@@ -85,19 +85,55 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Wanted OP lets users generate their own One Piece-style "wanted" poster, combining an uploaded photo with
-            a custom bounty amount to produce a personalized, shareable image.</p>
-        <p>A React front end handles the upload and poster customization, while a Python/FastAPI backend takes care
-            of processing the image and composing the final poster.</p>
+        <p>OneBounty (<em>Wanted OP – Web Application</em>) generates One Piece–style wanted posters from an uploaded
+            photograph. The user walks through a short wizard — upload and crop the portrait, enter a pirate name and
+            a bounty in Berry, choose the capture condition, dial in a pastel effect — and gets back a print-ready
+            poster to download. It is the full-stack React/TypeScript + FastAPI take on the idea, launched with a
+            single <code>start.sh</code> that provisions and starts both halves.</p>
+        <p>The architectural choice worth pointing out is that the poster is rendered <strong>server-side</strong>.
+            The frontend does not composite anything on a canvas: it posts the cropped image and the form fields as
+            multipart data to <code>POST /generate</code>, and the backend builds the poster with Pillow and the
+            <code>one-piece-wanted-poster</code> library, streaming back a JPEG. That keeps the typography, the
+            parchment texture and the layout identical on every browser, and keeps the rendering logic in one place
+            rather than duplicated in client code.</p>
+        <p>The frontend is a multi-step wizard with animated transitions between stages, built in React with
+            TypeScript on Vite. Upload is drag-and-drop, followed by an in-browser crop modal locked to a fixed
+            portrait ratio so the face always lands in the poster's frame correctly. A pastel intensity slider softens
+            the photo towards the hand-drawn look of the source material, and the capture condition selector offers
+            the three canonical options — <em>Dead or Alive</em>, <em>Only Dead</em>, <em>Only Alive</em>. The
+            finished poster is held in an in-memory blob store and shown on a dedicated result page with a one-click
+            download.</p>
+        <p>The backend is deliberately small: a <code>/health</code> endpoint for readiness checks and the
+            <code>/generate</code> endpoint, which validates the upload (PNG/JPG, max 20 MB), applies the requested
+            parameters and returns the image. Nothing is persisted server-side.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Multi-step wizard</strong> — upload, crop, details and result are separate stages with
+                animated transitions, so the form never presents everything at once.</li>
+            <li><strong>Drag-and-drop upload with in-browser crop</strong> — a crop modal locked to a fixed portrait
+                aspect ratio guarantees the photo fits the poster frame before it is ever sent to the server.</li>
+            <li><strong>Server-side rendering</strong> — the poster is composited by Pillow and the
+                <code>one-piece-wanted-poster</code> library on the backend and streamed back as a JPEG, so the
+                output is byte-identical regardless of the client's browser or device.</li>
+            <li><strong>Pastel intensity slider</strong> — a continuous control that desaturates, brightens and
+                softens the portrait towards the hand-drawn aesthetic of the original posters.</li>
+            <li><strong>Capture conditions</strong> — the three canonical variants, Dead or Alive, Only Dead and Only
+                Alive, are printed on the poster as selected.</li>
+            <li><strong>Bounty and pirate name</strong> — a free-text name and an integer Berry bounty are typeset
+                into the poster's own layout.</li>
+            <li><strong>One-click download</strong> — the generated poster is kept in an in-memory blob store and
+                offered for download from the result page at full resolution.</li>
+            <li><strong>Upload validation</strong> — PNG/JPG/JPEG only, capped at 20 MB, rejected by the API before
+                any rendering work is done.</li>
+            <li><strong>Health endpoint</strong> — <code>GET /health</code> for readiness checks in front of the
+                service.</li>
+            <li><strong>One-command startup</strong> — <code>start.sh</code> creates the Python virtualenv, installs
+                both dependency sets on first run, and starts backend (8000) and frontend (5173) together.</li>
+            <li><strong>Stateless</strong> — no account, no database, nothing written to disk: the image lives only
+                for the duration of the request.</li>
         </ul>
     </section>
 
@@ -106,15 +142,33 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>Backend logic: multipart validation, the pastel transformation of the uploaded portrait and the
+                    orchestration of the poster rendering.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Exposes <code>/generate</code> and <code>/health</code>, handles the multipart upload and streams
+                    the rendered JPEG back to the browser.</p>
             </div>
             <div class="project-stack-item">
-                <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <h3>Pillow + one-piece-wanted-poster</h3>
+                <p>Do the actual compositing — parchment background, portrait placement, name, bounty and capture
+                    condition typeset in the series' own layout.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React + TypeScript</h3>
+                <p>Builds the wizard: upload zone, crop modal, form pages and result page, with the poster held in a
+                    typed in-memory blob store between steps.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite</h3>
+                <p>Dev server and build tooling for the frontend, proxying API calls to the FastAPI backend during
+                    development.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Uvicorn</h3>
+                <p>ASGI server hosting the FastAPI application, started by <code>start.sh</code> alongside the
+                    frontend.</p>
             </div>
         </div>
     </section>

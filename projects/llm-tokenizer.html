@@ -83,19 +83,50 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>LLM Tokenizer is a small desktop utility that counts how many tokens a given sentence would consume,
-            helping estimate costs and context-window usage when working with large language models.</p>
-        <p>The interface is built with TKinter, keeping the tool lightweight and dependency-free so it can run
-            directly on the desktop without a browser or server component.</p>
+        <p>Tokenizer Playground is a small desktop tool that makes LLM tokenisation visible. You paste any text, press
+            <em>Analyze</em>, and the app shows how many tokens it becomes, how many characters it was, and — the
+            useful part — repaints the text itself with every individual token highlighted in its own colour, so the
+            boundaries the model actually sees are laid directly over the words you wrote.</p>
+        <p>Tokenisation is run with Hugging Face <code>transformers</code>, loading the
+            <code>bert-base-uncased</code> tokenizer through <code>AutoTokenizer</code>. The key detail is that the
+            app asks for <code>return_offsets_mapping=True</code>: rather than displaying the token strings as a
+            detached list (where WordPiece's <code>##</code> continuation markers and the loss of whitespace make the
+            result hard to read against the original), it uses each token's character offsets to tag the exact span
+            of the source text in the output widget. Special tokens are excluded, so what you count is what the model
+            would actually consume from your text.</p>
+        <p>Every token gets a randomly generated background colour, and the foreground is chosen automatically: the
+            app computes the perceived luminance of the background (0.299 R + 0.587 G + 0.114 B) and picks black or
+            white text accordingly, so a random palette never produces an unreadable token. Two large KPI counters —
+            TOKENS and CHARACTERS — sit above the highlighted output, which is the quick answer when the question is
+            "will this prompt fit".</p>
+        <p>The interface is built with <code>CustomTkinter</code>, a modern re-skin of Tkinter, giving a fixed
+            900×700 window with a proper dark theme, a logo header, an input textbox, the analyse button, the KPI row
+            and a read-only result area. It's deliberately a single 130-line script with no state, no configuration
+            and nothing to set up beyond the model download on first run.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>In-place token highlighting</strong> — tokens are coloured directly over the original text
+                using character offset mappings, instead of being listed separately with WordPiece
+                <code>##</code> artefacts.</li>
+            <li><strong>Live token and character counts</strong> — two large KPI readouts give the token count and
+                the raw character count of the input side by side.</li>
+            <li><strong>Real BERT tokenizer</strong> — Hugging Face <code>AutoTokenizer</code> with
+                <code>bert-base-uncased</code>, so the counts are the model's, not an approximation.</li>
+            <li><strong>Special tokens excluded</strong> — <code>add_special_tokens=False</code> means the count
+                reflects the user's own text rather than the <code>[CLS]</code>/<code>[SEP]</code> wrapper.</li>
+            <li><strong>Automatic contrast selection</strong> — the foreground colour of each highlighted token is
+                chosen from the perceived luminance of its randomly generated background, so every token stays
+                legible.</li>
+            <li><strong>Whitespace-faithful rendering</strong> — the original text including its final newline is
+                preserved in the output pane, and tags are applied over it, so the layout of what you pasted is
+                never rewritten.</li>
+            <li><strong>Modern desktop UI</strong> — CustomTkinter gives a dark-themed, fixed-size 900×700 window
+                with a logo header, input area, action button, KPI row and read-only result pane.</li>
+            <li><strong>Zero configuration</strong> — one script, no settings, no state; the only setup is the
+                tokenizer download on first launch.</li>
         </ul>
     </section>
 
@@ -104,11 +135,29 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>A single ~130-line script holding the tokenisation call, the offset-to-tag mapping, the random
+                    colour generator and the luminance-based contrast helper.</p>
             </div>
             <div class="project-stack-item">
-                <h3>TKinter</h3>
-                <p>Why/how it was used.</p>
+                <h3>CustomTkinter</h3>
+                <p>Provides the modern Tkinter-based UI — dark theme, <code>CTkTextbox</code> input and result panes,
+                    KPI labels and the image header — while keeping the app a dependency-light native desktop
+                    window.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Hugging Face transformers</h3>
+                <p><code>AutoTokenizer</code> loads <code>bert-base-uncased</code> and
+                    <code>encode_plus(return_offsets_mapping=True)</code> yields both the token ids and the character
+                    spans that drive the highlighting.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tkinter text tags</h3>
+                <p>Each token becomes its own named tag applied to a character range in the result widget — the
+                    mechanism behind the per-token background and foreground colours.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Pillow</h3>
+                <p>Loads the application icon rendered in the header through <code>CTkImage</code>.</p>
             </div>
         </div>
     </section>
