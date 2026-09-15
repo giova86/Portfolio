@@ -9,6 +9,7 @@ images.js (not images.json) is used deliberately: it's loaded via a plain
 URL. A fetch()'d JSON manifest would fail there due to CORS.
 """
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -16,13 +17,19 @@ GALLERY_DIR = ROOT / "static" / "gallery"
 EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
 
 
+def natural_key(name):
+    """Sort 2.png before 10.png (plain sorted() would not)."""
+    return [int(p) if p.isdigit() else p.lower() for p in re.split(r"(\d+)", name)]
+
+
 def main():
     for folder in sorted(GALLERY_DIR.iterdir()):
         if not folder.is_dir():
             continue
         images = sorted(
-            f.name for f in folder.iterdir()
-            if f.is_file() and f.suffix.lower() in EXTENSIONS
+            (f.name for f in folder.iterdir()
+             if f.is_file() and f.suffix.lower() in EXTENSIONS),
+            key=natural_key,
         )
         manifest = folder / "images.js"
         manifest.write_text(

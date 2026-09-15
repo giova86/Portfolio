@@ -1,2 +1,2 @@
 window.__galleryImages = window.__galleryImages || {};
-window.__galleryImages["magic-number-mobile-application"] = ["screenshot-1.png", "screenshot-2.png", "screenshot-3.png", "screenshot-4.png"];
+window.__galleryImages["magic-number-mobile-application"] = ["0.png", "1.png", "2.png", "3.png"];
