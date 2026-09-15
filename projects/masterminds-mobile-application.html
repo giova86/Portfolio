@@ -84,18 +84,55 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Masterminds is a mobile version of Mastermind, the classic code-breaking boardgame created by Mordecai
-            Meirowitz in 1970, bringing the game to Android and iOS devices.</p>
-        <p>It is built with Flutter and Dart, sharing a single codebase across platforms.</p>
+        <p>Masterminds is a mobile implementation of Mastermind, the code-breaking board game designed by Mordecai
+            Meirowitz in 1970. The device plays codemaker: it generates a secret sequence of four coloured pegs drawn
+            from a palette of eight (red, blue, green, yellow, purple, cyan, black, white, with repeats allowed), and
+            the player has <strong>ten attempts</strong> to reproduce it exactly.</p>
+        <p>Input is deliberately built for touch rather than ported from a physical board. Instead of a colour
+            picker, each of the four peg slots in the active row cycles through the palette when tapped, so an entire
+            guess is composed with a few thumb taps in one place on the screen. Submitting an incomplete row is
+            rejected with an inline warning rather than silently accepted.</p>
+        <p>After each submission the board shows the classic feedback: a black marker for every peg that is the right
+            colour <em>in the right position</em>, a white marker for every peg that is the right colour <em>in the
+            wrong position</em>, and grey placeholders for the remainder. The scoring routine does the two-pass
+            calculation the original game requires — exact matches are removed from both the guess and the secret
+            before colour-only matches are counted — so duplicated colours are scored correctly and never
+            double-counted, which is where naive implementations usually get Mastermind wrong. Completed rows stay on
+            screen as a history the player can reason over, and the game ends with a dialog either when all four pegs
+            match or when the tenth attempt is used up, revealing the secret code and offering a new round.</p>
+        <p>Around the game board sits a small presentation layer: an animated home screen with the app logo and
+            Play / Instructions entries, an in-app tutorial explaining the rules, the feedback colours and a suggested
+            opening strategy, a pulsing highlight marking the active row, and layouts that adapt to different screen
+            sizes. The whole app is pure Flutter with no third-party dependencies beyond the Cupertino icon set — the
+            code generation, the feedback algorithm and the state machine are all hand-written in Dart.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Faithful Mastermind rules</strong> — a randomly generated four-peg secret code drawn from
+                eight colours with repetitions allowed, and ten attempts to break it.</li>
+            <li><strong>Correct duplicate-aware scoring</strong> — feedback is computed in two passes, removing exact
+                position matches before counting colour-only matches, so repeated colours in a guess or in the secret
+                are never counted twice.</li>
+            <li><strong>Tap-to-cycle peg input</strong> — each slot in the active row advances through the palette on
+                tap and wraps around, letting a whole guess be entered without leaving the board or opening a
+                picker.</li>
+            <li><strong>Persistent guess history</strong> — every submitted row stays visible with its black/white
+                feedback, giving the player the full deduction table the physical game provides.</li>
+            <li><strong>Input validation</strong> — attempting to submit a row with empty slots raises an inline
+                warning instead of consuming one of the ten attempts.</li>
+            <li><strong>End-of-game reveal</strong> — winning or exhausting the attempts opens a result dialog that
+                discloses the secret code and starts a fresh round on demand; a "new game" control is also available
+                at any point.</li>
+            <li><strong>Built-in tutorial</strong> — an instructions screen covers the objective, how to enter a
+                guess, how to read the black, white and grey feedback markers, and an opening strategy (start with
+                four different colours to establish which are present).</li>
+            <li><strong>Animated, themed presentation</strong> — an animated home screen with logo and menu, a
+                pulsing indicator on the active row, custom background artwork for the menu and the board, and a dark
+                slate colour scheme.</li>
+            <li><strong>Responsive board</strong> — the ten-row grid, palette and feedback columns rescale to fit
+                phone screens of different sizes.</li>
         </ul>
     </section>
 
@@ -104,11 +141,25 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the entire game: random secret-code generation, the peg-cycling input model, the
+                    two-pass black/white feedback algorithm, win/lose detection and the round lifecycle.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Why/how it was used.</p>
+                <p>Builds the cross-platform UI for Android and iOS — the animated home screen, the ten-row game
+                    board with its colour palette and feedback columns, the instructions screen and the end-of-game
+                    dialogs — with state handled through <code>StatefulWidget</code> and <code>setState</code>.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Flutter animation framework</h3>
+                <p><code>AnimationController</code>s driven by <code>TickerProviderStateMixin</code> power the home
+                    screen entrance animation and the repeating pulse that marks which row is currently in play.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>No external dependencies</h3>
+                <p>Beyond <code>cupertino_icons</code>, the app pulls in no third-party packages: the game logic, the
+                    rendering and the state management are all first-party code, which keeps the build reproducible
+                    and the binary small.</p>
             </div>
         </div>
     </section>

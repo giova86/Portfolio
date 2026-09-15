@@ -80,18 +80,51 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>TOG (Messages) is a mobile application built to support boardgames, giving players a companion app on
-            their phones.</p>
-        <p>Developed with Flutter and Dart, it shares a single codebase across Android and iOS.</p>
+        <p>TOG (Messages) — <em>PlayToGether</em> — solves the small ritual that opens every board-game night: deciding
+            who goes first. Instead of rolling the highest die or arguing about it, the group opens the app, taps the
+            logo, and a randomly drawn "mystical" verse names the starting player by some absurd real-world criterion
+            — whoever is wearing the strangest socks, whoever has the least battery left on their phone, whoever last
+            forgot their umbrella on a day the sky looked threatening.</p>
+        <p>The app carries <strong>27 hand-written Italian messages</strong>, most of them rhymed, deliberately
+            phrased as prophecies rather than instructions. They are all resolvable at the table in seconds and
+            require no setup, no player list and no input: the criterion itself does the selecting, which is why the
+            whole interaction is a single tap with no configuration screen behind it.</p>
+        <p>What makes it feel like more than a random-string picker is the presentation. The screen is locked to
+            portrait and runs in immersive full-screen mode, hiding the system bars so the phone reads as a prop
+            rather than a phone. A fantasy-styled background sits behind glassmorphism panels, the logo floats and
+            rotates gently on a continuous animation, and when a verse is drawn it does not simply appear: six
+            independent animation controllers coordinate a fade-out of the previous state, a glass panel reveal, and
+            a per-letter entrance animation that types the prophecy onto the screen one character at a time, each
+            letter on its own controller with a randomised delay. The hand-drawn Kalam typeface completes the effect.
+        </p>
+        <p>Technically it is a deliberately minimal Flutter app: a single screen, no persistence, no network and no
+            dependencies beyond the Flutter SDK itself. All the complexity is in the animation choreography and in
+            the writing.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>27 hand-written mystical verses</strong> — original, mostly rhymed Italian messages that each
+                designate the starting player through a criterion the table can verify immediately (strangest socks,
+                lowest phone battery, last one to cook, and so on).</li>
+            <li><strong>One-tap interaction</strong> — tapping the logo draws a random verse; there is no player
+                setup, no counter and no settings screen to configure before playing.</li>
+            <li><strong>Per-letter text animation</strong> — the drawn verse is revealed character by character, each
+                letter driven by its own <code>AnimationController</code> with a randomised offset, so the prophecy
+                materialises rather than appearing.</li>
+            <li><strong>Layered animation choreography</strong> — six coordinated controllers handle the shimmer, the
+                floating logo, the text entrance, the button state, the glass panel reveal and the fade-out of the
+                previous message.</li>
+            <li><strong>Glassmorphism fantasy UI</strong> — translucent blurred panels over a custom fantasy
+                background, with a logo that drifts and rotates continuously.</li>
+            <li><strong>Immersive full-screen mode</strong> — <code>SystemUiMode.immersiveSticky</code> hides the
+                status and navigation bars, and the app is locked to portrait so it behaves like a dedicated table
+                accessory.</li>
+            <li><strong>Custom typography</strong> — the handwritten Kalam typeface (regular and bold) is bundled
+                with the app, matching the tone of the verses.</li>
+            <li><strong>Zero dependencies, fully offline</strong> — no network calls, no analytics, no storage; the
+                app is a single Flutter screen with its backgrounds, logo and fonts bundled as assets.</li>
         </ul>
     </section>
 
@@ -100,11 +133,24 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Why/how it was used.</p>
+                <p>Holds the message corpus, the random draw with its state transitions, and the logic that spawns
+                    and disposes one animation controller per letter of the selected verse.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Why/how it was used.</p>
+                <p>Builds the single-screen UI — layered background, floating logo, glass message panel and action
+                    button — and provides the <code>AnimationController</code> / <code>Tween</code> /
+                    <code>Transform</code> machinery behind every effect on screen.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SystemChrome</h3>
+                <p>Locks the app to portrait orientation and enables immersive sticky mode, hiding the Android system
+                    bars so the phone reads as a game accessory on the table.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Bundled assets</h3>
+                <p>Fantasy background artwork, the PlayToGether logo and the Kalam typeface (regular and bold) ship
+                    inside the app, with graceful fallbacks if an asset is missing.</p>
             </div>
         </div>
     </section>

@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dead Space - Mobile Application — Giovanni Bocchi</title>
     <meta name="description"
-        content="An interactive story mobile game where you play a space detective investigating a dark murder.">
+        content="A branching detective story: you are agent Kara Voss, with 24 real hours to unmask the killer of Colonel Hale.">
     <meta name="author" content="Giovanni Bocchi">
 
     <!-- Open Graph / social -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Dead Space - Mobile Application — Giovanni Bocchi">
     <meta property="og:description"
-        content="An interactive story mobile game where you play a space detective investigating a dark murder.">
+        content="A branching detective story: you are agent Kara Voss, with 24 real hours to unmask the killer of Colonel Hale.">
     <meta property="og:image" content="../static/dead_space.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dead Space - Mobile Application — Giovanni Bocchi">
     <meta name="twitter:description"
-        content="An interactive story mobile game where you play a space detective investigating a dark murder.">
+        content="A branching detective story: you are agent Kara Voss, with 24 real hours to unmask the killer of Colonel Hale.">
     <meta name="twitter:image" content="../static/dead_space.png">
 
     <!-- Favicon (inline SVG) -->
@@ -73,7 +73,7 @@
         <img src="../static/dead_space.png" alt="Immagine Wanted OP - Mobile Application" class="project-hero-image">
         <div>
             <h1>Dead Space - Mobile Application</h1>
-            <p class="project-tagline">In this interactive story, you'll play the rulo of a space detective investigating a dark murder...</p>
+            <p class="project-tagline">A branching detective story: you are agent Kara Voss, with 24 real hours to unmask the killer of Colonel Hale.</p>
             <div class="project-tech">
                 <span class="tech-tag">Dart</span>
                 <span class="tech-tag">Flutter</span>
@@ -83,19 +83,69 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Dead Space is an interactive-story mobile application in which the player takes on the role of a space
-            detective investigating a dark murder, making choices that steer the narrative.</p>
-        <p>The app is built with Flutter and Dart, delivering the branching story experience as a cross-platform
-            mobile game.</p>
+        <p>Dead Space is a text-driven investigation game for Android and iOS. The player is special agent Kara Voss
+            of the SGC investigative unit, called to the underground base inside Cheyenne Mountain after Colonel
+            Marcus Hale is found dead — apparent cardiac arrest, but the preliminary examination says otherwise. Eight
+            suspects are confined to the base, six areas can be searched, and the player has <strong>24 real-world
+            hours</strong> to name the killer before the trail goes cold.</p>
+        <p>Under the narrative is a small, data-driven story engine. The whole case lives in a single
+            <code>story.json</code> file of <strong>88 narrative nodes</strong>, each with its own text, background
+            artwork, optional music track, list of choices and the clues that reaching it unlocks. A choice can
+            declare <code>requires_clue</code> or <code>requires_clues</code>, so dialogue options and entire areas
+            stay locked until the player has actually found the evidence that would let Kara ask that question. With
+            <strong>146 distinct clues</strong> in play, the case is genuinely a dependency graph rather than a
+            linear script: interrogations open up investigations, investigations contradict alibis, and the
+            accusation only sticks if the supporting evidence is in hand.</p>
+        <p>The interface is built around a detective's toolkit rather than a generic "next" button. A bottom action
+            bar exposes <em>Investiga</em> (jump to one of the six areas: laboratory, stargate, control room, armoury,
+            the colonel's quarters, xenobiology), <em>Interroga</em> (question a suspect) and <em>Accusa</em> (make
+            the final call). A notebook screen, reachable from a badge in the header that flags newly found evidence,
+            lists every clue collected so far, grouped and labelled by the area it came from. A live countdown in the
+            header shows what is left of the 24 hours; when it hits zero the game routes to a dedicated timeout
+            screen and the case is lost.</p>
+        <p>Presentation carries a lot of the atmosphere. Scene text is revealed with a typewriter animation,
+            backgrounds and content cross-fade between nodes through coordinated opacity animations, and the
+            soundtrack changes with the scene using a manual 30/40-step volume ramp so one track fades out while the
+            next fades in instead of cutting. Progress — the start timestamp and the set of found clues — is written
+            to <code>shared_preferences</code>, so the investigation survives closing the app; accusing the wrong
+            person resets it.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Branching case file</strong> — 88 narrative nodes covering six searchable areas and eight
+                suspects, all authored in a single JSON file so the story can be rewritten or replaced without
+                touching a line of Dart.</li>
+            <li><strong>Clue-gated progression</strong> — 146 clues are collected automatically as nodes are reached;
+                options declaring <code>requires_clue</code> / <code>requires_clues</code> stay visibly locked until
+                the player holds the matching evidence, turning the story into an evidence dependency graph.</li>
+            <li><strong>24-hour real-time countdown</strong> — a persistent timer, anchored to a start timestamp in
+                <code>shared_preferences</code>, keeps running while the app is closed; a live HH:MM:SS readout sits
+                in the header and running out routes the player to a dedicated mission-failed screen.</li>
+            <li><strong>Detective action bar</strong> — dedicated Investigate, Interrogate and Accuse controls
+                replace generic navigation, letting the player move directly between areas and suspects instead of
+                walking back through the narrative.</li>
+            <li><strong>Evidence notebook</strong> — a notes screen lists every clue found, grouped by the area or
+                interrogation that produced it, with a badge on the header counting evidence the player has not read
+                yet and a running "clues collected: n / total" figure.</li>
+            <li><strong>Final accusation with consequences</strong> — each of the eight suspects has its own written
+                accusation outcome; only one is the real culprit, a wrong call resets the investigation, and the
+                correct one closes the case.</li>
+            <li><strong>Typewriter narration and scene transitions</strong> — text is typed out character by
+                character, while background image and content fade in and out in a coordinated sequence between
+                nodes.</li>
+            <li><strong>Adaptive soundtrack with crossfade</strong> — each node can declare its own music file;
+                switching tracks ramps the current one down and the new one up in small volume steps rather than
+                cutting, and tracks loop continuously.</li>
+            <li><strong>Resumable investigation</strong> — the timer and the collected clue set are persisted
+                locally, so the home screen can offer "continue" on a case already in progress or reset it and start
+                over.</li>
+            <li><strong>In-app briefing</strong> — a "how to play" section explains the mission, the investigation
+                and interrogation mechanics, the clue and unlock system, the accusation rules and the countdown,
+                without an external manual.</li>
+            <li><strong>Defensive asset handling</strong> — missing images, missing audio files, unknown node ids and
+                malformed JSON all fall back gracefully instead of crashing the scene.</li>
         </ul>
     </section>
 
@@ -104,11 +154,37 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the story engine: the <code>StoryNode</code> / <code>Option</code> model, JSON parsing,
+                    the clue set and unlock checks, the accusation logic and the <code>GameTimer</code> that computes
+                    remaining time from a persisted start timestamp.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Why/how it was used.</p>
+                <p>Renders the whole experience — home screen, scene view with its typewriter text and fading
+                    background, area and suspect pickers, notebook, accusation panel and timeout screen — from one
+                    codebase on Android and iOS, using explicit animation controllers for every transition.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>audioplayers</h3>
+                <p>Plays the per-scene soundtrack on loop and provides the volume control used to crossfade between
+                    tracks when the narrative moves to a node with different music.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>shared_preferences</h3>
+                <p>Persists the game start time and the set of discovered clues, making the 24-hour countdown real
+                    (it elapses whether or not the app is open) and letting the player resume an investigation
+                    later.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>collection</h3>
+                <p>Provides the grouping and lookup helpers used to organise collected clues by their source area in
+                    the notebook view.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>JSON story format</h3>
+                <p>A declarative node format (<code>id</code>, <code>text</code>, <code>image</code>,
+                    <code>music</code>, <code>options</code>, <code>cluesObtained</code>) that keeps the case
+                    entirely in data — new scenes, suspects or whole cases are authored, not coded.</p>
             </div>
         </div>
     </section>

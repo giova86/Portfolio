@@ -85,19 +85,70 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Wikimens is a mobile game where one player searches for a word on Wikipedia, and the others try to guess
-            it from a series of secret notification-based hints.</p>
-        <p>The app is built with Flutter and Dart, and uses Ntfy to deliver the hint notifications between
-            players.</p>
+        <p>Wikimens is a mentalism prop disguised as an ordinary Wikipedia browser. To the spectator holding the
+            phone it is simply the Italian Wikipedia: a full-screen page with no toolbar, no menu, no settings and no
+            branding of its own. They search for any word they like and read the article. Meanwhile the performer's
+            own device receives a push notification containing exactly the word that was looked up — which is the
+            whole trick.</p>
+        <p>The interception works in two complementary ways, because Wikipedia can be reached through either. A small
+            JavaScript snippet is injected into every page after load; it attaches an <code>input</code> listener to
+            Wikipedia's search fields and keeps the last typed value in <code>window._wkLastSearch</code>, re-scanning
+            the DOM through a <code>MutationObserver</code> so it keeps working as the single-page navigation
+            rewrites the header. In parallel, the WebView's <code>onNavigationRequest</code> delegate inspects every
+            URL the page tries to load: <code>SearchInterceptor</code> pulls the query out of
+            <code>Special:Search</code> / <code>Special:Ricerca</code> and <code>index.php?search=</code> URLs, and if
+            that fails a fallback parses the article slug out of any <code>/wiki/…</code> path and turns it back into
+            a readable title. A word is only transmitted if the injected listener confirms the spectator actually
+            typed a search — so ordinary link-following inside an article does not fire.</p>
+        <p>Delivery goes through <a href="https://ntfy.sh">ntfy.sh</a>: the word is <code>POST</code>ed as plain
+            UTF-8 text to <code>https://ntfy.sh/{topic}</code>, with the word also set as the notification title so it
+            is readable straight from the lock screen or a smartwatch. No account, no Firebase project and no server
+            of the performer's own is required — subscribing the second device to the same topic is the entire
+            setup.</p>
+        <p>Two details make it usable as a real routine rather than a demo. A configurable delay of
+            <strong>0 to 300 seconds</strong> defers the notification, so the performer's phone does not buzz the
+            instant the spectator types — and so a mistyped search can be corrected before the alert lands. And a
+            3-second duplicate-suppression window discards the same word sent twice, which matters because
+            Wikipedia's search flow can trigger several navigation events for a single query. Configuration itself is
+            hidden: there is no settings button anywhere in the UI, and the panel for the ntfy topic and the delay
+            only opens after <strong>five taps in the bottom-right corner within two seconds</strong> — an invisible
+            60×60 hit target the spectator will never find. Settings persist in
+            <code>shared_preferences</code>, and the app builds for Android, iOS, macOS, Windows and Linux.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Indistinguishable from a real browser</strong> — <code>it.wikipedia.org</code> is loaded
+                full-screen in a WebView with JavaScript enabled and no app chrome of any kind, so nothing on screen
+                suggests the page is instrumented.</li>
+            <li><strong>Keystroke-level search capture</strong> — an injected script attaches to Wikipedia's search
+                inputs and records the typed query, re-attaching automatically via a
+                <code>MutationObserver</code> as the page rewrites its own DOM.</li>
+            <li><strong>URL-level interception</strong> — the navigation delegate extracts the query from
+                <code>Special:Search</code>, <code>Special:Ricerca</code> and <code>index.php?search=</code> URLs,
+                with an article-slug fallback that decodes <code>/wiki/Some_Title</code> back into "Some Title".</li>
+            <li><strong>Search confirmation gate</strong> — a word is only sent when the injected listener confirms
+                the user actively typed it, so following links inside an article does not generate spurious
+                notifications.</li>
+            <li><strong>ntfy.sh delivery</strong> — the captured word is posted as plain UTF-8 text to a user-chosen
+                ntfy topic and carries the word as the notification title, readable from a lock screen or watch with
+                no app to open.</li>
+            <li><strong>Configurable 0–300 s delay</strong> — the notification can be deferred by up to five minutes,
+                giving the spectator room to correct a typo and the performer control over when the reveal
+                arrives.</li>
+            <li><strong>Duplicate suppression</strong> — identical words captured within a 3-second window are
+                discarded, absorbing the multiple navigation events a single Wikipedia search can produce.</li>
+            <li><strong>Gesture-hidden settings</strong> — five taps in an invisible 60×60 region in the bottom-right
+                corner within two seconds open a bottom sheet for the topic and the delay; the delay stepper
+                accelerates from 1 to 5 to 20 seconds per tick when held.</li>
+            <li><strong>Persisted, silent configuration</strong> — topic and delay are stored in
+                <code>shared_preferences</code>; with no topic configured the app sends nothing at all and behaves as
+                a plain Wikipedia browser.</li>
+            <li><strong>Resilient by design</strong> — network failures in the send path are swallowed silently, so a
+                dropped request can never surface an error dialog in front of the spectator.</li>
+            <li><strong>Cross-platform</strong> — a single codebase targeting Android, iOS, macOS, Windows and
+                Linux.</li>
         </ul>
     </section>
 
@@ -106,15 +157,37 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the interception pipeline: <code>SearchInterceptor</code>'s URL parsing, the article
+                    slug fallback, the duplicate-suppression window and the deferred-send timer that schedules the
+                    notification.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Why/how it was used.</p>
+                <p>Hosts the app as a single full-screen widget tree — WebView plus an invisible corner gesture
+                    detector — and provides the modal bottom sheet used for the hidden settings panel.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Ntfy</h3>
-                <p>Why/how it was used.</p>
+                <h3>webview_flutter</h3>
+                <p>Embeds Wikipedia with unrestricted JavaScript, exposes the <code>onPageFinished</code> hook used to
+                    inject the search listener, the <code>onNavigationRequest</code> delegate used to inspect URLs,
+                    and <code>runJavaScriptReturningResult</code> to read back the captured query.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Injected JavaScript</h3>
+                <p>A guarded, idempotent snippet that binds an <code>input</code> handler to Wikipedia's search
+                    fields and re-scans the DOM through a <code>MutationObserver</code>, surviving the site's
+                    client-side navigation.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>ntfy.sh + http</h3>
+                <p><code>NtfyService</code> posts the word to <code>https://ntfy.sh/{topic}</code> as
+                    <code>text/plain; charset=utf-8</code> with a <code>Title</code> header, using a shared
+                    <code>http.Client</code> and swallowing every error so failures stay invisible.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>shared_preferences</h3>
+                <p>Stores the ntfy topic and the notification delay on-device, keeping the app stateless from the
+                    spectator's point of view while remembering the performer's configuration between sessions.</p>
             </div>
         </div>
     </section>

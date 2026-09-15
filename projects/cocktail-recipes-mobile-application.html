@@ -83,19 +83,58 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Cocktail Recipes is a mobile application that collects the best cocktail recipes in a single, easy to
-            browse place, so users always have them at hand.</p>
-        <p>Built with Flutter and Dart, it runs as a cross-platform mobile app, letting the same codebase target
-            both Android and iOS.</p>
+        <p>Cocktail Recipes is an offline-first bartending manual for Android and iOS: a catalogue of
+            <strong>115 cocktail recipes</strong> and <strong>17 glass types</strong> that lives entirely inside the
+            app bundle. Every recipe, photograph and glass illustration ships as a local asset, so the app never
+            makes a network request and works identically at home, behind a bar or on a plane with no signal.</p>
+        <p>The app is organised around a four-tab bottom navigation bar. <em>Cocktail</em> shows the full catalogue
+            as an adaptive card grid sorted alphabetically, with a live search field that filters by name as you type
+            and a horizontally scrolling row of ingredient chips built dynamically from every ingredient appearing in
+            the database — so filtering to "everything I can make with gin" takes a single tap. <em>Bicchieri</em>
+            browses the glassware section, where each glass carries a description of what it is for and a list of
+            suggested cocktails that link back into the recipe catalogue. <em>Preferiti</em> collects the drinks the
+            user has starred, and <em>Dosi</em> is a small reference section combining an oz → ml conversion table
+            (with distinct US and UK values) and an illustrated glossary of the eight essential bar tools: jigger,
+            shaker, mixing glass, bar spoon, strainer, muddler, peeler and ice tongs.</p>
+        <p>Tapping a card opens a detail page built on a <code>SliverAppBar</code> with a collapsing image header and
+            a shared-element <code>Hero</code> transition from the grid thumbnail. The recipe is broken into
+            clearly separated blocks — description, ingredient list, per-ingredient measures, numbered preparation
+            steps, the recommended glass and the barman's notes — so the page reads like a recipe card rather than a
+            wall of text.</p>
+        <p>Data is modelled as two typed Dart classes, <code>Cocktail</code> and <code>Glass</code>, deserialised from
+            <code>cocktails.json</code> and <code>glasses.json</code> at startup behind an animated splash screen.
+            Favourites are the only mutable state and are persisted on-device with <code>shared_preferences</code>,
+            so the app has no backend, no account and no sync step to go wrong.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>115-recipe catalogue</strong> — each cocktail carries a photo, a short description, its
+                ingredient list, the exact measure for every ingredient, a step-by-step preparation procedure, the
+                recommended glass and a barman's note on when and why to serve it.</li>
+            <li><strong>Live search and ingredient filter</strong> — a text field filters the grid by cocktail name
+                as you type, while a row of <code>FilterChip</code>s generated from the union of every ingredient in
+                the database narrows the catalogue to drinks built on a given spirit or mixer.</li>
+            <li><strong>Glassware reference</strong> — 17 glass types (coupe, flute, highball, Nick &amp; Nora,
+                julep cup, tiki mug, Irish coffee glass and more), each with an illustration, an explanation of its
+                shape and purpose, and the cocktails traditionally served in it.</li>
+            <li><strong>Persistent favourites</strong> — any recipe can be starred from the grid or the detail page;
+                the set of favourite names is written to <code>shared_preferences</code> and restored on launch, and
+                a dedicated tab shows the collection with a live count.</li>
+            <li><strong>Measures &amp; tools section</strong> — an oz → ml conversion table covering the nine
+                measures a home bartender actually meets, with separate US and imperial columns, alongside an
+                illustrated glossary of the eight core bar tools.</li>
+            <li><strong>Collapsing detail page</strong> — a <code>SliverAppBar</code> with a full-bleed image header
+                that shrinks into a title bar as the recipe scrolls, entered via a <code>Hero</code> animation from
+                the grid card so the photo travels between screens.</li>
+            <li><strong>Animated splash screen</strong> — a custom <code>AnimationController</code>-driven intro
+                covers the JSON parsing and asset warm-up, so the catalogue is already in memory by the time the
+                first grid frame is painted.</li>
+            <li><strong>Fully offline</strong> — recipes, photos and glass artwork are bundled assets: no API keys,
+                no rate limits, no loading spinners and no degradation without a connection.</li>
+            <li><strong>Responsive, modern UI</strong> — an adaptive grid that reflows across phone and tablet
+                widths, gradient-based Material styling and Poppins typography throughout.</li>
         </ul>
     </section>
 
@@ -104,11 +143,35 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Why/how it was used.</p>
+                <p>Implements the data model (<code>Cocktail</code>, <code>Glass</code>), the JSON deserialisation
+                    of the two asset databases, and the search / ingredient-filter / favourites logic driving the
+                    catalogue.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Why/how it was used.</p>
+                <p>Provides the single cross-platform UI for Android and iOS: the animated splash screen, the
+                    four-tab <code>BottomNavigationBar</code>, the adaptive <code>GridView</code> catalogue and the
+                    <code>SliverAppBar</code> detail pages with <code>Hero</code> transitions.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>shared_preferences</h3>
+                <p>Persists the set of favourited cocktail names on the device, so the Preferiti tab survives app
+                    restarts without any server-side account.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>google_fonts</h3>
+                <p>Supplies the Poppins typeface used across the whole app, giving headings, ingredient lists and
+                    recipe steps a consistent, readable hierarchy.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>JSON assets</h3>
+                <p><code>cocktails.json</code> and <code>glasses.json</code> act as the app's local database: editing
+                    a recipe or adding a new drink is a data change, not a code change.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Bundled image assets</h3>
+                <p>Cocktail photography, glass illustrations and bar-tool images ship inside the APK/IPA, which is
+                    what makes the offline-first behaviour possible.</p>
             </div>
         </div>
     </section>
