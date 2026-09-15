@@ -82,19 +82,78 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>PixelForge is a local, offline image processing application that runs entirely on the user's machine, with
-            no data leaving the device.</p>
-        <p>It offers a set of image operations — compression, resizing, and AI-based upscaling — through a React and
-            HTML front end backed by a Python/FastAPI service.</p>
+        <p>PixelForge is an image-processing workbench that runs entirely on the user's own machine. Images are
+            dropped into the browser, processed by a local Python service, and downloaded back — nothing is uploaded
+            to a cloud service, there is no account to create, and no file-size or quota limit beyond what the
+            hardware allows. It covers the three operations that make up most day-to-day image work:
+            <strong>compression</strong>, <strong>AI upscaling</strong>, and <strong>resizing</strong>.</p>
+        <p>Each mode is deliberately backed by the best tool for the job rather than a single generic library. The
+            compressor shells out to <code>mozjpeg</code> and <code>pngquant</code> when they are installed on the
+            system — measurably better than stock encoders — and falls back to Pillow when they are not, so the app
+            works out of the box and gets better on a properly equipped machine. The upscaler runs
+            <strong>Real-ESRGAN</strong> through PyTorch, on the GPU when CUDA is available and on CPU otherwise. The
+            resizer uses LANCZOS resampling, a windowed-sinc filter that keeps edges sharp where bilinear or bicubic
+            would soften them.</p>
+        <p>The front end is a React 19 + TypeScript app built with Vite and Tailwind CSS, laid out as a two-pane
+            workspace: the upload queue and its settings on the left, the results on the right. The FastAPI back end
+            turns every uploaded file into a background job and streams its progress to the browser over
+            <strong>Server-Sent Events</strong>, so a batch of large images reports status per file instead of
+            freezing behind one long request. Each of the three modes keeps its own independent file queue, so
+            switching tabs mid-session never discards work. The project also ships a Docker multi-stage build that
+            serves the compiled front end from the same FastAPI process, and a small native macOS wrapper
+            (<code>mac-app/PixelForge.swift</code>) that launches both processes and hosts the UI in a WKWebView, so
+            it can be used as a desktop app rather than a localhost tab.</p>
     </section>
 
     <section class="project-section fade-in">
         <h2>Key features</h2>
-        <!-- TODO: list the main features -->
         <ul class="project-features">
-            <li>Feature one.</li>
-            <li>Feature two.</li>
-            <li>Feature three.</li>
+            <li><strong>Compression with real encoders</strong> — JPEG goes through <code>mozjpeg</code>'s
+                <code>cjpeg</code> (progressive, 4:2:0 subsampling) when available, PNG through
+                <code>pngquant</code>'s lossy palette quantisation, and WebP through Pillow at
+                <code>method=6</code>, its slowest and highest-quality setting. Every path falls back to Pillow if
+                the external binary is missing, and the PNG path keeps the original file whenever compression would
+                make it bigger.</li>
+            <li><strong>AI upscaling with Real-ESRGAN</strong> — ×2 (<code>RealESRGAN_x2plus</code>) and ×4
+                (<code>RealESRGAN_x4plus</code>) models, each a 23-block RRDB generator, run tile-by-tile so large
+                images fit in memory. Models are loaded once and cached per scale, use half precision on CUDA, and
+                fall back to CPU transparently.</li>
+            <li><strong>Correct alpha handling on upscale</strong> — Real-ESRGAN has no notion of transparency and
+                would let the arbitrary colours of fully transparent pixels bleed into semi-transparent edges during
+                convolution. PixelForge composites the image onto white before inference, upscales the alpha channel
+                separately with LANCZOS, and re-attaches it afterwards.</li>
+            <li><strong>Resize by dimensions or by factor</strong> — either an exact width × height with an optional
+                aspect-ratio lock, or a proportional downscale from 10 % to 90 %, with the output format inferred
+                from the original file.</li>
+            <li><strong>Per-file progress over Server-Sent Events</strong> — uploads become background jobs; the
+                browser opens an <code>EventSource</code> per job and receives <code>progress</code>,
+                <code>done</code>, and <code>error</code> events, so each row in the queue reports its own state.</li>
+            <li><strong>Batch download as ZIP</strong> — results can be downloaded one by one or as a single archive,
+                either for the whole session or for one processing batch, with duplicate filenames automatically
+                de-duplicated inside the ZIP.</li>
+            <li><strong>Independent queues per mode</strong> — compress, enhance, and resize each keep their own file
+                list and batch id, so switching tab doesn't clear the uploads.</li>
+            <li><strong>Settings-aware Process button</strong> — after a completed run the button re-unlocks by
+                itself as soon as any setting changes, so a batch can be re-run at a different quality without
+                re-uploading.</li>
+            <li><strong>Measured results, not promises</strong> — the compress view reports original size, output
+                size, and the exact saving percentage per file; resize reports the input and output dimensions;
+                enhance reports the scale and the model that produced the result.</li>
+            <li><strong>Client-side validation</strong> — files are filtered by MIME type and extension and capped at
+                50 MB before upload, and preview thumbnails plus source dimensions are read in the browser without a
+                round trip.</li>
+            <li><strong>Broad input support</strong> — JPEG, PNG, WebP, HEIC, TIFF, and BMP are accepted in all three
+                modes, with HEIC handled through <code>pillow-heif</code>.</li>
+            <li><strong>Algorithms panel</strong> — an in-app modal explains what actually runs in each mode: DCT
+                quantisation and chroma subsampling for compression, the RRDB generator and U-Net discriminator
+                behind Real-ESRGAN, and the windowed-sinc kernel behind LANCZOS.</li>
+            <li><strong>Backend health indicator</strong> — the navbar polls <code>/health</code> every ten seconds
+                and shows whether the local service is up and whether a GPU was detected.</li>
+            <li><strong>One-command setup</strong> — <code>setup.sh</code> creates the virtualenv, installs the right
+                PyTorch build for the machine, patches <code>basicsr</code> for Python 3.13, downloads both model
+                weights, and installs the front end; <code>start.sh</code> then runs both servers together.</li>
+            <li><strong>Tested back end</strong> — a pytest suite covers the API routes, the Pydantic schemas, and
+                each of the three services, including the slow Real-ESRGAN path.</li>
         </ul>
     </section>
 
@@ -103,19 +162,28 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Why/how it was used.</p>
+                <p>Back-end language for the whole processing layer: the Pillow-based compress and resize services,
+                    the Real-ESRGAN (PyTorch) upscaler, the subprocess bridges to <code>mozjpeg</code> and
+                    <code>pngquant</code>, and the pytest suite that covers them.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Why/how it was used.</p>
+                <p>Exposes the local API — <code>/process</code>, <code>/resize</code>, the
+                    <code>/stream/{job_id}</code> SSE channel, <code>/result</code>, the single-file and batch
+                    <code>/download</code> endpoints, and <code>/health</code> — running jobs as asyncio tasks with
+                    Pydantic-validated payloads, and serving the built front end in the Docker image.</p>
             </div>
             <div class="project-stack-item">
                 <h3>React</h3>
-                <p>Why/how it was used.</p>
+                <p>Drives the two-pane interface — drag-and-drop upload zone, per-mode file queues, settings box,
+                    resize panel, and result views — as React 19 + TypeScript with custom hooks
+                    (<code>useFileQueue</code>, <code>useProcessing</code>, <code>useResizeProcessing</code>), built
+                    with Vite 8 and styled with Tailwind CSS 4.</p>
             </div>
             <div class="project-stack-item">
                 <h3>HTML</h3>
-                <p>Why/how it was used.</p>
+                <p>App shell and Vite-built static output, served either by the dev server or straight from FastAPI
+                    in the production container — and hosted in a WKWebView by the native macOS wrapper.</p>
             </div>
         </div>
     </section>
