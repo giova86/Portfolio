@@ -76,10 +76,10 @@
             <p class="project-tagline">Analyzes and simulates the directional relationship between two emitted
                 gamma rays in nuclear decay processes, visualizing the complex physics behind these phenomena.</p>
             <div class="project-tech">
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">FastAPI</span>
                 <span class="tech-tag">Python</span>
-                <span class="tech-tag">Streamlit</span>
                 <span class="tech-tag">Nuclear Physics</span>
-                <span class="tech-tag">Matplotlib</span>
             </div>
             <div class="project-links">
                 <a href="https://angularcorrelation.streamlit.app" class="card-button" target="_blank">Live
@@ -90,35 +90,50 @@
 
     <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Angular Correlation is a Streamlit application for computing, plotting and fitting γ-γ angular
-            correlations in nuclear physics. When an excited nucleus de-excites through a cascade of two gamma rays,
-            the direction of the second photon is not isotropic with respect to the first: the angular distribution
-            <em>W(θ)</em> encodes the spins of the three nuclear levels involved and the multipolarities of the two
-            transitions. This app turns that measurement into an interactive workflow — declare the decay scheme, get
-            the theoretical correlation, upload the experimental counts, and read off the fitted coefficients.</p>
-        <p>The interface is split into three tabs. <em>Theory</em> is a full write-up of the formalism, rendered in
-            LaTeX: the Legendre expansion of W(θ), the truncation rule for k<sub>max</sub>, the definition of the
-            A<sub>kk</sub> coefficients as a product of the two A<sub>k</sub>, the mixing ratio δ, the F-coefficients
-            in terms of Wigner 3j and 6j symbols, and the correction for finite-volume detectors through the
-            attenuation coefficients Q<sub>k</sub>. <em>Analysis</em> is the working tool. <em>About Me</em> closes
-            the app with the author's details.</p>
-        <p>In the Analysis tab the user declares the cascade: energy, character (E or M) and multipolarity L, L′ of
-            each of the two transitions — with a mixing ratio δ when a transition is mixed — plus spin and parity of
-            the initial, intermediate and final level. From this, <code>k_max()</code> decides whether the Legendre
-            series truncates at k = 2 or k = 4, and <code>A_kk()</code> evaluates the theoretical coefficients exactly
-            using <code>sympy.physics.wigner</code>'s 3j and 6j symbols — symbolic angular-momentum algebra rather
-            than tabulated values. The app immediately draws the theoretical W(θ) curve and a generated level-scheme
-            diagram of the cascade alongside the numerical A<sub>kk</sub>.</p>
-        <p>The second half is the experimental fit. The user enters the detector attenuation coefficients Q<sub>2</sub>
-            and Q<sub>4</sub> and uploads a CSV of measured data (<code>theta</code>, <code>count</code>,
-            <code>error_count</code>, <code>norm</code>, <code>error_norm</code>). The effective W(θ), normalised at
-            θ = π/2 and attenuated by Q<sub>2</sub>/Q<sub>4</sub>, is fitted to the points with
-            <code>scipy.optimize.curve_fit</code>, returning A<sub>22</sub> and A<sub>44</sub> with the uncertainties
-            taken from the covariance matrix. When one of the transitions is mixed, the app goes one step further and
-            scans δ over the full arctan space in 10 000 steps, plotting the χ² curve to locate the minimum and then
-            drawing the A<sub>22</sub>/A<sub>44</sub> correlation ellipse — which is how the mixing ratio is actually
-            extracted from data. Sample CSVs for the classic <sup>152</sup>Eu and <sup>60</sup>Co cascades ship with
-            the app, and it is deployed publicly on Streamlit Community Cloud.</p>
+        <p>Angular Correlation is a web application for computing, plotting and fitting γ-γ angular correlations in
+            nuclear physics. When an excited nucleus de-excites through a cascade of two gamma rays, the direction of
+            the second photon is not isotropic with respect to the first: the angular distribution <em>W(θ)</em>
+            encodes the spins of the three nuclear levels involved and the multipolarities of the two transitions.
+            The app turns that measurement into an interactive workflow — declare the decay scheme, get the
+            theoretical correlation, feed in the experimental counts, and read off the fitted coefficients and the
+            mixing ratio.</p>
+        <p>It is built as a React single-page front end on top of a FastAPI back end. The split is deliberate: the
+            physics — Wigner algebra, non-linear fitting, χ² minimisation — stays in Python (<code>physics.py</code>,
+            exposed through two endpoints, <code>/api/theory</code> and <code>/api/fit</code>), while everything the
+            user touches is a React component that renders charts client-side with Recharts, hand-drawn SVG and
+            KaTeX. The back end returns plain JSON — curves as arrays of points, coefficients as numbers — so no
+            figure is ever rasterised on the server and every plot stays live and inspectable in the browser.</p>
+        <p>The interface has three tabs. <em>Theory</em> is a full write-up of the formalism typeset with KaTeX: the
+            Legendre expansion of W(θ), the truncation rule for k<sub>max</sub>, the A<sub>kk</sub> coefficients as a
+            product of the two A<sub>k</sub>, the mixing ratio δ, the F-coefficients in terms of Wigner 3j and 6j
+            symbols, the finite-detector attenuation coefficients Q<sub>k</sub>, and the bibliography.
+            <em>Analysis</em> is the working tool. <em>About</em> closes the app with the author's details.</p>
+        <p>In the Analysis tab the user declares the cascade: energy, character (E, M or M + E) and multipolarities
+            L, L′ of each transition — with a mixing ratio δ when a transition is mixed — plus spin and parity of the
+            initial, intermediate and final level. The back end's <code>k_max()</code> decides whether the Legendre
+            series truncates at k = 2 or k = 4, and <code>A_kk()</code> evaluates the coefficients exactly with
+            <code>sympy.physics.wigner</code>'s 3j and 6j symbols — symbolic angular-momentum algebra rather than
+            tabulated values. The theoretical W(θ) is redrawn as soon as an input changes, next to a level-scheme
+            diagram generated as SVG straight from the inputs and the numerical A<sub>kk</sub>.</p>
+        <p>The second half is the experimental fit. Measurements arrive either as an uploaded CSV
+            (<code>theta</code>, <code>count</code>, <code>error_count</code>, <code>norm</code>,
+            <code>error_norm</code>, parsed with PapaParse) or typed into an editable table that can be exported back
+            to CSV; both paths go through the same validator, which insists on a point at θ = 90° because the whole
+            correlation is normalised there. Counts are normalised and their errors propagated, then the effective
+            W(θ) — attenuated by the user's Q<sub>2</sub>/Q<sub>4</sub> — is fitted with
+            <code>scipy.optimize.curve_fit</code>, returning A<sub>22</sub> and A<sub>44</sub> with 1σ uncertainties
+            from the covariance matrix.</p>
+        <p>Extracting δ is where the tool goes furthest. With one mixed transition, χ² is scanned over 10 000 points
+            in arctan δ, the minimum refined with a bounded scalar minimisation so δ is not quantised by the grid,
+            and the 1σ interval found by bracketing the two Δχ² = 1 crossings with Brent's method; the result is
+            shown as a χ² curve plus the A<sub>22</sub>–A<sub>44</sub> correlation locus with the fitted point on it.
+            With both transitions mixed, χ² becomes a surface over (δ₁, δ₂): since A<sub>k</sub> factorises, the
+            241×241 grid costs 2n Wigner evaluations instead of n², the best cell seeds a Nelder–Mead refinement, and
+            the errors come from a profile-likelihood scan that re-minimises one δ while the other moves. The surface
+            is drawn as a hand-built heat map with Δχ² ≤ 1/4/9 confidence bands — a chart type Recharts does not
+            provide. The whole analysis can finally be exported as a multi-page PDF report, with the on-screen SVG
+            charts rasterised into the document and an embedded DejaVu subset so Greek letters and subscripts survive
+            the export.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -130,30 +145,39 @@
             <li><strong>Automatic series truncation</strong> — <code>k_max = min(2I, L₁+L₁′, L₂+L₂′)</code> is derived
                 from the declared scheme, so the app knows on its own whether the correlation stops at k = 2 or
                 extends to k = 4.</li>
-            <li><strong>Mixed-multipolarity support</strong> — each transition can be declared pure or mixed (M+E);
+            <li><strong>Mixed-multipolarity support</strong> — each transition can be declared pure or mixed (M + E);
                 a mixed transition exposes its own δ and is handled correctly inside A<sub>k</sub>.</li>
-            <li><strong>Generated level scheme</strong> — the app draws the three-level decay diagram with spins,
-                parities, transition energies and multipolarities directly from the inputs, as a figure you can drop
-                into a report.</li>
-            <li><strong>Experimental CSV fit</strong> — upload measured counts with their errors and normalisation;
-                the effective W(θ) is fitted with <code>scipy.optimize.curve_fit</code> and A<sub>22</sub>,
-                A<sub>44</sub> are reported with 1σ uncertainties from the covariance matrix.</li>
+            <li><strong>Generated level scheme</strong> — the three-level decay diagram, with spins, parities,
+                transition energies and multipolarities, is drawn as inline SVG from the inputs, so it scales
+                cleanly and can be lifted straight into a report.</li>
+            <li><strong>CSV upload or manual entry</strong> — experimental points can be uploaded (PapaParse) or
+                typed into an editable table and exported back to CSV; both feed the same validator, which checks
+                every field and requires the θ = 90° normalisation point.</li>
+            <li><strong>Weighted least-squares fit</strong> — the effective W(θ) is fitted with
+                <code>scipy.optimize.curve_fit</code> on propagated per-point errors, reporting A<sub>22</sub> and
+                A<sub>44</sub> with 1σ uncertainties from the covariance matrix.</li>
             <li><strong>Finite-detector correction</strong> — user-supplied attenuation coefficients Q<sub>2</sub>
-                and Q<sub>4</sub> enter the fitted function, so the comparison between theory and measurement is done
-                on the effective correlation actually observed by real detectors.</li>
-            <li><strong>χ² scan over the mixing ratio</strong> — δ is swept over 10 000 points across arctan space to
-                map the χ² landscape and locate its minimum, the standard way of extracting δ from an angular
-                correlation measurement.</li>
+                and Q<sub>4</sub> enter the fitted function, so theory and measurement are compared on the effective
+                correlation actually observed by real detectors.</li>
+            <li><strong>χ² scan with a refined minimum</strong> — δ is swept over 10 000 points in arctan space, the
+                minimum polished by a bounded minimisation, and the 1σ interval located by solving Δχ² = 1 with
+                Brent's method instead of reading it off the grid.</li>
+            <li><strong>Two free mixing ratios</strong> — when both transitions are mixed, χ² is mapped over the
+                (δ₁, δ₂) plane, refined with Nelder–Mead and turned into a heat map with Δχ² ≤ 1/4/9 confidence
+                bands; uncertainties come from a profile-likelihood scan, and the app flags the degenerate case
+                where two free parameters leave no degrees of freedom.</li>
             <li><strong>A<sub>22</sub>–A<sub>44</sub> correlation plot</strong> — the theoretical locus traced by
                 varying δ is drawn against the fitted point and its error bars, giving a visual consistency check
                 between the measurement and the assumed spin sequence.</li>
-            <li><strong>Built-in theory reference</strong> — a full LaTeX derivation of the formalism, with
-                bibliography, sits in the first tab so the tool is usable as teaching material and not just as a
+            <li><strong>PDF report export</strong> — inputs, theoretical curve, data table, fit results and every
+                chart are assembled into a multi-page PDF with jsPDF; the live SVG charts are rasterised on the
+                client and an embedded DejaVu subset keeps Greek letters and sub/superscripts intact.</li>
+            <li><strong>Built-in theory reference</strong> — a full KaTeX derivation of the formalism, with
+                bibliography, sits in the first tab so the tool doubles as teaching material and not just a
                 calculator.</li>
-            <li><strong>Sample datasets</strong> — pre-labelled CSVs for <sup>152</sup>Eu (220, 320, 342 keV) and
-                <sup>60</sup>Co cascades are bundled for testing and demonstration.</li>
-            <li><strong>Public deployment</strong> — hosted on Streamlit Community Cloud, usable from a browser with
-                no local install.</li>
+            <li><strong>Stateless JSON API</strong> — two POST endpoints (<code>/api/theory</code>,
+                <code>/api/fit</code>) with Pydantic-validated payloads return numbers and curves, so the physics
+                core is reusable outside the UI and testable on its own.</li>
         </ul>
     </section>
 
@@ -161,16 +185,14 @@
         <h2>Tech stack</h2>
         <div class="project-stack-grid">
             <div class="project-stack-item">
-                <h3>Python</h3>
-                <p>The whole application, cleanly split into <code>app.py</code> (UI and input parsing only) and
-                    <code>functions.py</code> (every physics computation and figure), so the numerical core can be
-                    reused or tested independently of Streamlit.</p>
+                <h3>React</h3>
+                <p>The single-page front end: three tabs kept mounted so their state survives switching, the decay-
+                    scheme widget grid, the data table, and every chart re-rendered live as the inputs change.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Streamlit</h3>
-                <p>Provides the three-tab layout, the widget grid for the decay scheme, LaTeX rendering of the
-                    formalism, the CSV uploader and the data table — and hosts the app publicly on Streamlit
-                    Community Cloud.</p>
+                <h3>FastAPI</h3>
+                <p>Serves the two computation endpoints with Pydantic models validating spins, multipolarities and
+                    every uploaded data row before they reach the physics code.</p>
             </div>
             <div class="project-stack-item">
                 <h3>SymPy</h3>
@@ -179,25 +201,34 @@
             </div>
             <div class="project-stack-item">
                 <h3>SciPy</h3>
-                <p><code>optimize.curve_fit</code> performs the weighted non-linear least-squares fit of the
-                    effective W(θ) to the experimental points and returns the covariance matrix used for the
-                    uncertainties.</p>
+                <p><code>curve_fit</code> for the weighted non-linear least squares, <code>minimize_scalar</code> and
+                    <code>minimize</code> to refine the χ² minimum, and <code>brentq</code> to solve the Δχ² = 1
+                    crossings that set the uncertainty on δ.</p>
             </div>
             <div class="project-stack-item">
                 <h3>NumPy</h3>
-                <p>Evaluates the Legendre expansion, builds the 10 000-point δ grid for the χ² scan and handles all
-                    the array arithmetic behind the plots.</p>
+                <p>Evaluates the Legendre expansion, builds the arctan-δ grids and the outer products that make the
+                    two-dimensional χ² map cheap enough to compute per request.</p>
             </div>
             <div class="project-stack-item">
-                <h3>Matplotlib</h3>
-                <p>Renders every figure the app produces: the theoretical W(θ), the generated level scheme, the fit
-                    against the experimental points, the χ² curve and the A<sub>22</sub>–A<sub>44</sub>
-                    correlation.</p>
+                <h3>Recharts &amp; SVG</h3>
+                <p>Recharts draws W(θ), the fit against the data and the χ² curve; the level scheme and the χ²
+                    heat map are hand-written SVG, since no chart library offers them.</p>
             </div>
             <div class="project-stack-item">
-                <h3>pandas</h3>
-                <p>Parses the uploaded CSV of experimental counts and displays it as an inspectable table before the
-                    fit runs.</p>
+                <h3>KaTeX</h3>
+                <p>Typesets the whole Theory tab and the formulas scattered through the Analysis tab, rendered
+                    synchronously in the browser with no MathJax-style layout shift.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>jsPDF &amp; PapaParse</h3>
+                <p>PapaParse reads and writes the experimental CSVs; jsPDF with autoTable assembles the exported
+                    report, including the rasterised charts and an embedded font subset for Greek glyphs.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite &amp; Tailwind CSS</h3>
+                <p>Vite builds the front end and proxies <code>/api</code> to uvicorn in development; Tailwind
+                    handles the layout and the utility-level styling of the whole interface.</p>
             </div>
         </div>
     </section>
