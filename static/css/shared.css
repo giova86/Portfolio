@@ -162,6 +162,13 @@ nav.scrolled {
     display: flex;
     list-style: none;
     gap: 2rem;
+    --nav-gap: 2rem;
+}
+
+/* Vertical separators between items (desktop only; reset in the mobile drawer) */
+.nav-links li + li {
+    border-left: 1px solid color-mix(in srgb, var(--border) 50%, var(--text-muted));
+    padding-left: var(--nav-gap);
 }
 
 .nav-links a {
@@ -238,6 +245,7 @@ nav.open .nav-toggle span:nth-child(3) {
 
     .nav-links {
         gap: 0.7rem;
+        --nav-gap: 0.7rem;
     }
 }
 
@@ -266,6 +274,11 @@ nav.open .nav-toggle span:nth-child(3) {
 
     nav.open .nav-links {
         transform: translateX(0);
+    }
+
+    .nav-links li + li {
+        border-left: none;
+        padding-left: 0;
     }
 
     .nav-links a {
