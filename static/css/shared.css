@@ -161,14 +161,16 @@ nav.scrolled {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
-    --nav-gap: 2rem;
+    --nav-gap: 1rem;
+}
+
+.nav-links li {
+    padding: 0 var(--nav-gap);
 }
 
 /* Vertical separators between items (desktop only; reset in the mobile drawer) */
 .nav-links li + li {
     border-left: 1px solid color-mix(in srgb, var(--border) 50%, var(--text-muted));
-    padding-left: var(--nav-gap);
 }
 
 .nav-links a {
@@ -244,7 +246,6 @@ nav.open .nav-toggle span:nth-child(3) {
     }
 
     .nav-links {
-        gap: 0.7rem;
         --nav-gap: 0.7rem;
     }
 }
