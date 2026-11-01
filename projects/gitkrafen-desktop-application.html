@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitKrafen - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A desktop Git client modelled on GitKraken: lane-based commit graph, staging, conflict editor, integrated terminal and AI commit messages.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GitKrafen - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A desktop Git client modelled on GitKraken: lane-based commit graph, staging, conflict editor, integrated terminal and AI commit messages.">
+    <meta property="og:image" content="../static/GitKrafen.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GitKrafen - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A desktop Git client modelled on GitKraken: lane-based commit graph, staging, conflict editor, integrated terminal and AI commit messages.">
+    <meta name="twitter:image" content="../static/GitKrafen.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/GitKrafen.png" alt="Immagine GitKrafen - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>GitKrafen - Desktop Application</h1>
+            <p class="project-tagline">A desktop Git client modelled on GitKraken: lane-based commit graph, staging, conflict editor, integrated terminal and AI commit messages.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Electron</span>
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">TypeScript</span>
+                <span class="tech-tag">Git</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p>GitKrafen is a full-featured desktop Git client built with Electron, React and TypeScript, modelled on
+            GitKraken 12.x: the same tabbed layout, toolbar, side panel, lane-based commit graph with avatars, and
+            WIP / commit panel on the right, with the same day-to-day workflow. It is a personal project born from a
+            simple question — how much of a commercial Git GUI can be rebuilt on top of the plain
+            <code>git</code> command line?</p>
+        <p>The back end deliberately does not reimplement Git: every operation shells out to the system
+            <code>git</code>, so each action behaves exactly as it would in a terminal — same hooks, same config, same
+            results. On top of that thin layer the app adds what a GUI is good at: a virtualised graph that stays
+            smooth with 20,000 commits and 25 parallel branches, hunk- and line-level staging, a three-way merge
+            editor, drag-and-drop between branch pills, and real-time updates driven by a filesystem watcher
+            (about half a second, even for changes made outside the app).</p>
+        <p>It also goes beyond the original in a few places: a permanent Launchpad home listing every repository
+            with live status, a colour legend with high-contrast, stable branch colours (ΔE ≥ 40 between any pair),
+            privacy-friendly avatars, and optional AI commit messages with the engine of the user's choice. A
+            one-command script builds a signed macOS DMG, and the whole project is covered by a Vitest suite that
+            runs against real temporary repositories.</p>
+    
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Key features</h2>
+        <ul class="project-features">
+            <li><strong>Lane-based commit graph</strong> — coloured lanes, avatars (Gravatar, initials only, or
+                none), merged local+remote branch pills, tags, stashes, a dashed <code>// WIP</code> row and day
+                separators; click a branch to highlight all of its commits and dim the rest.</li>
+            <li><strong>Virtualised and live</strong> — paged loading and row virtualisation, tested with 20,000
+                commits; a filesystem watcher refreshes the view within ~0.5 s of any change.</li>
+            <li><strong>Fine-grained staging</strong> — stage, unstage or discard whole files, hunks or single
+                lines; inline and side-by-side diffs with syntax highlighting, blame, file history and direct
+                editing.</li>
+            <li><strong>Full history tooling</strong> — merge (<code>--no-ff</code>, squash), rebase, interactive
+                rebase (pick / reword / squash / fixup / drop), cherry-pick, revert, reset, range squash, reword of
+                non-HEAD commits, Undo/Redo, and drag &amp; drop between branch pills.</li>
+            <li><strong>Three-pane conflict editor</strong> — Ours · Base · Theirs, with the base taken from the
+                common ancestor via <code>git merge-file --diff3</code>, per-block resolution, editable output and
+                handling of modify/delete and binary conflicts.</li>
+            <li><strong>Hosting integrations</strong> — GitHub, GitHub Enterprise, GitLab, Bitbucket and Azure
+                DevOps with OAuth/SSO (Device Flow, PKCE) or tokens encrypted in the system keychain: private
+                clones, pull requests, issues and a Launchpad of PRs and WIPs.</li>
+            <li><strong>Launchpad home</strong> — a permanent list of all repositories with live branch, changes,
+                ahead/behind and last-commit status, plus search, filters, favourites and grid or list view.</li>
+            <li><strong>Integrated terminal</strong> — a real pty (<code>node-pty</code> + xterm.js) with login
+                shell, colours, <code>less</code>/<code>vim</code> and synchronised resizing.</li>
+            <li><strong>Optional AI</strong> — “Generate with AI” fills the commit title and description from the
+                staged diff, using OpenAI, Claude, Gemini, Mistral, Groq, DeepSeek, OpenRouter, Ollama, LM Studio
+                or any OpenAI-compatible endpoint; keys stay in the keychain.</li>
+            <li><strong>Extras</strong> — command palette (⌘P), dark/light theme, submodules, worktrees, Git Flow,
+                Git LFS patterns, GPG/SSH-signed commits, author statistics.</li>
+            <li><strong>Tested and packaged</strong> — unit and integration tests with Vitest on real temporary
+                repositories, and a build script that assembles, ad-hoc signs and verifies a macOS DMG.</li>
+        </ul>
+    
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Electron</h3>
+                <p>Desktop shell: window and menus, IPC, the system <code>git</code> service, encrypted secrets in the
+                    keychain, OAuth loopback flows and the pty bridge for the integrated terminal.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React</h3>
+                <p>The whole interface — virtualised commit graph, diff and merge views, Launchpad, dialogs and
+                    command palette — built with React 18 and bundled with Vite.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>TypeScript</h3>
+                <p>Strictly typed renderer, including pure, well-tested modules for graph layout, diff/patch
+                    building and conflict parsing.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Git</h3>
+                <p>Every repository operation runs through the system <code>git</code>, so behaviour, hooks and
+                    configuration are identical to the command line.</p>
+            </div>
+        </div>
+    
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="gitkrafen-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/gitkrafen-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeKeeper Plus - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A desktop SQL editor for nine database engines, with a CodeMirror query editor, a charting panel, inline data editing, report export and an AI assistant.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BeeKeeper Plus - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A desktop SQL editor for nine database engines, with a CodeMirror query editor, a charting panel, inline data editing, report export and an AI assistant.">
+    <meta property="og:image" content="../static/BeeKeeperPlus.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BeeKeeper Plus - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A desktop SQL editor for nine database engines, with a CodeMirror query editor, a charting panel, inline data editing, report export and an AI assistant.">
+    <meta name="twitter:image" content="../static/BeeKeeperPlus.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23121212'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%23f5c242'>B</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/BeeKeeperPlus.png" alt="Immagine BeeKeeper Plus - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>BeeKeeper Plus - Desktop Application</h1>
+            <p class="project-tagline">A desktop SQL editor for nine database engines, with a CodeMirror query editor, a charting panel, inline data editing, report export and an AI assistant.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Electron</span>
+                <span class="tech-tag">Vue</span>
+                <span class="tech-tag">Javascript</span>
+                <span class="tech-tag">SQL</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p>BeeKeeper Plus is a desktop SQL editor and database browser built with Electron, Vue 3 and CodeMirror 6,
+            modelled on the look and feel of Beekeeper Studio. It is a personal project: a single dark-themed window
+            with a connection manager, an entity tree, tabbed query editors and a results grid, able to talk to
+            SQLite, libSQL/Turso, DuckDB, PostgreSQL, MySQL, SQL Server, ClickHouse, MongoDB and Redis through one
+            common interface.</p>
+        <p>Each engine has its own driver in the Electron main process, behind a shared IPC layer, so the renderer
+            only deals with queries, result sets and table structures. Results can be browsed in a sortable grid with a
+            JSON sidebar, edited in place, exported as CSV, JSON or SQL, or switched to a chart view that maps columns
+            to axes, colour and size and draws up to 50,000 rows with Plotly.</p>
+        <p>On top of the editor it adds a markdown report builder that collects queries, data excerpts, charts and
+            free text into a ZIP, and an AI assistant that turns questions in natural language into SQL (or Mongo /
+            Redis commands) for the connected schema. Connection passwords are encrypted with the OS keychain, and
+            a modular set of scripts builds an ad-hoc signed macOS app and DMG.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Key features</h2>
+        <ul class="project-features">
+            <li><strong>Nine engines, one UI</strong> — SQLite, libSQL/Turso, DuckDB, PostgreSQL, MySQL, SQL Server,
+                ClickHouse, MongoDB and Redis, each with a dedicated driver.</li>
+            <li><strong>Query editor</strong> — CodeMirror 6 with syntax highlighting, schema-aware autocomplete,
+                multiple tabs, run-at-cursor or run-all, query history and saved queries scoped to each connection
+                (with import and export).</li>
+            <li><strong>Results grid</strong> — sortable columns, cell selection, a JSON sidebar for the selected
+                row and cell, and inline editing of table data through “Edit Data”.</li>
+            <li><strong>Charts</strong> — bars, lines, area, scatter, histogram, box plot, pie and heatmap, with
+                columns mapped to X, Y, colour and size; stacked or grouped bars, log scale, and PNG or SVG export.</li>
+            <li><strong>Table browser and structure</strong> — entity tree with tables, views and columns, paged data
+                tabs with filtering, and a structure tab showing columns, indexes and foreign keys, with column and
+                index changes reviewed as SQL before they are applied.</li>
+            <li><strong>Import and export</strong> — import CSV files into tables (PapaParse) and export results as
+                CSV, JSON or SQL.</li>
+            <li><strong>Report builder</strong> — add queries, the first rows of a result, charts and text blocks to a
+                per-connection draft, preview it as markdown and export everything as a ZIP with the chart images.</li>
+            <li><strong>AI assistant</strong> — natural-language questions answered with SQL for your schema, using
+                Anthropic, OpenAI, Google Gemini, LM Studio, Ollama, the Claude Code CLI or any OpenAI-compatible
+                endpoint.</li>
+            <li><strong>Saved connections</strong> — stored locally, with passwords encrypted through Electron
+                <code>safeStorage</code> and the OS keychain.</li>
+            <li><strong>Packaging and tests</strong> — scripts that assemble the <code>.app</code>, apply an ad-hoc
+                signature and create a verified DMG; plain Node unit tests plus an end-to-end suite that drives the
+                real app in a hidden window.</li>
+        </ul>
+
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Electron</h3>
+                <p>Desktop shell: main process, IPC and preload bridge, the per-engine database drivers, the AI
+                    providers and encrypted credential storage through <code>safeStorage</code>.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vue</h3>
+                <p>The whole interface — workspace tabs, entity tree, results grid, chart panel, structure editor and
+                    report builder — written with Vue 3 single-file components and bundled with Vite.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p>Plain JavaScript on both sides of the IPC boundary, including pure, unit-tested modules for
+                    statement splitting, autocompletion, chart data and report generation.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SQL</h3>
+                <p>CodeMirror 6 SQL editing with dialect-aware completion, plus drivers for relational, analytical and
+                    embedded engines (<code>better-sqlite3</code>, <code>pg</code>, <code>mysql2</code>,
+                    <code>mssql</code>, DuckDB, ClickHouse and libSQL).</p>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="beekeeper-plus-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/beekeeper-plus-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacDown Lite - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A native macOS Markdown editor with live preview: syntax-highlighted source on the left, GitHub-style rendering on the right, a formatting toolbar, LaTeX formulas and HTML/PDF export.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MacDown Lite - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A native macOS Markdown editor with live preview: syntax-highlighted source on the left, GitHub-style rendering on the right, a formatting toolbar, LaTeX formulas and HTML/PDF export.">
+    <meta property="og:image" content="../static/MacDownLite.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MacDown Lite - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A native macOS Markdown editor with live preview: syntax-highlighted source on the left, GitHub-style rendering on the right, a formatting toolbar, LaTeX formulas and HTML/PDF export.">
+    <meta name="twitter:image" content="../static/MacDownLite.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231c1c1e'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2360a5fa'>M</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#1c1c1e">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/MacDownLite.png" alt="Immagine MacDown Lite - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>MacDown Lite - Desktop Application</h1>
+            <p class="project-tagline">A native macOS Markdown editor with live preview: syntax-highlighted source on the left, GitHub-style rendering on the right, a formatting toolbar, LaTeX formulas and HTML/PDF export.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Swift</span>
+                <span class="tech-tag">SwiftUI</span>
+                <span class="tech-tag">Markdown</span>
+                <span class="tech-tag">Javascript</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p>MacDown Lite is a native Markdown editor for macOS built around one idea: you write raw Markdown on the
+            left and see the formatted result on the right, instantly, with no button to press. It is a small
+            personal project written in Swift with SwiftUI and AppKit, works fully offline and ships as a
+            universal app (Apple Silicon and Intel) in a DMG of less than 1 MB.</p>
+        <p>The editor is a plain <code>NSTextView</code> with regex-based syntax highlighting and a formatting bar
+            whose buttons act on the selection or the current line and toggle the formatting off when pressed again.
+            The preview is a local HTML page inside a <code>WKWebView</code>: <code>marked</code> converts the text,
+            <code>DOMPurify</code> sanitises any embedded HTML, <code>highlight.js</code> colours code blocks and
+            <code>KaTeX</code> renders LaTeX formulas &mdash; all bundled with the app, so nothing is loaded from the
+            network.</p>
+        <p>Local images are served through a custom <code>mdfile://</code> URL scheme handled by the app, which lets
+            macOS grant folder access properly. The app is document-based (new, open, save, recent files, automatic
+            versions), the two panes can be resized with a drag handle, and a script assembles, ad-hoc signs and
+            verifies the DMG without needing an Xcode project.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Key features</h2>
+        <ul class="project-features">
+            <li><strong>Live preview</strong> &mdash; the preview updates on every keystroke, with GitHub Flavored
+                Markdown: tables, task lists, strikethrough and fenced code blocks highlighted per language.</li>
+            <li><strong>Syntax-highlighted editor</strong> &mdash; monospaced raw text with colours for headings,
+                bold, italic, links, code, quotes and lists; smart quotes and auto-substitutions are disabled so the
+                Markdown is never altered.</li>
+            <li><strong>Formatting toolbar</strong> &mdash; headings, bold (&#8984;B), italic (&#8984;I),
+                strikethrough, inline code, bullet, numbered and task lists, quotes, indent/outdent, links
+                (&#8984;K), images, tables, code blocks and horizontal rules; each button toggles.</li>
+            <li><strong>Text alignment</strong> &mdash; left, centre and right alignment implemented by wrapping
+                the selected lines in <code>&lt;div align&gt;</code> while keeping the content as Markdown.</li>
+            <li><strong>LaTeX formulas</strong> &mdash; inline <code>$&hellip;$</code> and block
+                <code>$$&hellip;$$</code> maths rendered with KaTeX, plus a menu of snippets (fraction, root,
+                sub/superscript, sum, integral).</li>
+            <li><strong>Independent themes</strong> &mdash; editor and preview each have an Automatic, Light or Dark
+                setting, remembered between launches.</li>
+            <li><strong>Synchronised scrolling</strong> &mdash; the preview follows the editor as you scroll.</li>
+            <li><strong>Images</strong> &mdash; insert from a file (relative path when possible) or a URL; local
+                images load through the app and a missing one shows a warning with its path.</li>
+            <li><strong>Export</strong> &mdash; save the preview as a single self-contained HTML file or as a
+                paginated PDF.</li>
+            <li><strong>Flexible layout</strong> &mdash; editor only (&#8984;1), editor and preview (&#8984;2) or
+                preview only (&#8984;3), with a draggable divider that resets to 50/50 on double click.</li>
+            <li><strong>Safe and offline</strong> &mdash; embedded HTML is sanitised with DOMPurify, links open in
+                the default browser, and all libraries are bundled.</li>
+        </ul>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Swift</h3>
+                <p>The whole application: document model, window layout, text formatting logic and the export code, packaged as a Swift Package with no Xcode project.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SwiftUI</h3>
+                <p>Window, toolbar, formatting bar, theme pickers and the resizable split view, on top of a document-based <code>DocumentGroup</code> app.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Markdown</h3>
+                <p>The native editor is an <code>NSTextView</code> with regex highlighting; text commands toggle GitHub Flavored Markdown syntax on the selection.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p><code>marked</code>, <code>DOMPurify</code>, <code>highlight.js</code> and <code>KaTeX</code> run inside a <code>WKWebView</code> to render, sanitise and colour the preview offline.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="macdown-lite-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/macdown-lite-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
