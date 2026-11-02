@@ -82,66 +82,65 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>RisveGino is the digital field manual for Risvegliati VIP Brescia, an association of volunteer clown
-            doctors ("claun") who run scheduled clown-therapy services in hospitals, care homes and other health
-            and social facilities. Before the app, the operational details each volunteer needed before a
-            service — which structure, on what day, at what time, wearing what protective equipment, who the
-            responsible "angel" was — lived in a paper or PDF manual that was awkward to search and quickly went
-            out of date. RisveGino turns that manual into a searchable, always-up-to-date mobile directory that
-            every clown carries in their pocket.</p>
-        <p>The home screen lists every partner structure as a card, with free-text search over name and address
-            plus quick filter chips for day of the week and structure type (hospital, RSA, day centre, and so
-            on). Tapping a card opens a detail screen with the service's full operational profile: schedule and
-            time slot, mask requirements, maximum capacity, the responsible angel, beneficiaries, expected
-            operators, preparation notes, service organisation, and any extra remarks — plus a one-tap link that
-            opens the structure's address directly in Google Maps, and a fixed safety notice reminding volunteers
-            of the association's photo and privacy rules.</p>
-        <p>Behind that simple list is a small sync system: the canonical <code>structures.json</code> is hosted on
-            Dropbox, and the app authenticates against the Dropbox API with a refresh token to pull the latest
-            version, diff it field-by-field against the copy cached on the device, and — the first time it runs,
-            or whenever the user taps the sync button — show a human-readable summary of what actually changed
-            ("new structures added", "opening hours updated for X"), rather than just silently overwriting the
-            data. Firebase Cloud Messaging complements this: a push notification tells volunteers a new bulletin
-            is available, which triggers the same background sync so the local list stays current without anyone
-            needing to reinstall the app or download a new PDF.</p>
-        <p>The app is built with Flutter and Dart, giving it a single cross-platform codebase for Android and
-            iOS, and is themed with the association's own hand-drawn clown branding (custom "Komica" and "Comic
-            Sans" typefaces, a red/white colour scheme, and a splash screen with the RisveGino logo) so it reads
-            as a natural extension of the paper manual it replaced.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>Brescia</strong><span>volunteer clown-doctor association</span></div>
+            <div class="project-stat"><strong>Search + filters</strong><span>by day and type</span></div>
+            <div class="project-stat"><strong>Cloud</strong><span>data sync with change summary</span></div>
+            <div class="project-stat"><strong>Push</strong><span>notifications to all volunteers</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Searchable structure directory</strong> — every partner facility is listed as a card with
-                name, type, weekly schedule and mask policy at a glance; free-text search matches on structure
-                name or address.</li>
-            <li><strong>Day and type filters</strong> — horizontally scrolling chips let volunteers narrow the
-                list to a specific day of the week or a specific structure type, so they can quickly find "what's
-                on today".</li>
-            <li><strong>Full operational detail sheet</strong> — tapping a structure opens its complete profile:
-                schedule and time, capacity, the responsible angel, beneficiaries, number of operators expected,
-                preparation notes, service organisation and any extra information, each shown only when actually
-                present in the data.</li>
-            <li><strong>One-tap navigation</strong> — the structure's address is tappable and opens directly in
-                Google Maps via <code>url_launcher</code>, taking volunteers straight from the app to
-                turn-by-turn directions.</li>
-            <li><strong>Cloud-backed data sync with change summary</strong> — a manual sync button (and an
-                automatic background check on launch) pulls the latest <code>structures.json</code> from Dropbox,
-                diffs it against the on-device copy, and reports exactly which structures are new or which fields
-                changed, instead of a blind overwrite.</li>
-            <li><strong>Push notifications</strong> — Firebase Cloud Messaging keeps every device subscribed to a
-                shared "strutture" topic, so an update to the manual can be broadcast to all volunteers and
-                trigger an automatic re-sync, with a local notification shown even while the app is open.</li>
-            <li><strong>Safety and privacy reminders</strong> — the detail screen always surfaces the
-                association's operational rules: who to notify if a volunteer can't attend, how to report
-                attendance, and an explicit, highlighted ban on posting photos from inside a facility on social
-                media.</li>
-            <li><strong>Custom clown-themed UI</strong> — a dedicated splash screen, header artwork, and the
-                association's own "Komica" and "Comic Sans" fonts give the app a distinct, playful identity that
-                matches the volunteers' own materials rather than a generic Material look.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">RisveGino is the digital field manual for Risvegliati VIP Brescia, an association of volunteer clown doctors who run scheduled clown-therapy services in hospitals, care homes and other health and social facilities. It puts everything a volunteer needs about each partner structure in their pocket.</p>
+        <p>The home screen lists every structure as a card, with free-text search over name and address and quick filter chips for day of the week and structure type. Tapping a card opens the complete profile of the service, and the address opens directly in Google Maps for turn-by-turn directions.</p>
+        <p>The manual is kept up to date from the cloud: the app pulls the latest version, compares it with the copy on the device and tells the volunteer exactly which structures are new or which fields changed.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Everything about a service</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/risvegino-mobile-application/0.png" alt="RisveGino - Mobile Application — structure list and detail">
+            </figure>
+            <div>
+                <p>The detail sheet shows schedule and time, capacity, the responsible angel, beneficiaries, expected operators, preparation notes and service organisation, together with the association's operational rules: who to notify if you cannot attend, how to report attendance and an explicit reminder not to post photos from inside a facility.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Find</h3>
+                <ul class="project-features">
+                    <li>Searchable directory of partner structures</li>
+                    <li>Filters by day of the week and structure type</li>
+                    <li>Weekly schedule and mask policy visible at a glance</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Stay in sync</h3>
+                <ul class="project-features">
+                    <li>Manual or automatic background sync</li>
+                    <li>Summary of what changed</li>
+                    <li>Push notifications that trigger an automatic update</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Identity</h3>
+                <ul class="project-features">
+                    <li>Hand-drawn clown branding, custom fonts and a red and white colour scheme</li>
+                    <li>Splash screen and header artwork matching the association's materials</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A Flutter app for Android and iOS. The structure data is a single file hosted in the cloud and synchronised through its API, push notifications use Firebase Cloud Messaging with a shared topic, and local notifications appear even while the app is open.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -149,42 +148,31 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Implements the app's state, data model and business logic: parsing <code>structures.json</code>
-                    into typed <code>Structure</code> objects, driving search/filter logic, and computing the
-                    field-level diff used to summarise remote updates.</p>
+                <p>Implements the app's state, data model and business logic: parsing the structure data, driving search and filters, and computing the diff used to summarise updates.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Provides the single cross-platform UI for Android and iOS — the structure list, filter chips,
-                    sliver-based detail screen with a collapsing header, and the custom clown-themed styling and
-                    animations.</p>
+                <p>Provides the single cross-platform UI for Android and iOS — the structure list, filter chips, sliver-based detail screen with a collapsing header, and the custom clown-themed styling and animations.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Firebase Cloud Messaging</h3>
-                <p>Delivers push notifications to every installed app, broadcasting manual updates to the
-                    "strutture" topic and waking a background sync so volunteers see fresh data without manually
-                    checking.</p>
+                <p>Delivers push notifications to every installed app, broadcasting manual updates to the "strutture" topic and waking a background sync so volunteers see fresh data without manually checking.</p>
             </div>
             <div class="project-stack-item">
                 <h3>flutter_local_notifications</h3>
-                <p>Shows a native notification when a push message arrives while the app is already open in the
-                    foreground, on both Android (via a dedicated high-priority channel) and iOS.</p>
+                <p>Shows a native notification when a push message arrives while the app is already open in the foreground, on both Android (via a dedicated high-priority channel) and iOS.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Dropbox API</h3>
-                <p>Hosts the canonical <code>structures.json</code> manual. The app authenticates with an
-                    OAuth2 refresh token to fetch the latest file, letting the association's data owners update
-                    the manual by editing a single shared file rather than shipping a new app release.</p>
+                <p>Hosts the canonical manual file that every device synchronises from.</p>
             </div>
             <div class="project-stack-item">
                 <h3>url_launcher</h3>
-                <p>Opens a structure's address directly in Google Maps from the detail screen, handing off
-                    navigation to the device's native maps app.</p>
+                <p>Opens a structure's address directly in Google Maps from the detail screen, handing off navigation to the device's native maps app.</p>
             </div>
             <div class="project-stack-item">
                 <h3>path_provider</h3>
-                <p>Locates the app's documents directory so the synced <code>structures.json</code> can be cached
-                    on-device and reloaded on subsequent launches without a network round-trip.</p>
+                <p>Locates the app's documents folder so synced data can be cached on the device and reloaded without a network round-trip.</p>
             </div>
         </div>
     </section>

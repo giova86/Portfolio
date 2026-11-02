@@ -82,37 +82,65 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Words Invaders (internally codenamed "Sparola") is a mobile arcade game that reimagines the classic
-            Space Invaders formula: instead of alien ships, words fall from the top of the screen in three columns,
-            and the player has to type each one correctly before it reaches the bottom. Get a word right and it
-            explodes in a burst of animated particles; let one slip through and you lose a life.</p>
-        <p>The game is built as a single Flutter application written entirely in Dart, targeting Android and iOS
-            with a retro '80s pixel-art aesthetic: an animated star field background, neon green/yellow/blue color
-            palette, monospace fonts, and horizontally-drifting alien sprites on the home screen.</p>
-        <p>Difficulty ramps up across 9 progressive levels — both the word length (from 2-3 letters up to 10+) and
-            the falling/spawn speed increase as the player advances, while a persistent high score and high level
-            are saved locally between sessions.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>9</strong><span>progressive levels</span></div>
+            <div class="project-stat"><strong>3</strong><span>lives</span></div>
+            <div class="project-stat"><strong>20</strong><span>points per word</span></div>
+            <div class="project-stat"><strong>Retro</strong><span>80s pixel-art style</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Type-to-destroy gameplay: falling words are cleared by typing them correctly on an integrated
-                virtual keyboard, with live highlighting of the letters already matched.</li>
-            <li>9 progressive levels with increasing word length and difficulty, driven by timers that shorten the
-                word-spawn interval and fall speed as the player levels up.</li>
-            <li>Scoring system worth 20 points per completed word, with automatic level-up thresholds and a
-                celebratory "LEVEL UP" pause screen between levels.</li>
-            <li>3 lives, lost whenever a word reaches the bottom of the screen unsolved, ending the run when they
-                run out.</li>
-            <li>Custom-painted explosion and starfield effects (via <code>CustomPainter</code>) — particle bursts
-                with simulated gravity and randomized color/duration play whenever a word is destroyed.</li>
-            <li>Persistent high score and high level, stored on-device with <code>shared_preferences</code> and
-                shown on both the home screen and the game-over screen.</li>
-            <li>Sound effects (laser/shoot sound on each keystroke) via <code>audioplayers</code>, paired with a
-                fully custom retro pixel-art UI for the home, in-game HUD, and game-over screens.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Words Invaders is a mobile arcade game that reimagines the classic Space Invaders formula: instead of alien ships, words fall from the top of the screen in three columns, and the player has to type each one correctly before it reaches the bottom.</p>
+        <p>It has a retro 80s pixel-art look: an animated star field, a neon green, yellow and blue palette, monospace fonts and a custom virtual keyboard.</p>
+        <p>Difficulty ramps up across nine levels as both the word length and the falling speed increase, while the best score and level are saved on the device.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Type to shoot</h2>
+        <div class="project-split">
+            <div>
+                <p>Letters already matched are highlighted live on the falling word, every keystroke fires a laser sound, and a destroyed word bursts into particles with simulated gravity. Three lives are lost whenever a word hits the bottom, and a level-up screen celebrates each new stage.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/words-invaders-mobile-application/0.png" alt="Words Invaders - Mobile Application — falling words">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Gameplay</h3>
+                <ul class="project-features">
+                    <li>Type-to-destroy with live highlighting</li>
+                    <li>Nine levels from short to ten-plus-letter words</li>
+                    <li>Three lives and automatic level-up thresholds</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Effects</h3>
+                <ul class="project-features">
+                    <li>Custom-drawn explosions and star field</li>
+                    <li>Laser sound effects</li>
+                    <li>Retro pixel-art interface for home, HUD and game over</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Progress</h3>
+                <ul class="project-features">
+                    <li>Best score and best level saved on the device</li>
+                    <li>Shown on the home and game-over screens</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A single Flutter application written in Dart for Android and iOS. Spawn and fall speeds are driven by timers that shorten with every level, explosions and the star field are drawn with custom painters, and scores are stored locally.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -120,23 +148,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Core language for all game logic: state management, word-spawning and scoring rules, level
-                    progression, and the timer-driven game loop.</p>
+                <p>Core language for all game logic: state management, word-spawning and scoring rules, level progression, and the timer-driven game loop.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Cross-platform UI framework used to build the entire app — home, game, and game-over screens,
-                    animations, and the virtual keyboard — from a single Android/iOS codebase.</p>
+                <p>Cross-platform UI framework used to build the entire app — home, game, and game-over screens, animations, and the virtual keyboard — from a single Android/iOS codebase.</p>
             </div>
             <div class="project-stack-item">
                 <h3>CustomPainter</h3>
-                <p>Used to hand-draw the animated star field and the particle-based explosion/laser effects
-                    directly on the canvas for smooth, lightweight visuals.</p>
+                <p>Used to hand-draw the animated star field and the particle-based explosion/laser effects directly on the canvas for smooth, lightweight visuals.</p>
             </div>
             <div class="project-stack-item">
                 <h3>shared_preferences</h3>
-                <p>Persists the player's high score and highest level reached locally on the device between game
-                    sessions.</p>
+                <p>Persists the player's high score and highest level reached locally on the device between game sessions.</p>
             </div>
             <div class="project-stack-item">
                 <h3>audioplayers</h3>

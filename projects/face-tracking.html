@@ -91,46 +91,66 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Face Tracking turns a static webcam feed into an auto-framing virtual camera for video calls, online
-            classes, and streaming. Rather than a fixed frame, it continuously detects the speaker's face and
-            recentres and crops the video so the subject stays framed as they move — without a PTZ camera or any
-            manual repositioning.</p>
-        <p>Under the hood, MediaPipe's FaceMesh model runs on every frame captured through OpenCV, using a stable
-            point on the nose bridge as the tracking anchor. The raw position is smoothed twice — first with a
-            weighted moving average that favours the most recent frames, then with an exponential filter — before
-            the frame is cropped around it and resized back to the output resolution with OpenCV's cubic
-            interpolation. The result is pushed to a system virtual camera device via pyvirtualcam, so any
-            application that accepts a webcam source — OBS, Zoom, Google Meet, Discord, Teams — can use it directly
-            as a video source.</p>
-        <p>If the face briefly leaves the frame or detection drops for less than a second, the last known velocity
-            is used to extrapolate its position, keeping the crop moving fluidly instead of snapping back to
-            centre. The script also probes several FaceMesh configurations at startup and auto-detects the
-            available camera devices, so it degrades gracefully across different setups. A companion script,
-            <code>app_multi.py</code>, extends the same approach to two people at once: it keeps both speakers in a
-            single shared frame while they're close together, then automatically switches to a synchronised
-            split-screen view — with hysteresis to avoid flicker — once they move far enough apart.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>2-stage</strong><span>motion smoothing</span></div>
+            <div class="project-stat"><strong><1 s</strong><span>of lost tracking bridged by prediction</span></div>
+            <div class="project-stat"><strong>Any app</strong><span>that accepts a webcam</span></div>
+            <div class="project-stat"><strong>Multi-face</strong><span>variant for two speakers</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Automatic face tracking that keeps the subject stable and centred, anchored on a nose-bridge
-                landmark from MediaPipe's FaceMesh.</li>
-            <li>Dynamic zoom: crops the frame to a configurable "active area", removing unnecessary empty space for
-                a more professional look.</li>
-            <li>Two-stage smoothing — a weighted moving average plus exponential filtering — to prevent jerky camera
-                motion.</li>
-            <li>Motion prediction: if the face is momentarily lost, its position is extrapolated from the last known
-                velocity to keep the frame moving fluidly.</li>
-            <li>Highly configurable via command-line arguments — zoom, smoothing window, recency weighting,
-                resolution, FPS, and camera device ID.</li>
-            <li>Headless mode for running on a server or in the background without preview windows.</li>
-            <li>Broad compatibility: streams through pyvirtualcam, so any app that accepts a webcam source — OBS,
-                Zoom, Google Meet, Discord, Teams — can use it out of the box.</li>
-            <li>Multi-face variant (<code>app_multi.py</code>) that automatically switches between a unified
-                two-person frame and a synchronised split-screen view as speakers move apart.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Face Tracking turns a static webcam feed into an auto-framing virtual camera for video calls, online classes and streaming. Rather than a fixed frame, it continuously detects the speaker's face and recentres and crops the video so the subject stays framed as they move — with no extra hardware.</p>
+        <p>The face position is smoothed in two stages, first with a weighted moving average that favours recent frames and then with an exponential filter, so the camera glides instead of jerking. If the face briefly leaves the frame, its movement is extrapolated so the crop keeps moving fluidly instead of snapping back to the centre.</p>
+        <p>The result is streamed to a virtual camera, so OBS, Zoom, Google Meet, Discord or Teams can use it as a regular webcam.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A camera operator in software</h2>
+        <div class="project-split">
+            <div>
+                <p>Zoom and the active area are configurable, removing empty space for a more professional look. A multi-face variant switches automatically between a unified frame for two people and a synchronised split-screen as the speakers move apart.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/face-tracking/0.png" alt="Face Tracking — auto-framed video">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Tracking</h3>
+                <ul class="project-features">
+                    <li>Face tracked through a stable landmark on the nose bridge</li>
+                    <li>Motion prediction when the face is momentarily lost</li>
+                    <li>Automatic choice of the best detection configuration at startup</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Framing</h3>
+                <ul class="project-features">
+                    <li>Dynamic zoom on a configurable active area</li>
+                    <li>Two-stage smoothing for fluid motion</li>
+                    <li>Unified or split-screen view for two people</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Everywhere</h3>
+                <ul class="project-features">
+                    <li>Works with any app that accepts a webcam</li>
+                    <li>Headless mode for servers and background use</li>
+                    <li>Configurable zoom, smoothing, resolution, frame rate and camera</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A MediaPipe face-mesh model runs on every frame captured through OpenCV, and the cropped result is published through a virtual-camera backend.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -138,25 +158,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Core language for the whole pipeline; an argparse-driven CLI exposes zoom, smoothing, resolution,
-                    FPS, and camera-device settings so the tool can be tuned per use case without touching code.</p>
+                <p>Core language for the whole pipeline; an argparse-driven CLI exposes zoom, smoothing, resolution, FPS, and camera-device settings so the tool can be tuned per use case without touching code.</p>
             </div>
             <div class="project-stack-item">
                 <h3>OpenCV</h3>
-                <p>Captures frames from the physical webcam, handles colour-space conversion, crops and resizes the
-                    tracked region with cubic interpolation, and draws the debug overlays shown in the preview
-                    windows.</p>
+                <p>Captures frames from the physical webcam, handles colour-space conversion, crops and resizes the tracked region with cubic interpolation, and draws the debug overlays shown in the preview windows.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Mediapipe</h3>
-                <p>Runs the FaceMesh model that detects facial landmarks on every frame; the app uses the nose-bridge
-                    point as a stable tracking anchor and falls back through progressively looser detection/tracking
-                    confidence configs if the strictest one fails to load.</p>
+                <p>Runs the FaceMesh model that detects facial landmarks on every frame; the app uses the nose-bridge point as a stable tracking anchor and falls back through progressively looser detection/tracking confidence configs if the strictest one fails to load.</p>
             </div>
             <div class="project-stack-item">
                 <h3>PyVirtualCam</h3>
-                <p>Streams the cropped, recentred frame to a system-level virtual camera device, so any conferencing
-                    or streaming app can pick it up as a normal webcam source.</p>
+                <p>Streams the cropped, recentred frame to a system-level virtual camera device, so any conferencing or streaming app can pick it up as a normal webcam source.</p>
             </div>
         </div>
     </section>

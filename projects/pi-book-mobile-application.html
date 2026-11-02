@@ -82,39 +82,66 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Pi Book looks like an ordinary dark-themed calculator, but every number it computes is silently checked
-            against a million digits of π. Whenever the current expression or result exists somewhere in Pi's
-            decimal expansion, the app reveals it: an icon changes color, and a long press on the calculator button
-            reveals exactly where the sequence lives — as if Pi had been printed in a physical book, split into
-            pages, rows and columns.</p>
-        <p>The idea plays on the fact that Pi is (conjectured to be) a normal number: every finite digit sequence —
-            a birth date, a phone number, today's calculation — should appear in it somewhere. Pi Book turns that
-            curiosity into an interactive party trick hidden inside a fully working calculator.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>1,000,000</strong><span>digits of π searched</span></div>
+            <div class="project-stat"><strong>Live</strong><span>detection after every keystroke</span></div>
+            <div class="project-stat"><strong>Page/row/col</strong><span>position as in a printed book</span></div>
+            <div class="project-stat"><strong>Dark</strong><span>calculator disguise</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Full four-function calculator (addition, subtraction, multiplication, division), plus percentage,
-                sign toggle, decimal input and backspace/all-clear — built on top of the <code>math_expressions</code>
-                shunting-yard parser rather than hand-rolled arithmetic.</li>
-            <li>Live Pi-sequence detection: after every keystroke the app strips the sign and decimal point from the
-                current expression or result and searches for it inside a bundled million-digit Pi dataset.</li>
-            <li>Visual "found in Pi" indicator that changes color the instant the current number is located inside
-                the expansion, with no extra tap required.</li>
-            <li>Long-press reveal on the calculator button: press and hold to see the sequence's exact position
-                expressed as a page, row and column — as if π were printed across pages of 48 rows × 60 digits.</li>
-            <li>A single tap toggles a persistent "book view", swapping the fake status bar's clock and battery
-                readout for the Pi page and row/position numbers, so the position stays on screen without holding
-                the button down.</li>
-            <li>A convincing disguise: the top bar mimics a real phone's status icons (Wi-Fi, signal, battery,
-                clock), so the Pi feature stays hidden until you know the long-press gesture.</li>
-            <li>Animated splash screen with a scaling, fading π mark inside a circular progress ring before handing
-                off to the calculator.</li>
-            <li>Dark theme throughout, locked to portrait orientation, with responsive button and font sizing based
-                on screen width so the layout holds up across phone sizes.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Pi Book looks like an ordinary dark-themed calculator, but every number it computes is silently checked against a million digits of π. Whenever the current expression or result exists somewhere in the decimal expansion, the app reveals it: an icon changes colour, and a long press shows exactly where the sequence is found.</p>
+        <p>The idea plays on the fact that π is conjectured to contain every finite sequence of digits — a birth date, a phone number, today's calculation. Pi Book turns that curiosity into an interactive party trick hidden inside a convincing calculator.</p>
+        <p>The position is expressed as a page, row and column, as if π were printed across pages of 48 rows of 60 digits.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Found in π</h2>
+        <div class="project-split">
+            <div>
+                <p>A single tap toggles a persistent book view, swapping the fake status bar's clock and battery readout for the page and row numbers so the position stays on screen. The top bar imitates a real phone's status icons, so the feature stays hidden until you know the gesture.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/pi-book-mobile-application/0.png" alt="Pi Book - Mobile Application — calculator with the Pi indicator">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Calculator</h3>
+                <ul class="project-features">
+                    <li>Four operations, percentage, sign toggle and decimal input</li>
+                    <li>Backspace and clear</li>
+                    <li>Reliable expression parsing</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Pi search</h3>
+                <ul class="project-features">
+                    <li>Detection after every keystroke</li>
+                    <li>Indicator that changes colour the moment the number is found</li>
+                    <li>Long-press reveal of the exact position</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Polish</h3>
+                <ul class="project-features">
+                    <li>Animated splash screen with a growing π mark</li>
+                    <li>Dark theme and portrait lock</li>
+                    <li>Layout that scales with the screen width</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A Flutter app for Android and iOS. The one-million-digit dataset is bundled in the app and searched on the device, and a small native Android component adapts the system overlay to the navigation mode.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -122,24 +149,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Implements all app logic: expression state management, the Pi-sequence search over the bundled
-                    digit string, and the page/row/column math that turns a raw index into a "book" position.</p>
+                <p>Implements all app logic: expression state management, the Pi-sequence search over the bundled digit string, and the page/row/column math that turns a raw index into a "book" position.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Builds the entire UI — custom circular calculator buttons with press animations, the
-                    <code>AnimationController</code>-driven splash screen, and gesture handling (tap vs. long-press)
-                    on the calculator button that switches between the two Pi-reveal modes.</p>
+                <p>Builds the entire UI — custom circular calculator buttons with press animations, the AnimationController-driven splash screen, and gesture handling (tap vs.</p>
             </div>
             <div class="project-stack-item">
                 <h3>math_expressions</h3>
-                <p>Dart package used to parse and evaluate calculator expressions via its shunting-yard parser,
-                    instead of writing a custom arithmetic evaluator.</p>
+                <p>Dart package used to parse and evaluate calculator expressions via its shunting-yard parser, instead of writing a custom arithmetic evaluator.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Platform channel (Android)</h3>
-                <p>A native <code>MethodChannel</code> queries the device's system navigation mode (gesture vs.
-                    button navigation) at startup, so the immersive UI hides the right system bars on each device.</p>
+                <p>A native MethodChannel queries the device's system navigation mode (gesture vs.</p>
             </div>
         </div>
     </section>

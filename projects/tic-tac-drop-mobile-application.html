@@ -82,44 +82,67 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Tic Tac Drop takes the familiar 3x3 tic-tac-toe grid and gives it a sliding-window twist: each player
-            can only ever have three marks on the board. Placing a fourth automatically removes that player's
-            oldest mark before the new one lands, so the board is never static &mdash; every move quietly weakens
-            an existing line and opens up a square somewhere else.</p>
-        <p>It's a single-screen Flutter mobile app with two modes: local two-player (pass-and-play on the same
-            device) and a rule-based AI opponent. The whole game &mdash; state, board rendering, computer logic,
-            and result dialogs &mdash; lives in one <code>StatefulWidget</code>, animated with Flutter's own
-            <code>AnimationController</code>/<code>Tween</code> APIs rather than an external animation package.</p>
-        <p>The core design problem is the classic tic-tac-toe win check no longer being enough on its own: with
-            marks disappearing, both the player and the AI need to reason not just about "can I make three in a
-            row now" but "which of my pieces is about to vanish, and does that break a line I'm relying on."</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>3</strong><span>marks per player at most</span></div>
+            <div class="project-stat"><strong>2</strong><span>modes: friend or AI</span></div>
+            <div class="project-stat"><strong>Live</strong><span>warning on the piece about to vanish</span></div>
+            <div class="project-stat"><strong>Gold</strong><span>winning line highlight</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Sliding three-piece rule: each player's moves are tracked in a FIFO queue
-                (<code>Queue&lt;int&gt;</code>); placing a fourth mark evicts the oldest one from the board
-                automatically, keeping the game in constant flux instead of filling up and ending in a draw.</li>
-            <li>Two game modes from the home screen: local pass-and-play against a friend, or a single-player
-                match against a built-in AI.</li>
-            <li>Rule-based AI opponent with a priority ladder: it first checks every available move (including
-                the piece it would have to drop) for an immediate win, then checks whether the human's next move
-                would win and blocks it, then falls back to taking the center, then to a random legal move.</li>
-            <li>"About to disappear" indicator: the cell holding the current player's oldest piece blinks (via a
-                looping <code>AnimationController</code>) whenever that player already has three marks on the
-                board, so the next capture is telegraphed instead of being a surprise.</li>
-            <li>Live win highlighting: the three winning cells are picked out in gold once a line of three forms,
-                using the same coordinate list the win-checker scans.</li>
-            <li>Persistent scoreboard for X, O across games within a session, reset together with the board via
-                the "New game" action.</li>
-            <li>Responsive board layout: a <code>LayoutBuilder</code> switches between a stacked portrait layout
-                and a side-by-side landscape layout (board + scoreboard/status panel), sizing the grid off the
-                available width/height rather than fixed constants.</li>
-            <li>In-app rules screen explaining the base rules, objective, game modes, and the piece-eviction
-                strategy twist, reachable from both the home screen and the in-game app bar.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Tic Tac Drop takes the familiar 3×3 tic-tac-toe grid and gives it a sliding-window twist: each player can only ever have three marks on the board. Placing a fourth automatically removes that player's oldest mark before the new one lands, so the board is always in flux and games rarely end in a draw.</p>
+        <p>Play pass-and-play with a friend on the same device, or face a built-in computer opponent. With marks disappearing, both players need to think not just about making three in a row now, but about which of their own pieces is about to vanish.</p>
+        <p>The cell holding the oldest piece blinks when its owner already has three marks, so the next removal is telegraphed rather than a surprise.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A smarter opponent</h2>
+        <div class="project-split">
+            <div>
+                <p>The computer follows a priority ladder: win immediately if possible, otherwise block the human's winning move, otherwise take the best available square — always accounting for the piece it would have to drop.</p>
+                <p>The winning line is picked out in gold, and a scoreboard keeps X and O results across games in a session.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/tic-tac-drop-mobile-application/0.png" alt="Tic Tac Drop - Mobile Application — a game in progress">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Game</h3>
+                <ul class="project-features">
+                    <li>Sliding three-piece rule</li>
+                    <li>Local two-player or computer opponent</li>
+                    <li>Persistent session scoreboard</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Feedback</h3>
+                <ul class="project-features">
+                    <li>Blinking indicator on the piece about to disappear</li>
+                    <li>Winning cells highlighted in gold</li>
+                    <li>Result dialogs for each game</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Layout</h3>
+                <ul class="project-features">
+                    <li>Stacked portrait layout and side-by-side landscape layout</li>
+                    <li>Board sized from the space available</li>
+                    <li>In-app rules screen from the home page and from the game</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A single-screen Flutter app. Each player's moves are tracked in a first-in, first-out queue, which makes the oldest-piece removal natural, and the whole game logic, board and computer opponent live in one widget.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -127,16 +150,11 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Implements the game state machine: move validation, the FIFO eviction of each player's oldest
-                    piece via <code>dart:collection</code>'s <code>Queue</code>, the eight-combination win check
-                    shared by both the human and the AI, and the AI's win/block/center/random decision ladder.</p>
+                <p>Implements the game state machine: move validation, the FIFO eviction of each player's oldest piece via dart:collection's Queue, the eight-combination win check shared by both the human and the AI, and the AI's win/block/center/random decision ladder.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Renders the board with a <code>GridView.builder</code> over <code>AnimatedContainer</code> /
-                    <code>AnimatedDefaultTextStyle</code> cells, drives the blinking "next to be removed" cue and
-                    tap feedback with <code>AnimationController</code>/<code>Tween</code>, and adapts the layout
-                    between portrait and landscape with <code>LayoutBuilder</code>.</p>
+                <p>Renders the board with a GridView.builder over AnimatedContainer / AnimatedDefaultTextStyle cells, drives the blinking "next to be removed" cue and tap feedback with AnimationController/Tween, and adapts the layout between portrait and landscape with LayoutBuilder.</p>
             </div>
         </div>
     </section>

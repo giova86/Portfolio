@@ -81,51 +81,96 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>BeeKeeper Plus is a desktop SQL editor and database browser built with Electron, Vue 3 and CodeMirror 6,
-            modelled on the look and feel of Beekeeper Studio. It is a personal project: a single dark-themed window
-            with a connection manager, an entity tree, tabbed query editors and a results grid, able to talk to
-            SQLite, libSQL/Turso, DuckDB, PostgreSQL, MySQL, SQL Server, ClickHouse, MongoDB and Redis through one
-            common interface.</p>
-        <p>Each engine has its own driver in the Electron main process, behind a shared IPC layer, so the renderer
-            only deals with queries, result sets and table structures. Results can be browsed in a sortable grid with a
-            JSON sidebar, edited in place, exported as CSV, JSON or SQL, or switched to a chart view that maps columns
-            to axes, colour and size and draws up to 50,000 rows with Plotly.</p>
-        <p>On top of the editor it adds a markdown report builder that collects queries, data excerpts, charts and
-            free text into a ZIP, and an AI assistant that turns questions in natural language into SQL (or Mongo /
-            Redis commands) for the connected schema. Connection passwords are encrypted with the OS keychain, and
-            a modular set of scripts builds an ad-hoc signed macOS app and DMG.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>9</strong><span>database engines behind one interface</span></div>
+            <div class="project-stat"><strong>50k</strong><span>rows plotted in a single chart</span></div>
+            <div class="project-stat"><strong>8</strong><span>chart types</span></div>
+            <div class="project-stat"><strong>7+</strong><span>AI providers for text-to-SQL</span></div>
+            <div class="project-stat"><strong>Keychain</strong><span>encrypted saved connections</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Nine engines, one UI</strong> — SQLite, libSQL/Turso, DuckDB, PostgreSQL, MySQL, SQL Server,
-                ClickHouse, MongoDB and Redis, each with a dedicated driver.</li>
-            <li><strong>Query editor</strong> — CodeMirror 6 with syntax highlighting, schema-aware autocomplete,
-                multiple tabs, run-at-cursor or run-all, query history and saved queries scoped to each connection
-                (with import and export).</li>
-            <li><strong>Results grid</strong> — sortable columns, cell selection, a JSON sidebar for the selected
-                row and cell, and inline editing of table data through “Edit Data”.</li>
-            <li><strong>Charts</strong> — bars, lines, area, scatter, histogram, box plot, pie and heatmap, with
-                columns mapped to X, Y, colour and size; stacked or grouped bars, log scale, and PNG or SVG export.</li>
-            <li><strong>Table browser and structure</strong> — entity tree with tables, views and columns, paged data
-                tabs with filtering, and a structure tab showing columns, indexes and foreign keys, with column and
-                index changes reviewed as SQL before they are applied.</li>
-            <li><strong>Import and export</strong> — import CSV files into tables (PapaParse) and export results as
-                CSV, JSON or SQL.</li>
-            <li><strong>Report builder</strong> — add queries, the first rows of a result, charts and text blocks to a
-                per-connection draft, preview it as markdown and export everything as a ZIP with the chart images.</li>
-            <li><strong>AI assistant</strong> — natural-language questions answered with SQL for your schema, using
-                Anthropic, OpenAI, Google Gemini, LM Studio, Ollama, the Claude Code CLI or any OpenAI-compatible
-                endpoint.</li>
-            <li><strong>Saved connections</strong> — stored locally, with passwords encrypted through Electron
-                <code>safeStorage</code> and the OS keychain.</li>
-            <li><strong>Packaging and tests</strong> — scripts that assemble the <code>.app</code>, apply an ad-hoc
-                signature and create a verified DMG; plain Node unit tests plus an end-to-end suite that drives the
-                real app in a hidden window.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">BeeKeeper Plus is a desktop SQL editor and database browser modelled on the look and feel of Beekeeper Studio: one dark window with a connection manager, a tree of tables and views, tabbed query editors and a results grid.</p>
+        <p>It talks to SQLite, libSQL/Turso, DuckDB, PostgreSQL, MySQL, SQL Server, ClickHouse, MongoDB and Redis through the same interface, so switching from a local file to a production server does not change the way you work. Results can be sorted, inspected in a JSON sidebar, edited in place, exported or turned into charts.</p>
+        <p>On top of the editor it adds a report builder that collects queries, data excerpts, charts and notes into a shareable bundle, and an AI assistant that turns questions in plain language into queries for the connected schema.</p>
 
+        <div class="project-callout">
+            <h3>A personal project</h3>
+            <p>Built to see how far a commercial-grade database client can be recreated with web technologies in a desktop shell.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>From query to chart</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/beekeeper-plus-desktop-application/0.png" alt="BeeKeeper Plus - Desktop Application — query editor and results">
+            </figure>
+            <div>
+                <p>Write a query in an editor with syntax highlighting and schema-aware autocomplete, run it at the cursor or all at once, and read the answer in a sortable grid with a JSON view of the selected row.</p>
+                <p>Switch the same result to a chart: columns map to axes, colour and size, with bars, lines, areas, scatter plots, histograms, box plots, pies and heatmaps, and the picture can be exported as an image.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Many engines, one UI</h3>
+                <ul class="project-features">
+                    <li>Nine engines, each with a dedicated driver</li>
+                    <li>Saved connections stored locally, passwords encrypted with the system keychain</li>
+                    <li>Table browser with paged data, filters and a structure view of columns, indexes and foreign keys</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Query editor</h3>
+                <ul class="project-features">
+                    <li>Multiple tabs, run-at-cursor or run-all</li>
+                    <li>Query history and saved queries per connection, with import and export</li>
+                    <li>Changes to columns and indexes are reviewed as SQL before they are applied</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Results and data</h3>
+                <ul class="project-features">
+                    <li>Sortable grid with cell selection and a JSON sidebar</li>
+                    <li>Inline editing of table data</li>
+                    <li>Import CSV files into tables; export results as CSV, JSON or SQL</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Charts</h3>
+                <ul class="project-features">
+                    <li>Eight chart types with stacked or grouped bars and log scale</li>
+                    <li>Up to 50,000 rows drawn smoothly</li>
+                    <li>PNG and SVG export</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Reports</h3>
+                <ul class="project-features">
+                    <li>Add queries, result excerpts, charts and text blocks to a draft per connection</li>
+                    <li>Preview as Markdown and export everything as a ZIP with the chart images</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>AI assistant</h3>
+                <ul class="project-features">
+                    <li>Natural-language questions answered with SQL, Mongo or Redis commands for your schema</li>
+                    <li>Works with cloud providers or local models such as LM Studio and Ollama, or any compatible endpoint</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>Each database engine has its own driver running in the application's main process behind a shared messaging layer, so the interface only ever deals with queries, result sets and table structures. The interface is a Vue 3 application with a CodeMirror 6 editor, and charts are drawn with Plotly.</p>
+        <p>The app is packaged as a signed macOS bundle and DMG, and is verified by unit tests and an end-to-end suite that drives the real application.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -133,24 +178,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Electron</h3>
-                <p>Desktop shell: main process, IPC and preload bridge, the per-engine database drivers, the AI
-                    providers and encrypted credential storage through <code>safeStorage</code>.</p>
+                <p>Desktop shell: main process, IPC and preload bridge, the per-engine database drivers, the AI providers and encrypted credential storage through safeStorage.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Vue</h3>
-                <p>The whole interface — workspace tabs, entity tree, results grid, chart panel, structure editor and
-                    report builder — written with Vue 3 single-file components and bundled with Vite.</p>
+                <p>The whole interface — workspace tabs, entity tree, results grid, chart panel, structure editor and report builder — written with Vue 3 single-file components and bundled with Vite.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Javascript</h3>
-                <p>Plain JavaScript on both sides of the IPC boundary, including pure, unit-tested modules for
-                    statement splitting, autocompletion, chart data and report generation.</p>
+                <p>Plain JavaScript on both sides of the IPC boundary, including pure, unit-tested modules for statement splitting, autocompletion, chart data and report generation.</p>
             </div>
             <div class="project-stack-item">
                 <h3>SQL</h3>
-                <p>CodeMirror 6 SQL editing with dialect-aware completion, plus drivers for relational, analytical and
-                    embedded engines (<code>better-sqlite3</code>, <code>pg</code>, <code>mysql2</code>,
-                    <code>mssql</code>, DuckDB, ClickHouse and libSQL).</p>
+                <p>CodeMirror 6 SQL editing with dialect-aware completion, plus drivers for relational, analytical and embedded engines (better-sqlite3, pg, mysql2, mssql, DuckDB, ClickHouse and libSQL).</p>
             </div>
         </div>
 

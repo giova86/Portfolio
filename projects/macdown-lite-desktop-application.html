@@ -81,51 +81,75 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>MacDown Lite is a native Markdown editor for macOS built around one idea: you write raw Markdown on the
-            left and see the formatted result on the right, instantly, with no button to press. It is a small
-            personal project written in Swift with SwiftUI and AppKit, works fully offline and ships as a
-            universal app (Apple Silicon and Intel) in a DMG of less than 1 MB.</p>
-        <p>The editor is a plain <code>NSTextView</code> with regex-based syntax highlighting and a formatting bar
-            whose buttons act on the selection or the current line and toggle the formatting off when pressed again.
-            The preview is a local HTML page inside a <code>WKWebView</code>: <code>marked</code> converts the text,
-            <code>DOMPurify</code> sanitises any embedded HTML, <code>highlight.js</code> colours code blocks and
-            <code>KaTeX</code> renders LaTeX formulas &mdash; all bundled with the app, so nothing is loaded from the
-            network.</p>
-        <p>Local images are served through a custom <code>mdfile://</code> URL scheme handled by the app, which lets
-            macOS grant folder access properly. The app is document-based (new, open, save, recent files, automatic
-            versions), the two panes can be resized with a drag handle, and a script assembles, ad-hoc signs and
-            verifies the DMG without needing an Xcode project.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong><1 MB</strong><span>download size</span></div>
+            <div class="project-stat"><strong>Live</strong><span>preview on every keystroke</span></div>
+            <div class="project-stat"><strong>Offline</strong><span>all libraries bundled</span></div>
+            <div class="project-stat"><strong>Universal</strong><span>Apple silicon and Intel</span></div>
+            <div class="project-stat"><strong>PDF + HTML</strong><span>one-click export</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Live preview</strong> &mdash; the preview updates on every keystroke, with GitHub Flavored
-                Markdown: tables, task lists, strikethrough and fenced code blocks highlighted per language.</li>
-            <li><strong>Syntax-highlighted editor</strong> &mdash; monospaced raw text with colours for headings,
-                bold, italic, links, code, quotes and lists; smart quotes and auto-substitutions are disabled so the
-                Markdown is never altered.</li>
-            <li><strong>Formatting toolbar</strong> &mdash; headings, bold (&#8984;B), italic (&#8984;I),
-                strikethrough, inline code, bullet, numbered and task lists, quotes, indent/outdent, links
-                (&#8984;K), images, tables, code blocks and horizontal rules; each button toggles.</li>
-            <li><strong>Text alignment</strong> &mdash; left, centre and right alignment implemented by wrapping
-                the selected lines in <code>&lt;div align&gt;</code> while keeping the content as Markdown.</li>
-            <li><strong>LaTeX formulas</strong> &mdash; inline <code>$&hellip;$</code> and block
-                <code>$$&hellip;$$</code> maths rendered with KaTeX, plus a menu of snippets (fraction, root,
-                sub/superscript, sum, integral).</li>
-            <li><strong>Independent themes</strong> &mdash; editor and preview each have an Automatic, Light or Dark
-                setting, remembered between launches.</li>
-            <li><strong>Synchronised scrolling</strong> &mdash; the preview follows the editor as you scroll.</li>
-            <li><strong>Images</strong> &mdash; insert from a file (relative path when possible) or a URL; local
-                images load through the app and a missing one shows a warning with its path.</li>
-            <li><strong>Export</strong> &mdash; save the preview as a single self-contained HTML file or as a
-                paginated PDF.</li>
-            <li><strong>Flexible layout</strong> &mdash; editor only (&#8984;1), editor and preview (&#8984;2) or
-                preview only (&#8984;3), with a draggable divider that resets to 50/50 on double click.</li>
-            <li><strong>Safe and offline</strong> &mdash; embedded HTML is sanitised with DOMPurify, links open in
-                the default browser, and all libraries are bundled.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">MacDown Lite is a native Markdown editor for macOS built around one idea: you write raw Markdown on the left and see the formatted result on the right, instantly, with no button to press.</p>
+        <p>It is a small personal project written in Swift with SwiftUI and AppKit. It works fully offline and ships as a universal app in a DMG of less than 1 MB.</p>
+        <p>The editor colours headings, emphasis, links, code, quotes and lists, and a formatting bar toggles styles on the selection. The preview renders GitHub-style Markdown, code highlighting and LaTeX formulas.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Write left, read right</h2>
+        <div class="project-split">
+            <div>
+                <p>The two panes stay in sync as you type and as you scroll, and a draggable divider lets you give more room to either side. Switch between editor only, editor and preview, or preview only whenever you want to focus.</p>
+                <p>Editor and preview each have an automatic, light or dark appearance, remembered between launches.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/macdown-lite-desktop-application/0.png" alt="MacDown Lite - Desktop Application — editor and live preview">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Editor</h3>
+                <ul class="project-features">
+                    <li>Syntax-coloured raw text that is never altered by smart quotes or auto-substitutions</li>
+                    <li>Formatting bar for headings, bold, italic, lists, tasks, quotes, links, images, tables and code blocks — each button toggles</li>
+                    <li>Left, centre and right alignment</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Preview</h3>
+                <ul class="project-features">
+                    <li>GitHub Flavored Markdown with tables, task lists and strikethrough</li>
+                    <li>Fenced code blocks highlighted per language</li>
+                    <li>LaTeX formulas, inline and block, with a menu of common snippets</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Documents and images</h3>
+                <ul class="project-features">
+                    <li>Document-based app with recent files and automatic versions</li>
+                    <li>Insert images from a file or a URL; local images load correctly and a missing one shows a warning</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Export and safety</h3>
+                <ul class="project-features">
+                    <li>Export the preview as a self-contained HTML file or a paginated PDF</li>
+                    <li>Embedded HTML is sanitised and links open in the default browser</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The editor is a native text view with pattern-based highlighting. The preview is a local web page inside a web view that converts the Markdown, sanitises any embedded HTML, colours code and renders formulas, with every library bundled in the app so nothing is downloaded.</p>
+        <p>Local images are served through a custom URL scheme handled by the app, which lets macOS grant folder access properly. The DMG is assembled, signed and verified by a script, with no Xcode project needed.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -137,15 +161,15 @@
             </div>
             <div class="project-stack-item">
                 <h3>SwiftUI</h3>
-                <p>Window, toolbar, formatting bar, theme pickers and the resizable split view, on top of a document-based <code>DocumentGroup</code> app.</p>
+                <p>Window, toolbar, formatting bar, theme pickers and the resizable split view, on top of a document-based DocumentGroup app.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Markdown</h3>
-                <p>The native editor is an <code>NSTextView</code> with regex highlighting; text commands toggle GitHub Flavored Markdown syntax on the selection.</p>
+                <p>The native editor is an NSTextView with regex highlighting; text commands toggle GitHub Flavored Markdown syntax on the selection.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Javascript</h3>
-                <p><code>marked</code>, <code>DOMPurify</code>, <code>highlight.js</code> and <code>KaTeX</code> run inside a <code>WKWebView</code> to render, sanitise and colour the preview offline.</p>
+                <p>marked, DOMPurify, highlight.js and KaTeX run inside a WKWebView to render, sanitise and colour the preview offline.</p>
             </div>
         </div>
     </section>

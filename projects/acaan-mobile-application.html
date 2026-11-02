@@ -79,72 +79,81 @@
     </section>
 
     <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>38</strong><span>card themes</span></div>
+            <div class="project-stat"><strong>52</strong><span>draggable, flippable cards</span></div>
+            <div class="project-stat"><strong>0</strong><span>menus or tells on screen</span></div>
+            <div class="project-stat"><strong>2</strong><span>languages for the built-in guide</span></div>
+            <div class="project-stat"><strong>100%</strong><span>offline</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>ACAAN is a performance tool for close-up card magic, built around the classic "Any Card At Any Number"
-            plot. The phone stands in for a real deck: the performer secretly sets a target card, hands the device
-            to a spectator, and whatever they do with the cards, the first one they turn over is the target.</p>
-        <p>The secret is in the deck graphic itself. The closed deck is divided into an invisible 2×2 grid — one
-            quadrant per suit — and the open deck into an invisible 3×5 grid running from Ace to King. Two taps
-            that read as nothing more than handling the deck are enough to arm the effect, with no menus, no
-            typing and no tells on screen.</p>
-        <p>Once the deck is spread, all 52 cards become individually draggable and flippable objects. The
-            spectator can shuffle them around the screen, stack them and browse as long as they like: the force is
-            applied on the first flip, by swapping the tapped card's face with the target card and giving its old
-            face to the card that previously held the target — so the deck on screen always remains a legitimate
-            52-card deck with no duplicates.</p>
-        <p>It is built with Flutter and Dart as a single cross-platform codebase for Android and iOS, running
-            entirely offline from bundled assets.</p>
+        <p class="project-lead">ACAAN is a performance tool for close-up card magic, built around the classic "Any Card At Any Number" plot. The phone stands in for a real deck: the performer secretly sets a target card, hands the device to a spectator, and whatever they do with the cards, the first one they turn over is the target.</p>
+        <p>The secret is in the deck graphic itself. The closed deck hides an invisible 2×2 grid — one quadrant per suit — and the open deck an invisible 3×5 grid running from Ace to King. Two taps that read as nothing more than handling the deck arm the effect, with no menus, no typing and no tells.</p>
+        <p>Once the deck is spread, all 52 cards become individually draggable and flippable objects. The spectator can shuffle them around the screen, stack them and browse as long as they like; the force is applied at the first flip.</p>
     </section>
 
     <section class="project-section fade-in">
-        <h2>How a performance runs</h2>
-        <ul class="project-features">
-            <li><strong>Setup</strong> — an animated splash screen plays while every theme's deck and card-back
-                images are pre-cached, so no asset ever pops in mid-performance.</li>
-            <li><strong>Choose the suit</strong> — one tap on a quadrant of the closed deck. Nothing on screen
-                changes except the deck opening, which reads as a natural handling move.</li>
-            <li><strong>Choose the value</strong> — the open deck hides a 3×5 grid; a second tap picks the rank.
-                Depending on the configured exit mode, the deck then leaves the screen on a tap or is dragged
-                away with a downward swipe that doubles as the rank selection.</li>
-            <li><strong>Hand it over</strong> — the cards spread into a loose pile, each with a small random
-                offset and tilt. The spectator drags, stacks and browses freely; every touched card lifts,
-                scales and comes to the front of the stack.</li>
-            <li><strong>The reveal</strong> — the first flip, single- or double-tap depending on the setting,
-                turns up the target card with a 3D rotation.</li>
-            <li><strong>Reset</strong> — one button gathers the cards back to centre, then reshuffles a fresh
-                deck ready for the next spectator.</li>
-        </ul>
+        <h2>A performance, start to finish</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/acaan-mobile-application/0.png" alt="ACAAN - Mobile Application — the spread deck">
+            </figure>
+            <div>
+                <p>Choose the suit with one tap on the closed deck, choose the value with a second tap on the open deck, and hand the phone over. The cards spread into a loose pile, each with a small random offset and tilt, and every touched card lifts, scales and comes to the front.</p>
+                <p>The first flip turns the target card with a 3D rotation. One button gathers the cards back and reshuffles a fresh deck for the next spectator.</p>
+            </div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Invisible selection grids</strong> — suit and rank are picked by hit-testing the touch
-                position against the deck image's own geometry (2×2 closed, 3×5 open), so the interface that
-                arms the trick is completely unmarked.</li>
-            <li><strong>Undetectable force</strong> — the target face is swapped in on the first flip and traded
-                with the card that already held it, keeping the deck internally consistent if the spectator
-                turns over every remaining card.</li>
-            <li><strong>Two deck-exit modes</strong> — tap-to-exit or drag-to-exit, the latter letting the
-                performer pick the rank and slide the deck away in a single continuous gesture. The choice is
-                saved between sessions.</li>
-            <li><strong>38 card themes</strong> — deck, open deck and card back are all driven by a filename
-                suffix declared in a JSON manifest, so a new theme is three images and one entry, with no code
-                changes. Themes are browsed through a scaling carousel and the selection persists across
-                restarts.</li>
-            <li><strong>Tunable handling</strong> — flip on single tap (fast) or double tap (safe against
-                accidental reveals), plus a flip-duration slider from 0.5 s to 5 s to match the pace of the
-                routine.</li>
-            <li><strong>Physical card feel</strong> — a perspective 3D flip with an overshoot curve, a scale
-                bump through the turn, a lift on drag, and shadows whose opacity, blur and spread track how far
-                the card is "off the table".</li>
-            <li><strong>Built-in bilingual guide</strong> — a six-step illustrated walkthrough covering suit,
-                value, spreading, the reveal, reset and settings, available in Italian and English through an
-                in-app language toggle.</li>
-            <li><strong>Performance-safe presentation</strong> — portrait lock, immersive full-screen tuned to
-                the device's Android navigation mode, asset re-caching when the app returns from background, and
-                a fallback placeholder behind every image so a missing asset can never break a show.</li>
-        </ul>
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Invisible controls</h3>
+                <ul class="project-features">
+                    <li>Suit and rank are picked by touching the deck image itself</li>
+                    <li>Two exit modes: tap to leave, or a single swipe that picks the rank and slides the deck away</li>
+                    <li>The force stays consistent even if every remaining card is turned over</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Card themes</h3>
+                <ul class="project-features">
+                    <li>38 decks and card backs, browsed in a scaling carousel</li>
+                    <li>New themes are just images plus a manifest entry</li>
+                    <li>The chosen theme is remembered</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Tunable handling</h3>
+                <ul class="project-features">
+                    <li>Flip with a single tap for speed or a double tap for safety</li>
+                    <li>Flip duration adjustable from half a second to five seconds</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Physical feel</h3>
+                <ul class="project-features">
+                    <li>Perspective 3D flip with overshoot and scale</li>
+                    <li>Cards lift on drag with shadows that follow their height above the table</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Built for the stage</h3>
+                <ul class="project-features">
+                    <li>Bilingual illustrated guide in Italian and English</li>
+                    <li>Portrait lock, full-screen layout and pre-cached images so nothing pops in mid-show</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>ACAAN is a Flutter and Dart app with a single codebase for Android and iOS, running entirely offline from bundled assets. Selection grids are computed from the geometry of the deck images, themes are described in a JSON manifest, and settings are persisted on the device. A small native Android component adapts the full-screen mode to the device's navigation style.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -152,35 +161,23 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Drives the deck state machine (<code>inDeck → deckOpening → open → scrollingOut →
-                        gathering</code>), the hit-testing that turns a touch <code>Offset</code> into a suit or
-                    rank, the face-swap that applies the force, and the list reordering used as a z-index for
-                    card stacking.</p>
+                <p>Drives the deck state machine (inDeck → deckOpening → open → scrollingOut → gathering), the hit-testing that turns a touch Offset into a suit or rank, the face-swap that applies the force, and the list reordering used as a z-index for card stacking.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Renders the splash screen, deck and 52 card widgets. <code>AnimatedPositioned</code> and
-                    <code>AnimatedRotation</code> handle the spread and gather; <code>Matrix4</code> with a
-                    perspective entry and <code>rotateY</code> handles the flip; layered
-                    <code>AnimationController</code>s combine the flip, scale and drag-lift effects.
-                    <code>GlobalKey</code>s keep each card's animation state alive as the stack is reordered.</p>
+                <p>Renders the splash screen, deck and 52 card widgets.</p>
             </div>
             <div class="project-stack-item">
                 <h3>JSON theme manifest</h3>
-                <p>A bundled <code>themes.json</code> is parsed at startup into typed <code>CardThemeConfig</code>
-                    objects that derive their three asset paths from a suffix, with an optional per-theme card-back
-                    override. This is what keeps 38 themes maintainable as data rather than code.</p>
+                <p>Card themes are described in a small bundled manifest, so adding a deck means adding images and one entry.</p>
             </div>
             <div class="project-stack-item">
                 <h3>shared_preferences</h3>
-                <p>Persists the performer's setup — the selected card theme and the deck exit mode — so the app
-                    reopens configured exactly as it was left.</p>
+                <p>Persists the performer's setup — the selected card theme and the deck exit mode — so the app reopens configured exactly as it was left.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Kotlin platform channel</h3>
-                <p>A <code>navigation_mode_channel</code> <code>MethodChannel</code> reports whether the Android
-                    device uses gesture or three-button navigation, so the app picks the immersive system-UI mode
-                    that keeps the deck full-screen without the system bars intruding.</p>
+                <p>A navigation_mode_channel MethodChannel reports whether the Android device uses gesture or three-button navigation, so the app picks the immersive system-UI mode that keeps the deck full-screen without the system bars intruding.</p>
             </div>
         </div>
     </section>

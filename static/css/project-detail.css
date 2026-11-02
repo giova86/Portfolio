@@ -282,6 +282,124 @@
     }
 }
 
+/* ---- Rich detail-page blocks: stats strip, grouped features, callouts,
+   shortcut table, code blocks, numbered steps, split layout ---- */
+
+.project-lead {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.project-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.project-stat {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+}
+
+.project-stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    line-height: 1.1;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.project-stat span {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.project-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 2rem;
+    align-items: center;
+}
+
+.project-split .project-figure {
+    margin: 0;
+}
+
+.project-feature-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+}
+
+.project-feature-group {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.5rem;
+}
+
+.project-feature-group h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--brand);
+    margin-bottom: 0.9rem;
+}
+
+.project-feature-group .project-features {
+    gap: 0.6rem;
+}
+
+.project-feature-group .project-features li {
+    font-size: 0.93rem;
+}
+
+.project-callout {
+    border: 1px solid var(--border-strong);
+    border-left-width: 4px;
+    background: var(--bg-elev);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.4rem;
+    margin: 1.5rem 0 0;
+}
+
+.project-callout h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.project-callout p,
+.project-callout li {
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.6;
+}
+
+.project-callout p {
+    margin-bottom: 0;
+}
+
+.project-callout ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.4rem;
+}
+
+@media (max-width: 860px) {
+    .project-split {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .project-hero {
         padding: 0 1.25rem 2rem;

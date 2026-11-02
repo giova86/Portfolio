@@ -90,44 +90,52 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>PassaPronto was born out of a very concrete frustration shared by most Italians: booking an appointment
-            to renew a passport on the Italian State Police (Polizia di Stato) portal, where waiting lists routinely
-            stretch for months and free slots appear at random, unpredictable moments as other bookings get
-            cancelled or new capacity is released. Manually refreshing the booking page dozens of times a day is
-            the only workaround most people find — and it rarely works.</p>
-        <p>PassaPronto automates that refreshing for the user. A background worker polls the State Police booking
-            system on a schedule, tracking the specific police headquarters (questura) the user cares about, and
-            compares each response against the last known state to detect newly opened slots. As soon as a new
-            opening is found, the user is notified within seconds via Telegram or email, with enough time to open
-            the official site and secure the appointment before someone else takes it.</p>
-        <p>The service is packaged as a Streamlit application — used both to configure monitoring and to manage
-            notification preferences — and shipped in a Docker container so the whole stack (scheduler, notifier
-            and web UI) can be deployed and scaled as a single unit. Live since 2023, it has helped a large number
-            of users skip the endless refresh cycle and get their passport appointment in days rather than months,
-            and was covered by local press (<a href="https://primabrescia.it/attualita/conpassapronto-si-risolve-il-problema-dellappuntamento-per-il-passaporto/"
-                target="_blank" rel="noopener">PrimaBrescia.it</a>) as a practical fix to a widely felt problem.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>24/7</strong><span>automatic monitoring</span></div>
+            <div class="project-stat"><strong>2</strong><span>notification channels</span></div>
+            <div class="project-stat"><strong>Per questura</strong><span>location-aware tracking</span></div>
+            <div class="project-stat"><strong>Featured</strong><span>in the local press</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Continuous slot monitoring</strong> — a scheduled background process polls the Polizia di
-                Stato appointment portal at regular intervals, so the user never has to manually refresh the page
-                themselves.</li>
-            <li><strong>Instant alerts</strong> — the moment a new appointment slot opens up, a notification is
-                pushed out via Telegram or email, giving the user a head start to book it before it's taken.</li>
-            <li><strong>Multi-channel notifications</strong> — users choose the channel that suits them: a Telegram
-                bot for push-style, mobile-first alerts, or plain email for those who prefer it.</li>
-            <li><strong>Location-aware tracking</strong> — monitoring can be scoped to the specific questura or
-                office the user needs, rather than surfacing irrelevant openings elsewhere in the country.</li>
-            <li><strong>Self-service configuration</strong> — the Streamlit front end lets users set up and manage
-                their own monitoring requests and notification preferences without any manual intervention.</li>
-            <li><strong>Change detection, not noise</strong> — the checker diffs each poll against the previously
-                seen availability so users are alerted only on genuinely new openings, not repeat states.</li>
-            <li><strong>Containerised deployment</strong> — the whole service ships as a Docker image, making it
-                easy to deploy, restart and keep running reliably as a long-lived background service.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">PassaPronto was born out of a very concrete frustration shared by most Italians: booking an appointment to renew a passport on the State Police portal, where waiting lists routinely stretch for months and free slots appear at random moments.</p>
+        <p>The service automates the constant refreshing. A background worker checks the booking system on a schedule for the specific police headquarters the user cares about and compares every response with the last known state, so an alert is sent only when a genuinely new slot opens.</p>
+        <p>Notifications arrive on Telegram or by email, giving the user a head start to book before the slot is taken.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Monitoring</h3>
+                <ul class="project-features">
+                    <li>Continuous checks of the appointment portal</li>
+                    <li>Scoped to the questura or office you need</li>
+                    <li>Change detection, so you are alerted only on genuinely new openings</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Alerts</h3>
+                <ul class="project-features">
+                    <li>Instant push messages through a Telegram bot</li>
+                    <li>Email for those who prefer it</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Self-service</h3>
+                <ul class="project-features">
+                    <li>Web interface to set up and manage monitoring requests and notification preferences</li>
+                    <li>Packaged as a container for reliable, long-running deployment</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The scheduler, the notifier and the web interface are packaged together in a single Docker image, so the whole service can be deployed and scaled as one unit. The web interface is built with Streamlit.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -135,25 +143,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Drives the core logic: periodically querying the State Police booking system, parsing the
-                    responses, diffing them against previously seen availability, and triggering a notification the
-                    moment a new slot is detected.</p>
+                <p>Drives the core logic: periodically querying the State Police booking system, parsing the responses, diffing them against previously seen availability, and triggering a notification the moment a new slot is detected.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Streamlit</h3>
-                <p>Provides the web interface used to configure what to monitor and how to be notified, turning a
-                    background script into a self-service product that non-technical users can operate on their
-                    own.</p>
+                <p>Provides the web interface used to configure what to monitor and how to be notified, turning a background script into a self-service product that non-technical users can operate on their own.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Docker</h3>
-                <p>Packages the scheduler, notifier and Streamlit UI into a single deployable image, keeping the
-                    service easy to run continuously and to redeploy without environment drift.</p>
+                <p>Packages the scheduler, notifier and Streamlit UI into a single deployable image, keeping the service easy to run continuously and to redeploy without environment drift.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Telegram Bot API</h3>
-                <p>Powers the Telegram notification channel, delivering push-style alerts straight to the user's
-                    phone as soon as a new appointment slot is found — the fastest of the two notification paths.</p>
+                <p>Powers the Telegram notification channel, delivering push-style alerts straight to the user's phone as soon as a new appointment slot is found — the fastest of the two notification paths.</p>
             </div>
         </div>
     </section>

@@ -82,64 +82,66 @@
     </section>
 
     <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>~106k</strong><span>Italian words in the dictionary</span></div>
+            <div class="project-stat"><strong>100%</strong><span>offline, no account</span></div>
+            <div class="project-stat"><strong>Auto</strong><span>save and resume</span></div>
+            <div class="project-stat"><strong>Android + iOS</strong><span>one Flutter codebase</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Abaco Zuzzurellone is a mobile adaptation of the classic Italian party game of the same name — a word
-            hunt played entirely by alphabetical order. The app hides a secret Italian word and asks you to find
-            it by narrowing an alphabetical interval that starts, as the name suggests, between
-            <em>abaco</em> and <em>zuzzurellone</em>.</p>
-        <p>Every guess is compared lexicographically against the hidden word: if it comes before, it becomes the
-            new lower bound; if it comes after, it becomes the new upper bound. The playable range shrinks with
-            each attempt until only the secret word is left — a binary search the player runs with their own
-            vocabulary, with the score being how few attempts it took.</p>
-        <p>It is built with Flutter and Dart as a single cross-platform codebase for Android and iOS. All the
-            game logic, the ~106,000-word Italian dictionary and the artwork ship inside the bundle, so the game
-            is fully playable offline with no backend and no network calls.</p>
+        <p class="project-lead">Abaco Zuzzurellone is a mobile adaptation of the classic Italian party game of the same name — a word hunt played entirely by alphabetical order. The app hides a secret Italian word and asks you to find it by narrowing an alphabetical interval that starts, as the name suggests, between abaco and zuzzurellone.</p>
+        <p>Every guess is compared alphabetically with the hidden word: if it comes before, it becomes the new lower bound; if it comes after, the new upper bound. The playable range shrinks with each attempt until only the secret word is left — a binary search the player runs with their own vocabulary.</p>
+        <p>The whole game, including a dictionary of about 106,000 words and the artwork, ships inside the app, so it is fully playable offline.</p>
     </section>
 
     <section class="project-section fade-in">
-        <h2>How a round works</h2>
-        <ul class="project-features">
-            <li><strong>Startup</strong> — a loading screen shows the logo while the dictionary is read from the
-                asset bundle and cached in memory, then hands over to the main menu.</li>
-            <li><strong>Menu</strong> — "Nuova Partita" always available, plus "Riprendi Partita" when a saved
-                game is detected; an in-app rules dialog explains the bound mechanic before the first round.</li>
-            <li><strong>Guessing</strong> — the game screen keeps the current interval on screen (<em>DA</em> in
-                cyan, <em>A</em> in magenta) above an auto-focused text field, so submitting guess after guess
-                never requires leaving the keyboard.</li>
-            <li><strong>Feedback</strong> — a rejected guess is explained inline in the input hint (invalid word,
-                already tried, outside the current bounds) and reverts after two seconds; an accepted one
-                confirms "Intervallo ristretto!" and redraws the tightened range.</li>
-            <li><strong>Ending</strong> — matching the word opens the victory screen with the answer and the
-                attempt count; giving up through the "Arrenditi" menu action opens the defeat screen, which
-                reveals the word all the same. Both offer an instant rematch or a return to the menu.</li>
-        </ul>
+        <h2>A round, step by step</h2>
+        <div class="project-split">
+            <div>
+                <p>The current interval stays on screen, with the lower and upper bounds in cyan and magenta, above an input field that is always focused: guess after guess never requires leaving the keyboard.</p>
+                <p>A rejected guess is explained right in the input hint — not a real word, already tried, or outside the interval — and costs nothing. Matching the word opens the victory screen with the attempt count; giving up reveals the word all the same, and both offer an instant rematch.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/abaco-zuzzurellone-mobile-application/0.png" alt="Abaco Zuzzurellone - Mobile Application — a round in progress">
+            </figure>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>~106,000-word Italian dictionary</strong> bundled as a plain text asset, loaded once into
-                a static list and reused for both picking the secret word and validating every guess.</li>
-            <li><strong>Strict guess validation</strong> — a guess must be a real dictionary word, must not have
-                been played before in the same round, and must fall strictly inside the current interval.
-                Rejected guesses cost nothing: the attempt counter only advances once all checks pass.</li>
-            <li><strong>Automatic save and resume</strong> — the secret word, both bounds, the attempt count and
-                the list of previous guesses are persisted after every valid move, so closing the app mid-round
-                loses nothing. The save is cleared on victory or surrender.</li>
-            <li><strong>Guarded destructive actions</strong> — starting a new game over an active one, or
-                surrendering, both require confirmation through a dialog before progress is discarded.</li>
-            <li><strong>Neon dark theme</strong> — a cyan/magenta palette over a near-black surface, Poppins
-                typography, per-screen full-bleed backgrounds with gradient scrims, and glowing bordered cards
-                and gradient buttons for the interactive elements.</li>
-            <li><strong>Screen-size aware layout</strong> — spacing and type scale across small, medium and large
-                phones, long words shrink to fit their card instead of overflowing, and the scrollable
-                intrinsic-height layout keeps everything reachable when the keyboard is up.</li>
-            <li><strong>Native Android navigation handling</strong> — the app detects whether the device uses
-                gesture or three-button navigation and picks the matching immersive system-UI mode, so the
-                full-screen artwork never fights the system bars.</li>
-            <li><strong>Portrait-locked and fully offline</strong> — orientation is pinned at startup and the
-                whole game runs from bundled assets and on-device storage.</li>
-        </ul>
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Game rules</h3>
+                <ul class="project-features">
+                    <li>Guesses must be real dictionary words, not repeated and strictly inside the interval</li>
+                    <li>Rejected guesses never advance the attempt counter</li>
+                    <li>An in-app dialog explains the mechanic before the first round</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Never lose a game</h3>
+                <ul class="project-features">
+                    <li>The round is saved after every valid move and can be resumed from the menu</li>
+                    <li>Starting a new game or surrendering asks for confirmation first</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Look and feel</h3>
+                <ul class="project-features">
+                    <li>Neon dark theme with a cyan and magenta palette and glowing cards</li>
+                    <li>Layouts that adapt to small, medium and large phones, with long words shrinking to fit</li>
+                    <li>Portrait-only, full-screen artwork that respects Android gesture or button navigation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The app is built with Flutter and Dart as a single cross-platform codebase for Android and iOS. The dictionary is bundled as a plain text asset, loaded once at startup behind a splash screen and reused both to pick the secret word and to validate guesses. Progress is stored on the device, and a small native Android component detects the navigation style to choose the right immersive mode.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -147,35 +149,23 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Holds the whole game model in a single <code>GameLogic</code> class: random word selection,
-                    lexicographic comparison via <code>String.compareTo</code> to move the bounds, guess
-                    validation against the dictionary, and the save/load/clear lifecycle. Async APIs are used
-                    throughout for asset and storage access.</p>
+                <p>Holds the whole game model in a single GameLogic class: random word selection, lexicographic comparison via String.compareTo to move the bounds, guess validation against the dictionary, and the save/load/clear lifecycle.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Provides the four screens (loading, menu, game, victory/defeat) as stateful and stateless
-                    widgets with a shared dark <code>ThemeData</code>. <code>LayoutBuilder</code>,
-                    <code>FittedBox</code> and <code>MediaQuery</code> breakpoints handle responsiveness;
-                    <code>rootBundle</code> loads the dictionary and artwork from the asset bundle.</p>
+                <p>Provides the four screens (loading, menu, game, victory/defeat) as stateful and stateless widgets with a shared dark ThemeData.</p>
             </div>
             <div class="project-stack-item">
                 <h3>shared_preferences</h3>
-                <p>Persists the round across app restarts — bounds, attempts, secret word and the JSON-encoded
-                    list of past guesses — plus the flag the menu reads to decide whether to offer "Riprendi
-                    Partita".</p>
+                <p>Persists the round across app restarts — bounds, attempts, secret word and the JSON-encoded list of past guesses — plus the flag the menu reads to decide whether to offer "Riprendi Partita".</p>
             </div>
             <div class="project-stack-item">
                 <h3>google_fonts</h3>
-                <p>Pulls the Poppins family into the app-wide text theme, giving every screen consistent
-                    typography without shipping font files manually.</p>
+                <p>Pulls the Poppins family into the app-wide text theme, giving every screen consistent typography without shipping font files manually.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Kotlin platform channel</h3>
-                <p>A small <code>MainActivity</code> exposes a <code>navigation_mode_channel</code>
-                    <code>MethodChannel</code> that reads the Android navigation mode from secure settings, with
-                    fallbacks to the system resource config and the navigation-bar height. Dart applies the
-                    matching system-UI mode and degrades gracefully when the channel is unavailable.</p>
+                <p>A small MainActivity exposes a navigation_mode_channel MethodChannel that reads the Android navigation mode from secure settings, with fallbacks to the system resource config and the navigation-bar height.</p>
             </div>
         </div>
     </section>

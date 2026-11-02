@@ -81,59 +81,92 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>GitKrafen is a full-featured desktop Git client built with Electron, React and TypeScript, modelled on
-            GitKraken 12.x: the same tabbed layout, toolbar, side panel, lane-based commit graph with avatars, and
-            WIP / commit panel on the right, with the same day-to-day workflow. It is a personal project born from a
-            simple question — how much of a commercial Git GUI can be rebuilt on top of the plain
-            <code>git</code> command line?</p>
-        <p>The back end deliberately does not reimplement Git: every operation shells out to the system
-            <code>git</code>, so each action behaves exactly as it would in a terminal — same hooks, same config, same
-            results. On top of that thin layer the app adds what a GUI is good at: a virtualised graph that stays
-            smooth with 20,000 commits and 25 parallel branches, hunk- and line-level staging, a three-way merge
-            editor, drag-and-drop between branch pills, and real-time updates driven by a filesystem watcher
-            (about half a second, even for changes made outside the app).</p>
-        <p>It also goes beyond the original in a few places: a permanent Launchpad home listing every repository
-            with live status, a colour legend with high-contrast, stable branch colours (ΔE ≥ 40 between any pair),
-            privacy-friendly avatars, and optional AI commit messages with the engine of the user's choice. A
-            one-command script builds a signed macOS DMG, and the whole project is covered by a Vitest suite that
-            runs against real temporary repositories.</p>
-    
+        <div class="project-stats">
+            <div class="project-stat"><strong>20,000</strong><span>commits rendered smoothly in the graph</span></div>
+            <div class="project-stat"><strong>~0.5 s</strong><span>to reflect changes made outside the app</span></div>
+            <div class="project-stat"><strong>5</strong><span>hosting services integrated</span></div>
+            <div class="project-stat"><strong>10+</strong><span>AI engines for commit messages</span></div>
+            <div class="project-stat"><strong>3-way</strong><span>conflict editor</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Lane-based commit graph</strong> — coloured lanes, avatars (Gravatar, initials only, or
-                none), merged local+remote branch pills, tags, stashes, a dashed <code>// WIP</code> row and day
-                separators; click a branch to highlight all of its commits and dim the rest.</li>
-            <li><strong>Virtualised and live</strong> — paged loading and row virtualisation, tested with 20,000
-                commits; a filesystem watcher refreshes the view within ~0.5 s of any change.</li>
-            <li><strong>Fine-grained staging</strong> — stage, unstage or discard whole files, hunks or single
-                lines; inline and side-by-side diffs with syntax highlighting, blame, file history and direct
-                editing.</li>
-            <li><strong>Full history tooling</strong> — merge (<code>--no-ff</code>, squash), rebase, interactive
-                rebase (pick / reword / squash / fixup / drop), cherry-pick, revert, reset, range squash, reword of
-                non-HEAD commits, Undo/Redo, and drag &amp; drop between branch pills.</li>
-            <li><strong>Three-pane conflict editor</strong> — Ours · Base · Theirs, with the base taken from the
-                common ancestor via <code>git merge-file --diff3</code>, per-block resolution, editable output and
-                handling of modify/delete and binary conflicts.</li>
-            <li><strong>Hosting integrations</strong> — GitHub, GitHub Enterprise, GitLab, Bitbucket and Azure
-                DevOps with OAuth/SSO (Device Flow, PKCE) or tokens encrypted in the system keychain: private
-                clones, pull requests, issues and a Launchpad of PRs and WIPs.</li>
-            <li><strong>Launchpad home</strong> — a permanent list of all repositories with live branch, changes,
-                ahead/behind and last-commit status, plus search, filters, favourites and grid or list view.</li>
-            <li><strong>Integrated terminal</strong> — a real pty (<code>node-pty</code> + xterm.js) with login
-                shell, colours, <code>less</code>/<code>vim</code> and synchronised resizing.</li>
-            <li><strong>Optional AI</strong> — “Generate with AI” fills the commit title and description from the
-                staged diff, using OpenAI, Claude, Gemini, Mistral, Groq, DeepSeek, OpenRouter, Ollama, LM Studio
-                or any OpenAI-compatible endpoint; keys stay in the keychain.</li>
-            <li><strong>Extras</strong> — command palette (⌘P), dark/light theme, submodules, worktrees, Git Flow,
-                Git LFS patterns, GPG/SSH-signed commits, author statistics.</li>
-            <li><strong>Tested and packaged</strong> — unit and integration tests with Vitest on real temporary
-                repositories, and a build script that assembles, ad-hoc signs and verifies a macOS DMG.</li>
-        </ul>
-    
+        <h2>Overview</h2>
+        <p class="project-lead">GitKrafen is a full-featured desktop Git client modelled on GitKraken: the same tabbed layout, toolbar, side panel, lane-based commit graph with avatars and a commit panel on the right, with the same day-to-day workflow.</p>
+        <p>It started from a simple question: how much of a commercial Git GUI can be rebuilt on top of the plain git command line? Every operation runs through the system git, so each action behaves exactly as it would in a terminal — same hooks, same configuration, same results — while the app adds what a GUI is good at.</p>
+        <p>It also goes beyond the original in a few places: a permanent Launchpad home listing every repository with live status, stable high-contrast branch colours, privacy-friendly avatars and optional AI-written commit messages.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A graph that stays smooth</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/gitkrafen-desktop-application/0.png" alt="GitKrafen - Desktop Application — commit graph">
+            </figure>
+            <div>
+                <p>The commit graph draws coloured lanes with avatars, merged local and remote branch labels, tags, stashes and day separators. Click a branch to highlight all of its commits and dim the rest.</p>
+                <p>It is virtualised, so it stays fluid with tens of thousands of commits and many parallel branches, and a file-system watcher refreshes the view within about half a second of any change, even if it was made from another tool.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Everyday workflow</h3>
+                <ul class="project-features">
+                    <li>Stage, unstage or discard whole files, hunks or single lines</li>
+                    <li>Inline and side-by-side diffs with syntax highlighting, blame and file history</li>
+                    <li>Drag and drop between branch labels to merge or rebase</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Full history tooling</h3>
+                <ul class="project-features">
+                    <li>Merge, squash, rebase and interactive rebase</li>
+                    <li>Cherry-pick, revert, reset and reword of older commits</li>
+                    <li>Undo and redo for repository operations</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Conflict resolution</h3>
+                <ul class="project-features">
+                    <li>Three-pane editor showing ours, base and theirs</li>
+                    <li>Per-block resolution with an editable result</li>
+                    <li>Handles modify/delete and binary conflicts</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Connected to your hosting</h3>
+                <ul class="project-features">
+                    <li>GitHub, GitHub Enterprise, GitLab, Bitbucket and Azure DevOps</li>
+                    <li>Sign-in with OAuth/SSO or tokens kept in the system keychain</li>
+                    <li>Pull requests, issues and private clones</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Launchpad home</h3>
+                <ul class="project-features">
+                    <li>Every repository with live branch, change and ahead/behind status</li>
+                    <li>Search, filters, favourites and grid or list view</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Extras</h3>
+                <ul class="project-features">
+                    <li>Integrated terminal with a real shell</li>
+                    <li>Optional AI commit messages from the staged changes, with keys kept in the keychain</li>
+                    <li>Command palette, dark and light theme, submodules, worktrees, Git Flow, LFS and signed commits</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The application is an Electron app with a React and TypeScript interface. A thin back end launches the system git for every operation and parses its output, rather than reimplementing Git, which keeps behaviour identical to the command line.</p>
+        <p>The project is covered by an automated test suite that runs against real temporary repositories, and is packaged as a signed macOS DMG by a single script.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -141,23 +174,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Electron</h3>
-                <p>Desktop shell: window and menus, IPC, the system <code>git</code> service, encrypted secrets in the
-                    keychain, OAuth loopback flows and the pty bridge for the integrated terminal.</p>
+                <p>Desktop shell: window and menus, IPC, the system git service, encrypted secrets in the keychain, OAuth loopback flows and the pty bridge for the integrated terminal.</p>
             </div>
             <div class="project-stack-item">
                 <h3>React</h3>
-                <p>The whole interface — virtualised commit graph, diff and merge views, Launchpad, dialogs and
-                    command palette — built with React 18 and bundled with Vite.</p>
+                <p>The whole interface — virtualised commit graph, diff and merge views, Launchpad, dialogs and command palette — built with React 18 and bundled with Vite.</p>
             </div>
             <div class="project-stack-item">
                 <h3>TypeScript</h3>
-                <p>Strictly typed renderer, including pure, well-tested modules for graph layout, diff/patch
-                    building and conflict parsing.</p>
+                <p>Strictly typed renderer, including pure, well-tested modules for graph layout, diff/patch building and conflict parsing.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Git</h3>
-                <p>Every repository operation runs through the system <code>git</code>, so behaviour, hooks and
-                    configuration are identical to the command line.</p>
+                <p>Every repository operation runs through the system git, so behaviour, hooks and configuration are identical to the command line.</p>
             </div>
         </div>
     

@@ -84,35 +84,65 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Brick Picture (in-app branded "Camera Bricks") is a Flutter mobile app, paired with its own Python
-            backend API, that converts any photo into a Lego-brick style mosaic ready to save or share on social
-            networks. The client only handles capture, upload and presentation — every ounce of image processing
-            happens server-side.</p>
-        <p>On launch the app pings its API to confirm it's reachable, then lets the user snap a photo or pick one
-            from the gallery and choose a brick style: <em>Circle</em>, <em>Circle Flat</em>, <em>Square</em> or
-            <em>Square Flat</em>. The photo is uploaded as multipart form data to a <code>/generate_brick_art</code>
-            endpoint together with the chosen brick shape, a brick count and a colour palette, while a full-screen
-            looping video keeps the user entertained during the round trip. The API renders the picture as a grid
-            of studs in the requested style and colour palette and streams the finished JPEG back, which the app
-            then displays with options to download it to the gallery or share it directly to other apps.</p>
-        <p>The whole flow — theming, error states, loading — was skinned around a One Piece pirate motif: hand-drawn
-            titles, a Jolly Roger brick logo, animated snackbars with themed icons, and a brick-patterned
-            background, on top of a fairly small, focused Flutter codebase (a single-screen home + generator flow).</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>4</strong><span>brick styles</span></div>
+            <div class="project-stat"><strong>1 tap</strong><span>to save or share the result</span></div>
+            <div class="project-stat"><strong>Camera + Gallery</strong><span>photo sources</span></div>
+            <div class="project-stat"><strong>Flutter + Python</strong><span>app and API</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Convert any photo — from the camera or the gallery — into a Lego-brick style mosaic.</li>
-            <li>Four selectable brick styles: Circle, Circle Flat, Square and Square Flat.</li>
-            <li>Automatic server-connectivity check on launch, with a retry flow if the API is unreachable.</li>
-            <li>Full-screen looping video feedback while the picture is generated server-side.</li>
-            <li>One-tap save of the generated poster to the device gallery, or direct sharing to other apps.</li>
-            <li>Custom animated snackbars with themed icons for success, warning and error states.</li>
-            <li>One Piece-inspired UI: hand-drawn typography, a Jolly Roger brick logo and a brick-patterned
-                background throughout the app.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Brick Picture is a Flutter mobile app, paired with its own Python backend API, that converts any photo into a Lego-brick style mosaic ready to save or share on social networks. The app handles capture, upload and presentation, while all the image processing happens on the server.</p>
+        <p>On launch the app checks that the server is reachable, then lets the user snap a photo or pick one from the gallery and choose a brick style: Circle, Circle Flat, Square or Square Flat. While the picture is generated, a full-screen looping video keeps the user entertained.</p>
+        <p>The whole experience is skinned around a One Piece pirate motif: hand-drawn titles, a Jolly Roger brick logo, animated notifications with themed icons and a brick-patterned background.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>From photo to poster</h2>
+        <div class="project-split">
+            <div>
+                <p>The finished poster can be saved to the device gallery or shared directly to other apps with a single tap. If the server cannot be reached at startup, a retry flow explains what happened instead of leaving the user with an empty screen.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/brick-picture-mobile-application-api/0.png" alt="Brick Picture - Mobile Application + API — brick style selection and result">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Create</h3>
+                <ul class="project-features">
+                    <li>Photos from the camera or the gallery</li>
+                    <li>Four selectable brick styles</li>
+                    <li>Poster generated server-side</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Share</h3>
+                <ul class="project-features">
+                    <li>One-tap save to the device gallery</li>
+                    <li>Direct sharing to other apps</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Experience</h3>
+                <ul class="project-features">
+                    <li>Automatic connectivity check with a retry flow</li>
+                    <li>Animated notifications for success, warning and error</li>
+                    <li>Hand-drawn One Piece inspired interface</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The client is a small, focused Flutter codebase for Android and iOS. The photo is uploaded together with the chosen style to a FastAPI service written in Python, which does the heavy image processing and returns the finished mosaic.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -120,26 +150,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Powers the backend API that does the actual image-to-brick conversion: downsampling the photo to
-                    a brick grid, mapping each cell to the closest palette colour and rendering the requested stud
-                    style back out as a JPEG.</p>
+                <p>Powers the backend API that does the actual image-to-brick conversion: downsampling the photo to a brick grid, mapping each cell to the closest palette colour and rendering the requested stud style back out as a JPEG.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Implementation language for the Flutter client — state management for the connection check,
-                    image picking, upload progress and the animated snackbar/loading UI.</p>
+                <p>Implementation language for the Flutter client — state management for the connection check, image picking, upload progress and the animated snackbar/loading UI.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Cross-platform mobile framework behind the app itself: camera/gallery capture via
-                    <code>image_picker</code>, the full-screen generation video via <code>video_player</code>, and
-                    saving/sharing results via <code>flutter_image_gallery_saver</code> and <code>share_plus</code>.</p>
+                <p>Cross-platform mobile framework behind the app itself: camera/gallery capture via image_picker, the full-screen generation video via video_player, and saving/sharing results via flutter_image_gallery_saver and share_plus.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Serves the <code>/generate_brick_art</code> endpoint the app calls with the uploaded photo, brick
-                    style, brick count and colour palette, and returns the processed image as multipart/form-data
-                    over HTTP.</p>
+                <p>Serves the /generate_brick_art endpoint the app calls with the uploaded photo, brick style, brick count and colour palette, and returns the processed image as multipart/form-data over HTTP.</p>
             </div>
         </div>
     </section>

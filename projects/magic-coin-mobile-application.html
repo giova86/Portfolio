@@ -83,48 +83,65 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Magic Coin is a Flutter app built for a close-up magic trick: an object appears out of thin air on a
-            fullscreen black stage, can be freely dragged around, and vanishes off the edge of the screen when
-            flicked away fast enough. What started as a single coin has grown into a small "trick toolkit" with 18
-            selectable objects, an accelerometer-driven shake gesture, tilt-based physics, and a hidden "broken
-            glass" screen gag.</p>
-        <p>The project was built test-first: every gesture and physics rule below is backed by an automated Dart
-            test, with the trickiest logic (multi-touch detection, fling and tilt physics) kept as pure, dependency-free
-            functions so it can be unit-tested without spinning up a widget tree.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>18</strong><span>selectable objects</span></div>
+            <div class="project-stat"><strong>3</strong><span>ways to make it appear</span></div>
+            <div class="project-stat"><strong>50–400 px</strong><span>adjustable size per object</span></div>
+            <div class="project-stat"><strong>Test-first</strong><span>gesture and physics rules covered by tests</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>18 selectable objects</strong>, not just coins: 2€, 1€, 5€ and USA coins, a Chinese coin,
-                a ring, a keyring, a lighter, a nose, an LED, a die, an AirPod, a BIC cap, a key, a folded card,
-                and both a bitten and a whole Oreo — each with its own artwork and default size.</li>
-            <li><strong>Three ways to make the object appear</strong>: a two-finger tap (default), a one-finger
-                tap, or a sharp shake of the phone against your palm, detected from raw accelerometer data
-                (a fast acceleration spike immediately followed by a dead stop, distinguishing a real palm-slap
-                from walking or waving the phone around).</li>
-            <li><strong>Tilt-based physics</strong>: once on screen, the object rolls like a ball on a tilted tray
-                — it accelerates while the phone is tilted, decelerates from friction when the phone flattens out,
-                and comes to a hard stop at the screen edges. Dragging with a finger always takes priority and
-                cancels any tilt velocity on release.</li>
-            <li><strong>Physically sensible fling-to-dismiss</strong>: releasing the object makes it vanish only
-                if it's moving fast enough <em>and</em> near the edge it's exiting through, so a hard flick from
-                the middle of the screen doesn't send it flying by accident; a slow release instead snaps it back
-                onto the stage.</li>
-            <li><strong>Per-variant, persistent sizing</strong>: a slider (50–400px) resizes the current object
-                instantly, in place, and each of the 18 variants remembers its own size independently, restored
-                on the next launch alongside the chosen object, gesture, and every other setting.</li>
-            <li><strong>Hidden settings entry point</strong>: the settings button is fully invisible (opacity 0)
-                but still tappable in its original spot, so the "Magic Noir" gold-accented settings sheet — with
-                a horizontally scrollable object picker, size slider, gesture switch, and background/glass
-                toggles — only opens for someone who knows exactly where to tap.</li>
-            <li><strong>Custom background</strong>: the black stage can be swapped for a photo picked from the
-                device gallery via <code>image_picker</code>, so the trick can be performed over any backdrop.</li>
-            <li><strong>Secret "broken glass" gag</strong>: an optional full-screen "cracked screen" overlay can
-                be set to appear together with the object; it's dismissed with a hidden triple-tap gesture
-                anywhere on the overlay, without disturbing the object underneath.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Magic Coin is a Flutter app built for a close-up magic trick: an object appears out of thin air on a fullscreen black stage, can be freely dragged around, and vanishes off the edge of the screen when flicked away fast enough. What started as a single coin has grown into a whole set of props.</p>
+        <p>It can appear with a two-finger tap, a one-finger tap, or a sharp shake of the phone against the palm, recognised from the motion sensor so that a real palm hit is distinguished from ordinary handling. Once on screen, the object rolls like a ball on a tilted tray: it accelerates as the phone tilts, slows with friction and stops at the edges.</p>
+        <p>The behaviour is deliberately physical: the object vanishes only if it is released fast enough near the edge it is leaving through, while a slow release snaps it back.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Make it appear, make it vanish</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/magic-coin-mobile-application/0.png" alt="Magic Coin - Mobile Application — the stage with an object">
+            </figure>
+            <div>
+                <p>Eighteen props are available — coins, a ring, a keyring, a lighter, a die, an AirPod, a key, even an Oreo — each with its own artwork. A hidden settings entry, invisible but tappable, opens a gold-accented sheet to choose the object, its size, the appearance gesture and the background.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Props</h3>
+                <ul class="project-features">
+                    <li>18 objects with their own artwork and default size</li>
+                    <li>Size remembered separately for each object</li>
+                    <li>Custom background chosen from the photo gallery</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Gestures and physics</h3>
+                <ul class="project-features">
+                    <li>Appear with a two-finger tap, a tap or a shake</li>
+                    <li>Tilt-driven rolling with friction and hard stops at the edges</li>
+                    <li>Fling-to-dismiss that ignores accidental flicks</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>For performers</h3>
+                <ul class="project-features">
+                    <li>Fully invisible settings button</li>
+                    <li>Optional full-screen cracked-glass gag, dismissed with a hidden triple tap</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The project was built test-first: every gesture and physics rule is backed by an automated test, with the trickiest logic — multi-touch detection, fling and tilt physics — written as pure functions that can be tested without a device. It is a Flutter app using the phone's sensors and local storage for all preferences.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -132,31 +149,23 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>All app and physics logic — gesture detectors, fling/tilt geometry, and settings persistence
-                    — is plain Dart, kept deliberately free of Flutter widget dependencies so it can be covered
-                    by fast, headless unit tests.</p>
+                <p>All app and physics logic — gesture detectors, fling/tilt geometry, and settings persistence — is plain Dart, kept deliberately free of Flutter widget dependencies so it can be covered by fast, headless unit tests.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Renders the fullscreen immersive stage, the draggable object, and the custom "Magic Noir"
-                    settings bottom sheet, and ties the pure-logic modules to real touch, sensor, and lifecycle
-                    events.</p>
+                <p>Renders the fullscreen immersive stage, the draggable object, and the custom "Magic Noir" settings bottom sheet, and ties the pure-logic modules to real touch, sensor, and lifecycle events.</p>
             </div>
             <div class="project-stack-item">
                 <h3>sensors_plus</h3>
-                <p>Streams accelerometer data for two independent features: the shake-to-appear gesture and the
-                    continuous tilt readings that drive the on-screen physics.</p>
+                <p>Streams accelerometer data for two independent features: the shake-to-appear gesture and the continuous tilt readings that drive the on-screen physics.</p>
             </div>
             <div class="project-stack-item">
                 <h3>shared_preferences</h3>
-                <p>Persists every user choice to disk behind a single <code>SettingsRepository</code> wrapper —
-                    selected object, appear gesture, each variant's own size, the glass-effect toggle, and the
-                    custom background — restored automatically on the next launch.</p>
+                <p>Persists every user choice to disk behind a single SettingsRepository wrapper — selected object, appear gesture, each variant's own size, the glass-effect toggle, and the custom background — restored automatically on the next launch.</p>
             </div>
             <div class="project-stack-item">
                 <h3>image_picker</h3>
-                <p>Lets the user pick a photo from the device gallery to replace the black stage with a custom
-                    background.</p>
+                <p>Lets the user pick a photo from the device gallery to replace the black stage with a custom background.</p>
             </div>
         </div>
     </section>

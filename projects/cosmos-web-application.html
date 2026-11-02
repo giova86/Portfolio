@@ -88,47 +88,72 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Cosmos is a fully local, single-user dashboard for orchestrating a team of specialized AI agents through
-            one conversational interface. There is no login, no external account, and no cloud database: every
-            agent's configuration, chat history, and personal data stay on the machine running the app.</p>
-        <p>Each agent is defined declaratively by a <code>config.json</code> — its own role, system prompt, skills,
-            and LLM provider — and is discovered automatically at backend startup by scanning the agents folder.
-            Adding a new agent never requires touching the core application code, just dropping in a new config
-            file.</p>
-        <p>An orchestrator agent, <strong>Jarvis</strong>, sits in front of the team: it breaks down a user's request,
-            delegates the relevant parts to the right specialist agents, collects their results, and synthesizes a
-            single answer. The backend is built with FastAPI and streams responses token-by-token over WebSocket,
-            while the React + Vite + Tailwind front end renders the chat, calendar, routines, and agent-configuration
-            views.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>5+</strong><span>specialised agents</span></div>
+            <div class="project-stat"><strong>4</strong><span>LLM providers, swappable live</span></div>
+            <div class="project-stat"><strong>0</strong><span>accounts or cloud databases</span></div>
+            <div class="project-stat"><strong>Live</strong><span>token streaming</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Multi-agent orchestration.</strong> Jarvis decomposes a request and delegates sub-tasks to
-                specialized agents (calendar, email, web search, copywriting, math) via a <code>delegate_to_agent</code>
-                tool, then merges their results into one coherent reply.</li>
-            <li><strong>Unified LLM provider layer.</strong> The same interface talks to LM Studio, Ollama, OpenAI, and
-                Anthropic (Claude) — the provider, model, endpoint, and API key can be swapped per agent live from the
-                UI, with a one-click connection check, no backend restart needed.</li>
-            <li><strong>Tool-calling with a textual fallback.</strong> Agents can invoke skills even on local models
-                without native function-calling: a <code>tool_mode</code> setting falls back to a <code>TOOL_CALL:
-                    {json}</code> text protocol that the backend parses transparently, hiding the raw syntax from the
-                user-visible stream.</li>
-            <li><strong>Real-time streaming chat.</strong> Responses stream over WebSocket with stop/resume controls
-                and a live "agents at work" indicator while the orchestrator's sub-agents are running.</li>
-            <li><strong>Scheduled routines.</strong> Any agent can be set to run automatically on an interval or a
-                daily/weekly schedule (or triggered manually), with results saved for later reference — e.g. a daily
-                LinkedIn post draft or a morning inbox summary.</li>
-            <li><strong>Morning briefing and job queue.</strong> An automatic daily briefing aggregates the day ahead,
-                and a per-agent job queue tracks routine runs and their outcomes.</li>
-            <li><strong>Google Calendar, Tasks, and Gmail integration.</strong> Two agents (Alex and Emma) act on the
-                user's real Google account through OAuth, always asking for explicit confirmation before any
-                destructive or outbound action (sending an email, deleting an event).</li>
-            <li><strong>Ephemeral sessions.</strong> Chat history lives in memory and can be cleared with a single
-                click — nothing persists beyond what the user explicitly wants kept.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Cosmos is a fully local, single-user dashboard for orchestrating a team of specialised AI agents through one conversational interface. There is no login, no external account and no cloud database: configuration, chat history and personal data stay on the machine running it.</p>
+        <p>An orchestrator agent, Jarvis, sits in front of the team: it breaks down a request, delegates the relevant parts to the right specialists — calendar, email, web search, copywriting, math — collects their results and writes a single answer.</p>
+        <p>Each agent is defined by a simple configuration with its own role, instructions, skills and model provider, so adding a new agent never requires touching the core application.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>One conversation, a whole team</h2>
+        <div class="project-split">
+            <div>
+                <p>Responses stream token by token, with stop and resume controls and a live indicator showing which agents are at work. Agents can be pointed at LM Studio, Ollama, OpenAI or Claude and swapped from the interface, with a one-click connection check.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/cosmos-web-application/0.png" alt="Cosmos - Web Application — chat with the orchestrator">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Orchestration</h3>
+                <ul class="project-features">
+                    <li>Request decomposition and delegation to specialist agents</li>
+                    <li>Results merged into one coherent reply</li>
+                    <li>Tools usable even on local models without native function calling</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Routines</h3>
+                <ul class="project-features">
+                    <li>Run any agent on an interval, daily or weekly, or on demand</li>
+                    <li>Automatic morning briefing</li>
+                    <li>Job queue with the outcome of every run</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Real-world integration</h3>
+                <ul class="project-features">
+                    <li>Google Calendar, Tasks and Gmail through OAuth</li>
+                    <li>Explicit confirmation before any email is sent or event deleted</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Private by design</h3>
+                <ul class="project-features">
+                    <li>Everything runs locally</li>
+                    <li>Chat history held in memory and cleared with one click</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The back end is a FastAPI service that discovers agents by scanning their configuration files at startup and streams responses over WebSockets. The interface is a React application, and a unified provider layer hides the differences between the supported model servers.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -136,43 +161,35 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Backend language. Powers the agent loader, orchestrator, tool registry, and Google API
-                    integrations.</p>
+                <p>Backend language.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Serves the REST endpoints and the WebSocket chat stream, with Uvicorn as the ASGI server and
-                    auto-generated Swagger docs.</p>
+                <p>Serves the REST endpoints and the WebSocket chat stream, with Uvicorn as the ASGI server and auto-generated Swagger docs.</p>
             </div>
             <div class="project-stack-item">
                 <h3>React</h3>
-                <p>Builds the dashboard, agent cards, chat panels, calendar, and routines views as a single-page
-                    front end.</p>
+                <p>Builds the dashboard, agent cards, chat panels, calendar, and routines views as a single-page front end.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Javascript</h3>
-                <p>Drives the Vite-powered front end tooling and the client-side logic connecting UI state to the
-                    streaming API.</p>
+                <p>Drives the Vite-powered front end tooling and the client-side logic connecting UI state to the streaming API.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Ollama</h3>
-                <p>One of the supported local LLM providers, used to run open-weight models entirely on-device with
-                    no external calls.</p>
+                <p>One of the supported local LLM providers, used to run open-weight models entirely on-device with no external calls.</p>
             </div>
             <div class="project-stack-item">
                 <h3>LM Studio</h3>
-                <p>Default local provider: exposes downloaded models through an OpenAI-compatible endpoint that the
-                    agents talk to out of the box.</p>
+                <p>Default local provider: exposes downloaded models through an OpenAI-compatible endpoint that the agents talk to out of the box.</p>
             </div>
             <div class="project-stack-item">
                 <h3>OpenAI</h3>
-                <p>Supported as a cloud provider (or any OpenAI-compatible endpoint), selectable per agent alongside
-                    the local options.</p>
+                <p>Supported as a cloud provider (or any OpenAI-compatible endpoint), selectable per agent alongside the local options.</p>
             </div>
             <div class="project-stack-item">
                 <h3>LLM</h3>
-                <p>The core abstraction behind every agent: a unified provider interface lets each agent's model,
-                    temperature, and tool-calling mode be configured independently.</p>
+                <p>The core abstraction behind every agent: a unified provider interface lets each agent's model, temperature, and tool-calling mode be configured independently.</p>
             </div>
         </div>
     </section>

@@ -89,37 +89,53 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Dr. Strange Shield turns a webcam into a virtual camera that overlays the Sorcerer Supreme's mystical
-            shields onto your hands in real time, so the effect can be used live in any video-conferencing app
-            (Zoom, Meet, Teams) through OBS Studio's virtual camera device.</p>
-        <p>A MediaPipe HandLandmarker tracks both hands frame by frame, extracting 21 3D landmarks per hand. Their
-            normalized coordinates are fed into an SVM classifier trained with Scikit-learn, which recognises a
-            short sequence of hand poses (three "keys") used to arm the effect and a fourth pose used to dismiss
-            it &mdash; mirroring the ritual, deliberate gesture Doctor Strange performs before summoning a shield.</p>
-        <p>Once armed, OpenCV composites a chroma-keyed shield video onto each hand, resizing and repositioning it
-            every frame based on the hand's bounding box so it stays anchored and scaled correctly as the hand
-            moves, rotates, or changes distance from the camera.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>2</strong><span>hands tracked at once</span></div>
+            <div class="project-stat"><strong>21</strong><span>landmarks per hand</span></div>
+            <div class="project-stat"><strong>4</strong><span>gesture keys</span></div>
+            <div class="project-stat"><strong>Zoom, Meet, Teams</strong><span>compatible via virtual camera</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Real-time two-hand tracking via MediaPipe's HandLandmarker task, extracting 21 3D landmarks per
-                hand at live webcam frame rates.</li>
-            <li>Gesture-sequence "spell casting": an SVM classifier recognises three hand poses in sequence
-                (key_1 &rarr; key_2 &rarr; key_3) to activate the shields, and a fourth pose (key_4) to dismiss
-                them, each gated by a configurable confidence threshold.</li>
-            <li>Chroma-keyed shield video composited independently onto each hand, dynamically resized and
-                repositioned frame-by-frame to track the hand's position, size, and edge clipping at the frame
-                boundary.</li>
-            <li>Two shields can be summoned simultaneously, one per hand, exactly as in the source material.</li>
-            <li>Virtual webcam output via <code>pyvirtualcam</code> and the OBS Studio virtual camera backend, so
-                the composited feed can be selected as the camera source in any conferencing app.</li>
-            <li>Configurable via CLI flags: camera device id, detection/tracking confidence, prediction
-                threshold, shield video path, and output mode (preview window, virtual camera, or both).</li>
-            <li>Live in-terminal status line showing shield state and gesture-key progress while the app runs.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Dr. Strange Shield turns a webcam into a virtual camera that overlays the Sorcerer Supreme's mystical shields onto your hands in real time, so the effect can be used live in any video-conferencing app.</p>
+        <p>A short sequence of hand poses acts as the spell: three gestures in order summon the shields, and a fourth dismisses them. Once armed, a shield video is composited on each hand and follows it as it moves, rotates or changes distance from the camera.</p>
+        <p>Two shields can appear at once, one per hand, exactly as in the films.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Tracking</h3>
+                <ul class="project-features">
+                    <li>Real-time tracking of both hands</li>
+                    <li>Shields resized and repositioned every frame to match the hand</li>
+                    <li>Clipping handled at the edges of the frame</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Spell casting</h3>
+                <ul class="project-features">
+                    <li>Gesture sequence recognised by a trained classifier</li>
+                    <li>Adjustable confidence threshold</li>
+                    <li>Live status of the shield and the gesture progress</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Output</h3>
+                <ul class="project-features">
+                    <li>Virtual camera selectable in any conferencing app</li>
+                    <li>Preview window, virtual camera or both</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A MediaPipe hand tracker extracts the landmarks, and a scikit-learn support-vector classifier recognises the hand poses. OpenCV composites a chroma-keyed shield video onto the frame, and the result is published through a virtual camera backend.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -127,33 +143,27 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Glues together video capture, hand-pose classification, frame compositing, and the virtual
-                    camera output into a single real-time loop.</p>
+                <p>Glues together video capture, hand-pose classification, frame compositing, and the virtual camera output into a single real-time loop.</p>
             </div>
             <div class="project-stack-item">
                 <h3>MediaPipe</h3>
-                <p>Provides the HandLandmarker task used for two-hand detection, returning 21 3D landmarks per
-                    hand every frame &mdash; the basis for both the gesture classifier and the shield anchoring.</p>
+                <p>Provides the HandLandmarker task used for two-hand detection, returning 21 3D landmarks per hand every frame &mdash; the basis for both the gesture classifier and the shield anchoring.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Sklearn</h3>
-                <p>Used to train and load the SVM model on normalized hand-landmark coordinates, and to expose
-                    per-class prediction probabilities for confidence-gated gesture recognition.</p>
+                <p>Used to train and load the SVM model on normalized hand-landmark coordinates, and to expose per-class prediction probabilities for confidence-gated gesture recognition.</p>
             </div>
             <div class="project-stack-item">
                 <h3>SVM</h3>
-                <p>The classifier itself: a support vector machine trained to recognise the four hand poses
-                    (three "keys" plus a dismiss gesture) that drive the shield state machine.</p>
+                <p>The classifier itself: a support vector machine trained to recognise the four hand poses (three "keys" plus a dismiss gesture) that drive the shield state machine.</p>
             </div>
             <div class="project-stack-item">
                 <h3>OpenCV</h3>
-                <p>Handles webcam capture, chroma-key masking of the shield video against a black background, and
-                    per-frame alpha compositing onto the live hand region.</p>
+                <p>Handles webcam capture, chroma-key masking of the shield video against a black background, and per-frame alpha compositing onto the live hand region.</p>
             </div>
             <div class="project-stack-item">
                 <h3>pyvirtualcam</h3>
-                <p>Streams the composited output frames to the OBS Studio virtual camera device, exposing the
-                    effect as a selectable webcam in third-party video-call software.</p>
+                <p>Streams the composited output frames to the OBS Studio virtual camera device, exposing the effect as a selectable webcam in third-party video-call software.</p>
             </div>
         </div>
     </section>

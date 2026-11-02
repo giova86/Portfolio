@@ -86,32 +86,62 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>JSON Formatter is a small, focused utility for pretty-printing and validating JSON: paste raw JSON on the
-            left, get a formatted, indented version on the right, with any syntax error pointed out at the exact
-            line and column where it occurs. It was built to be the kind of tool you reach for a dozen times a day
-            without any friction — no sign-in, no ads, no unnecessary options.</p>
-        <p>The front end is a React + Vite single-page app talking to a Flask API over a single <code>POST
-                /api/format</code> endpoint. The backend does the actual parsing with Python's built-in
-            <code>json</code> module, catching <code>JSONDecodeError</code> and returning the message plus the
-            failing line/column so the UI can surface it inline instead of a generic "invalid JSON" message.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>2 / 4 / 8</strong><span>indent widths</span></div>
+            <div class="project-stat"><strong>Line + col</strong><span>exact error position</span></div>
+            <div class="project-stat"><strong>Dark + Light</strong><span>themes</span></div>
+            <div class="project-stat"><strong>1 click</strong><span>copy or download</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Format & pretty-print</strong> — reindents any valid JSON with a configurable indent width
-                (2, 4, or 8 spaces).</li>
-            <li><strong>Inline error reporting</strong> — invalid JSON surfaces the exact line and column of the
-                syntax error, taken straight from Python's own parser.</li>
-            <li><strong>Dark / light theme</strong> — a toggle with smooth transitions, persisted across sessions.
-            </li>
-            <li><strong>Unicode-safe output</strong> — non-ASCII characters are preserved as-is instead of being
-                escaped.</li>
-            <li><strong>Copy to clipboard</strong> and <strong>download</strong> directly from the output panel.</li>
-            <li><strong>Responsive layout</strong> — the two-column input/output view stacks to a single column on
-                mobile.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">JSON Formatter is a small, focused utility for pretty-printing and validating JSON: paste raw JSON on the left, get a formatted, indented version on the right, with any syntax error pointed out at the exact line and column where it occurs.</p>
+        <p>It was built to be the kind of tool you keep open in a tab: fast, clean and with nothing in the way.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Paste, read, copy</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/json-formatter-web-application/0.png" alt="JSON Formatter - Web Application — formatted JSON and error report">
+            </figure>
+            <div>
+                <p>The output can be copied to the clipboard or downloaded straight from the panel. Non-ASCII characters are preserved as they are instead of being escaped, and the two-column view stacks into a single column on mobile.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Format</h3>
+                <ul class="project-features">
+                    <li>Re-indents any valid JSON with a configurable width</li>
+                    <li>Unicode-safe output</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Validate</h3>
+                <ul class="project-features">
+                    <li>Invalid input is reported with the exact line and column of the problem</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Comfort</h3>
+                <ul class="project-features">
+                    <li>Dark and light themes with smooth transitions, remembered between sessions</li>
+                    <li>Responsive layout for phones</li>
+                    <li>Copy and download from the output panel</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A React and Vite single-page app talks to a small Flask API with a single endpoint. The back end parses the text with Python's own JSON parser and returns either the formatted result or the position of the error.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -123,8 +153,7 @@
             </div>
             <div class="project-stack-item">
                 <h3>Flask</h3>
-                <p>Exposes the single <code>/api/format</code> endpoint that validates and pretty-prints the
-                    submitted JSON.</p>
+                <p>Exposes the single endpoint that validates and pretty-prints the submitted JSON.</p>
             </div>
             <div class="project-stack-item">
                 <h3>React</h3>
@@ -132,8 +161,7 @@
             </div>
             <div class="project-stack-item">
                 <h3>Vite</h3>
-                <p>Dev server and build tool for the React front end, with a proxy to the Flask API during
-                    development.</p>
+                <p>Dev server and build tool for the React front end, with a proxy to the Flask API during development.</p>
             </div>
         </div>
     </section>

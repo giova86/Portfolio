@@ -82,50 +82,64 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Magic Number is a Flutter implementation of a classic mentalist card trick, not a number-guessing
-            game. The player picks any number from 1 to 63 and keeps it secret. The app deals a shuffled stack
-            of six cards &mdash; labelled 1, 2, 4, 8, 16 and 32 &mdash; one at a time. For each card, the player
-            swipes up if their number appears on it, or down if it doesn't. Once all six cards have been
-            answered, they shake the phone, and the app reveals the exact number they were thinking of.</p>
-        <p>The trick works because each card encodes one bit of the number's binary representation: card
-            <code>N</code> shows every number whose binary form has bit <code>N</code> set. Summing the values
-            of only the cards the player swiped "yes" on reconstructs the original number &mdash; classic
-            binary encoding, dressed up as a magic trick. The app doesn't need to know the number in advance;
-            it only needs the player's six yes/no answers, and it recomputes the total live as each card is
-            dismissed.</p>
-        <p>It's a small, self-contained single-screen Flutter app: one <code>StatefulWidget</code> drives the
-            shuffled card deck, the swipe-to-dismiss interactions, the phone-shake reveal (via the device
-            accelerometer), and a floating reset button to deal a fresh, re-shuffled stack.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>1–63</strong><span>any number can be guessed</span></div>
+            <div class="project-stat"><strong>6</strong><span>cards, shuffled every round</span></div>
+            <div class="project-stat"><strong>Shake</strong><span>to reveal the result</span></div>
+            <div class="project-stat"><strong>Binary</strong><span>maths behind the trick</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Binary-encoding card trick: six cards (values 1, 2, 4, 8, 16, 32) each list every number from
-                1&ndash;63 that has that bit set in its binary representation, so the sum of the cards the
-                player confirms always reconstructs their secret number.</li>
-            <li>Freshly shuffled deck every round: the six cards are reshuffled with <code>List.shuffle</code>
-                on each new game, so the reveal never happens in the same, memorizable card order twice.</li>
-            <li>Vertical swipe-to-dismiss gameplay built on Flutter's <code>Dismissible</code>: swipe a card up
-                if the secret number is on it (adds its value to the running total), swipe down to discard it
-                with no effect, both with a 20%-of-height dismiss threshold.</li>
-            <li>Messy, tactile card-stack presentation: each card gets a small randomized rotation and x/y
-                offset so the stack looks hand-scattered rather than perfectly aligned, with drop shadows for
-                depth.</li>
-            <li>Dismissible instructions overlay: an in-stack "ISTRUZIONI" card explains the rules in Italian
-                and fades out (via an <code>AnimationController</code>/<code>Tween</code>) on first tap, so it
-                only ever gets in the way once.</li>
-            <li>Shake-to-reveal result screen: once every card is gone, the <code>sensors_plus</code>
-                accelerometer stream watches for a shake gesture past a magnitude threshold, accumulating
-                "shake energy" that fades the answer in from fully transparent to solid white as the player
-                keeps shaking.</li>
-            <li>One-tap reset via a floating action button that re-shuffles the deck, restores the instructions
-                card, and zeroes the running total and shake progress, so a new round can start immediately.</li>
-            <li>Locked portrait orientation with immersive/edge-to-edge system UI, including a small platform
-                channel that detects Android's navigation mode (gesture vs. button bar) to pick the right
-                system UI overlay mode.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Magic Number is a Flutter implementation of a classic mentalist card trick. The player picks any number from 1 to 63 and keeps it secret. The app deals a shuffled stack of six cards, one at a time, and for each of them the player swipes up if the number appears on it, or down if it does not.</p>
+        <p>When the last card is gone, shaking the phone makes the answer fade in from nothing — the number the player was only ever thinking of.</p>
+        <p>The trick works because each card encodes one bit of the binary representation of the number: adding up the values of the cards the player confirmed reconstructs it exactly.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Swipe, shake, reveal</h2>
+        <div class="project-split">
+            <div>
+                <p>The cards are scattered with a small random rotation and offset so the stack looks hand-dealt, with shadows for depth. A first card explains the rules and fades away on the first touch, and a floating button reshuffles the deck for the next round.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/magic-number-mobile-application/0.png" alt="Magic Number - Mobile Application — the card stack">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>The trick</h3>
+                <ul class="project-features">
+                    <li>Six cards that together cover every number from 1 to 63</li>
+                    <li>Deck reshuffled every round so the order is never memorisable</li>
+                    <li>Swipe up for yes, down for no</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>The reveal</h3>
+                <ul class="project-features">
+                    <li>Shake the phone to make the result appear gradually</li>
+                    <li>Result fades from transparent to solid as the shaking continues</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Polish</h3>
+                <ul class="project-features">
+                    <li>Tactile, hand-scattered card stack</li>
+                    <li>Portrait lock and full-screen display tuned to Android navigation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A small, self-contained Flutter app: one screen drives the shuffled deck, the swipe interactions and the shake detection through the phone's motion sensor.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -133,26 +147,15 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart</h3>
-                <p>Implements the whole game as a single <code>StatefulWidget</code>: the shuffle-and-deal
-                    logic, per-card swipe handling and running-total bookkeeping, the accelerometer-driven
-                    shake accumulator that maps raw sensor magnitude to a 0&ndash;1 reveal progress, and the
-                    fade animations for the instructions card, all with plain <code>dart:math</code> and
-                    <code>dart:async</code> &mdash; no external state-management package.</p>
+                <p>Implements the whole game as a single StatefulWidget: the shuffle-and-deal logic, per-card swipe handling and running-total bookkeeping, the accelerometer-driven shake accumulator that maps raw sensor magnitude to a 0&ndash;1 reveal progress, and the fade animations for the instructions card, all with plain dart:math and dart:async &mdash; no external state-management package.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Flutter</h3>
-                <p>Renders the scattered card stack with <code>Stack</code>/<code>Positioned</code>/
-                    <code>Transform.rotate</code>, handles swipe gestures through <code>Dismissible</code> with
-                    custom vertical dismiss thresholds, and drives the instructions fade-out and shake-reveal
-                    opacity with <code>AnimationController</code>. A native <code>MethodChannel</code> queries
-                    the Android navigation-bar mode at startup to choose the correct
-                    <code>SystemUiMode</code>.</p>
+                <p>Renders the scattered card stack with Stack/Positioned/ Transform.rotate, handles swipe gestures through Dismissible with custom vertical dismiss thresholds, and drives the instructions fade-out and shake-reveal opacity with AnimationController.</p>
             </div>
             <div class="project-stack-item">
                 <h3>sensors_plus</h3>
-                <p>Streams live accelerometer events used to detect the "shake to reveal" gesture: the app
-                    sums the vector magnitude of each event, and once it clears a threshold accumulates that
-                    excess into a progress value that controls how visible the revealed number becomes.</p>
+                <p>Streams live accelerometer events used to detect the "shake to reveal" gesture: the app sums the vector magnitude of each event, and once it clears a threshold accumulates that excess into a progress value that controls how visible the revealed number becomes.</p>
             </div>
         </div>
     </section>

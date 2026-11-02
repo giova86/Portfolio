@@ -87,74 +87,72 @@
     </section>
 
     <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>14</strong><span>colour palettes</span></div>
+            <div class="project-stat"><strong>4</strong><span>brick shapes</span></div>
+            <div class="project-stat"><strong>3</strong><span>detail levels, up to 96 bricks across</span></div>
+            <div class="project-stat"><strong>~3,000 px</strong><span>print-ready output width</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
         <h2>Overview</h2>
-        <p>Camera Bricks turns any photo into brick art. Upload an image, pick a brick shape, a level of detail and
-            a colour palette, and the app rebuilds the picture as a mosaic of rendered studs, ready to download as
-            a framed polaroid-style print.</p>
-        <p>The conversion is a small image-processing pipeline. The upload is first normalised to a fixed working
-            width, then cropped so both dimensions are exact multiples of the brick grid — no partial bricks at
-            the edges. Each cell of that grid is reduced to its average colour, and the average is matched to the
-            nearest entry in the chosen palette using a distance weighted 0.3 / 0.59 / 0.11 across R, G and B
-            rather than a plain Euclidean one, so the match follows perceived brightness instead of raw channel
-            difference.</p>
-        <p>The last step is what makes the result read as plastic rather than as large pixels: instead of filling
-            each cell with flat colour, the matched colour is multiplied onto a real greyscale photograph of a
-            brick. The stud's own highlights and shadows survive the tinting, so every one of the thousands of
-            tiles in the mosaic keeps its moulded, three-dimensional look.</p>
-        <p>It runs as a Streamlit app — the entire interface, from the uploader to the download button, is defined
-            in the same Python codebase that does the imaging, with no separate front end to build or deploy.</p>
+        <p class="project-lead">Camera Bricks turns any photo into brick art. Upload an image, pick a brick shape, a level of detail and a colour palette, and the app rebuilds the picture as a mosaic of rendered studs, ready to download as a framed polaroid-style print.</p>
+        <p>What makes the result read as plastic rather than as large pixels is the texture: each colour is applied onto a real photograph of a brick, so the highlights and shadows of every stud survive and the mosaic looks like a physical build.</p>
+        <p>It runs as a single web app, with the whole interface and the imaging code in the same codebase.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Choose your bricks</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/camera-bricks/0.png" alt="Camera Bricks — brick mosaic and controls">
+            </figure>
+            <div>
+                <p>Round or square studs, raised or flat, with a 3D preview of the selected brick next to the control. Three detail levels — 24, 48 or 96 bricks across — trade the chunky look of a small build against the fidelity of a large one, and the result is labelled with its brick count, a useful estimate of how large a real build would be.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Customise</h3>
+                <ul class="project-features">
+                    <li>14 palettes: classic brick colours, black and white, monochrome scales, Warhol-style art sets and limited sets of 10, 20 and 75 colours</li>
+                    <li>Four brick shapes with a live 3D preview</li>
+                    <li>Three detail levels</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Download</h3>
+                <ul class="project-features">
+                    <li>Framed polaroid-style print with the logo, as a JPEG</li>
+                    <li>Nothing is stored on the server</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Explore</h3>
+                <ul class="project-features">
+                    <li>Example gallery with 24 sample transformations</li>
+                    <li>Brick count shown for every result</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Polish</h3>
+                <ul class="project-features">
+                    <li>Interface restyled so it reads as a product rather than a notebook</li>
+                    <li>Fast repeated renders thanks to cached assets</li>
+                    <li>Terms, privacy policy and support links included</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
         <h2>How the conversion works</h2>
-        <ul class="project-features">
-            <li><strong>Normalise</strong> — the uploaded photo is resized to a fixed 96-pixel working width with
-                its aspect ratio preserved, which bounds the cost of the conversion no matter how large the
-                original file is. Greyscale and RGBA uploads are coerced to three-channel RGB first.</li>
-            <li><strong>Crop to the grid</strong> — the brick size in source pixels is derived from the requested
-                horizontal brick count, and the image is trimmed to an exact multiple of it. At 24 bricks each
-                tile averages a 4×4 block, at 48 a 2×2 block, and at 96 the grid lines up one-to-one with the
-                working pixels.</li>
-            <li><strong>Average and match</strong> — each block is reduced to its mean colour per channel, then
-                scored against every colour in the selected palette with the luminance-weighted distance; the
-                closest one wins.</li>
-            <li><strong>Render the brick</strong> — the matched colour is multiplied onto the greyscale texture of
-                the selected brick shape and clipped back into range, producing a 30×30-pixel tile that keeps the
-                original stud's shading.</li>
-            <li><strong>Compose</strong> — the tiles are written into the output canvas at 30 pixels each, so a
-                96-brick-wide render comes out nearly 3,000 pixels across — large enough to print.</li>
-            <li><strong>Frame</strong> — a polaroid treatment adds a white border with a deep bottom band and a
-                thin black outline, then centres the Camera Bricks logo in the band. The unframed mosaic is shown
-                on screen with its brick dimensions, and the framed version is what the download button
-                returns.</li>
-        </ul>
-    </section>
-
-    <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>14 colour palettes</strong> — the classic brick set, black &amp; white, five monochrome
-                scales, three Warhol-style art palettes and three limited sets of 10, 20 and 75 colours. Each is a
-                plain CSV of names and RGB triples, so adding a palette is a file rather than a code change.</li>
-            <li><strong>4 brick shapes</strong> — round or square studs, each in a raised or flat variant, with a
-                3D preview of the selected brick shown next to the control so the choice is visible before
-                generating.</li>
-            <li><strong>3 detail levels</strong> — 24, 48 or 96 bricks across, trading the chunky look of a small
-                build against the fidelity of a large one.</li>
-            <li><strong>Brick count readout</strong> — the result is labelled with the mosaic's horizontal and
-                vertical brick counts, which doubles as an estimate of how big a physical build would be.</li>
-            <li><strong>Polaroid download</strong> — the framed, logo-stamped render is offered as a JPEG straight
-                from the browser, with no file ever written to the server's disk.</li>
-            <li><strong>Example gallery</strong> — a dedicated tab with 24 sample transformations, laid out in
-                mixed-width rows so portraits and landscapes both sit well.</li>
-            <li><strong>Cached asset loading</strong> — palettes, brick textures and static images are memoised
-                with a one-hour TTL, so repeated renders and page reruns don't re-read the same files.</li>
-            <li><strong>Custom-skinned Streamlit</strong> — injected CSS hides the default menu, header, footer and
-                fullscreen affordances and constrains the content width, so the app reads as a product rather
-                than as a notebook UI.</li>
-            <li><strong>Full legal footer</strong> — a GDPR-oriented terms, conditions and privacy policy section,
-                plus support contact links and a Buy Me a Coffee tab.</li>
-        </ul>
+        <p>The photo is first resized to a fixed working width and cropped to an exact multiple of the brick grid, so there are no partial bricks at the edges. Each cell is reduced to its average colour, matched to the closest colour of the chosen palette using a perceptual weighting, and rendered onto the brick texture. The tiles are composed into a large canvas and wrapped in a polaroid frame stamped with the logo.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -162,29 +160,19 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Holds the whole application in two modules: <code>lego_app.py</code> for the page layout and
-                    flow, and <code>functions.py</code> for the imaging helpers — cropping, nearest-colour
-                    matching, brick colourisation, framing and the download plumbing.</p>
+                <p>Holds the whole application: page layout and flow, plus the imaging helpers for cropping, colour matching, brick colourisation, framing and download.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Streamlit</h3>
-                <p>Provides the entire interface — file uploader, the brick / size / palette selectors, tabbed
-                    navigation, spinners and download buttons — from the same Python file as the logic. Its
-                    <code>cache_data</code> decorator memoises the palette and asset loaders, and the app is
-                    configured for a wide layout, a collapsed sidebar and a 20 MB upload limit.</p>
+                <p>Provides the entire interface — file uploader, the brick / size / palette selectors, tabbed navigation, spinners and download buttons — from the same Python file as the logic.</p>
             </div>
             <div class="project-stack-item">
                 <h3>NumPy &amp; pandas</h3>
-                <p>NumPy carries the pixel work: block averaging, the tinting of the brick texture, clipping back
-                    into 8-bit range and writing each tile into the output canvas. pandas parses the palette CSVs
-                    into the name/RGB mapping the matcher consumes.</p>
+                <p>NumPy carries the pixel work: block averaging, the tinting of the brick texture, clipping back into 8-bit range and writing each tile into the output canvas.</p>
             </div>
             <div class="project-stack-item">
                 <h3>OpenCV &amp; Pillow</h3>
-                <p>OpenCV builds the polaroid frame with <code>copyMakeBorder</code>, using an asymmetric bottom
-                    border plus a thin black outline. Pillow handles decoding, resampling, the logo composite with
-                    alpha masking, and encoding the final JPEG into the in-memory buffer the download button
-                    serves.</p>
+                <p>OpenCV builds the polaroid frame with copyMakeBorder, using an asymmetric bottom border plus a thin black outline.</p>
             </div>
         </div>
     </section>

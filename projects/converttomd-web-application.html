@@ -87,53 +87,67 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>ConvertToMD converts PDF, DOCX, DOC, XLSX, and XLS files into clean, well-structured Markdown, entirely on
-            the user's own machine — no document is ever uploaded to an external service. It offers two conversion
-            paths depending on the format: a <strong>direct</strong> mode that parses DOCX and XLSX structurally with
-            <code>python-docx</code> and <code>openpyxl</code>, and an <strong>OCR</strong> mode that renders each
-            page as an image and asks a locally-hosted vision-language model to transcribe it into Markdown. PDFs and
-            the legacy DOC/XLS formats — which have no reliable structural parser — always go through OCR; DOC and
-            XLS files are first bridged to PDF with a headless LibreOffice conversion.</p>
-        <p>The web app is a React front end with a split-view editor: the original page renders on one side, its
-            Markdown output on the other, so every page can be inspected and re-run individually before the file is
-            downloaded. The OCR back end isn't hard-wired to Ollama — a small backend abstraction lets the app talk
-            to Ollama, LM Studio, or any vLLM server that speaks the OpenAI chat-completions API, so the vision model
-            doing the transcription can be swapped without touching the app's logic. A separate CLI script
-            (<code>scripts/convert.py</code>) exposes the same conversion pipeline for batch-processing a whole
-            folder of documents without opening the browser at all.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>5</strong><span>document formats</span></div>
+            <div class="project-stat"><strong>100%</strong><span>local — no file leaves your machine</span></div>
+            <div class="project-stat"><strong>3</strong><span>local model servers supported</span></div>
+            <div class="project-stat"><strong>Page by page</strong><span>review and re-run</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li><strong>Split-view conversion</strong> — the rendered document page sits next to its Markdown output,
-                with a toggle between a rendered preview and the raw Markdown source, so formatting can be checked
-                page by page as it's produced.</li>
-            <li><strong>Per-page or one-click OCR</strong> — each page can be converted individually, or the whole
-                document can be queued with "OCR all," which skips pages already marked done so a run can be
-                resumed after an interruption.</li>
-            <li><strong>Direct structural extraction for DOCX/XLSX</strong> — Word documents keep their heading
-                levels, bold/italic runs and tables; Excel workbooks are walked sheet by sheet into Markdown tables.
-                Both are deterministic and don't touch the OCR model at all.</li>
-            <li><strong>Pluggable local LLM backend</strong> — a settings panel lets the OCR server be pointed at
-                Ollama, LM Studio, or vLLM, with a "test connection" step that lists the models actually available
-                on that server before one is picked as default.</li>
-            <li><strong>Per-page model override</strong> — the model used for OCR can be changed page by page, useful
-                for re-running a page that came out garbled with a different model without restarting the whole
-                document.</li>
-            <li><strong>Download as Markdown</strong> — the direct-mode result or the combined per-page OCR output
-                downloads as a single <code>.md</code> file, generated client-side with no round trip to the
-                server.</li>
-            <li><strong>Dark mode</strong> — the whole interface, including the split-view editor and settings modal,
-                has a dark theme toggle.</li>
-            <li><strong>CLI batch converter</strong> — <code>scripts/convert.py</code> processes an entire input
-                folder to Markdown outside the browser, with flags for the conversion mode, render DPI, OCR model,
-                Ollama endpoint, and per-page timeout, and skips files it has already converted unless
-                <code>--force</code> is passed.</li>
-            <li><strong>100% local</strong> — no file leaves the machine and no API key is required by default; the
-                OCR step runs entirely against a locally-hosted model server.</li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">ConvertToMD converts PDF, Word and Excel files into clean, well-structured Markdown, entirely on your own machine — no document is ever uploaded to an external service.</p>
+        <p>It offers two conversion paths depending on the format: Word and Excel files are read structurally, keeping headings, emphasis and tables, while PDFs and scans are converted page by page with a locally hosted vision-language model acting as OCR.</p>
+        <p>The interface is a split-view editor: the original page on one side, its Markdown on the other, so every page can be checked and re-run before the file is downloaded.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Inspect every page</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/converttomd-web-application/0.png" alt="ConvertToMD - Web Application — split-view conversion">
+            </figure>
+            <div>
+                <p>Toggle between a rendered preview and the raw Markdown while the text is produced. Convert a single page, or queue the whole document: pages already done are skipped, so a long run can resume after an interruption.</p>
+                <p>If a page comes out garbled, re-run just that page with a different model, without restarting the document.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Conversion</h3>
+                <ul class="project-features">
+                    <li>Structure-preserving extraction for Word documents and Excel workbooks</li>
+                    <li>OCR for PDFs with a local model, page by page or all at once</li>
+                    <li>Result downloaded as a single Markdown file</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Local models</h3>
+                <ul class="project-features">
+                    <li>Choose between Ollama, LM Studio and vLLM from a settings panel</li>
+                    <li>A connection test lists the models actually available</li>
+                    <li>Per-page model override</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Everyday comfort</h3>
+                <ul class="project-features">
+                    <li>Dark mode across the whole interface</li>
+                    <li>No API key required</li>
+                    <li>A command-line batch converter for whole folders</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A React front end talks to a FastAPI back end written in Python. The OCR layer sits behind a small abstraction so that any compatible local model server can be plugged in, and Word and Excel conversion is deterministic and never touches the model.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -141,18 +155,15 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Python</h3>
-                <p>Backend language for the FastAPI service, the DOCX/XLSX converters, and the standalone CLI batch
-                    script.</p>
+                <p>Backend language for the FastAPI service, the DOCX/XLSX converters, and the standalone CLI batch script.</p>
             </div>
             <div class="project-stack-item">
                 <h3>FastAPI</h3>
-                <p>Exposes the REST API — upload, direct conversion, PDF bridging, per-page OCR, and settings/model
-                    endpoints — consumed by the React front end.</p>
+                <p>Exposes the REST API — upload, direct conversion, PDF bridging, per-page OCR, and settings/model endpoints — consumed by the React front end.</p>
             </div>
             <div class="project-stack-item">
                 <h3>React</h3>
-                <p>Drives the whole interface: the upload zone, the mode-selection step, the split-view editor with
-                    its page strip and model picker, and the settings modal — built with Vite and Tailwind CSS.</p>
+                <p>Drives the whole interface: the upload zone, the mode-selection step, the split-view editor with its page strip and model picker, and the settings modal — built with Vite and Tailwind CSS.</p>
             </div>
             <div class="project-stack-item">
                 <h3>HTML</h3>
@@ -160,14 +171,11 @@
             </div>
             <div class="project-stack-item">
                 <h3>Ollama</h3>
-                <p>Default local model server for the OCR path — runs the vision-language model that turns a
-                    rendered page image into Markdown, with no data leaving the machine.</p>
+                <p>Default local model server for the OCR path — runs the vision-language model that turns a rendered page image into Markdown, with no data leaving the machine.</p>
             </div>
             <div class="project-stack-item">
                 <h3>LLM</h3>
-                <p>A vision-language model (<code>glm-ocr</code> by default) reads each rendered page image and
-                    returns structured Markdown — headings, tables, lists — through a backend-agnostic interface
-                    that also supports LM Studio and vLLM.</p>
+                <p>A vision-language model (glm-ocr by default) reads each rendered page image and returns structured Markdown — headings, tables, lists — through a backend-agnostic interface that also supports LM Studio and vLLM.</p>
             </div>
         </div>
     </section>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBLite - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A native macOS text and code editor inspired by BBEdit: multi-cursor and column editing, Vim mode, regex search, a command palette and JavaScript scripting.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BBLite - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A native macOS text and code editor inspired by BBEdit: multi-cursor and column editing, Vim mode, regex search, a command palette and JavaScript scripting.">
+    <meta property="og:image" content="../static/BBLite.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BBLite - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A native macOS text and code editor inspired by BBEdit: multi-cursor and column editing, Vim mode, regex search, a command palette and JavaScript scripting.">
+    <meta name="twitter:image" content="../static/BBLite.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/BBLite.png" alt="Immagine BBLite - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>BBLite - Desktop Application</h1>
+            <p class="project-tagline">A native macOS text and code editor inspired by BBEdit: multi-cursor and column editing, Vim mode, regex search, a command palette and JavaScript scripting.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Swift</span>
+                <span class="tech-tag">AppKit</span>
+                <span class="tech-tag">Javascript</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>100%</strong><span>native macOS, no Electron or web view</span></div>
+            <div class="project-stat"><strong>8</strong><span>languages with syntax highlighting</span></div>
+            <div class="project-stat"><strong>Light + Dark</strong><span>themes, with optional ligatures</span></div>
+            <div class="project-stat"><strong>Universal</strong><span>runs on Apple silicon and Intel Macs</span></div>
+            <div class="project-stat"><strong>Scriptable</strong><span>extend it with your own JavaScript</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">BBLite is a lightweight text and code editor for macOS, inspired by BBEdit. It aims at
+            the sweet spot between a plain notepad and a full IDE: it opens instantly, looks like a Mac app, and puts
+            the power tools of a professional editor a keystroke away.</p>
+        <p>It handles the everyday jobs of a developer or writer &mdash; reading and editing source files, Markdown
+            notes, JSON and configuration, shell scripts &mdash; with native window tabs, line numbers, a
+            current-line highlight and colour-coded syntax for Swift, JavaScript, JSON, Python, shell, HTML, CSS and
+            Markdown. A file browser on the left and a minimap on the right make it easy to move around a project
+            without leaving the keyboard.</p>
+        <p>What sets it apart from a simple editor is the toolbox: editing in several places at once, searching with
+            regular expressions across a whole folder, a Vim-style modal mode for those who want it, reusable
+            snippets and text transformations, and a scripting layer that lets users add their own commands. All of
+            it is reachable from a single searchable command palette.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Edit in many places at once</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/bblite-desktop-application/2.png" alt="BBLite with a column selection over several lines">
+            </figure>
+            <div>
+                <p>Multiple cursors turn repetitive edits into a single gesture: add the next occurrence of a word,
+                    drop carets above or below, or click to place them anywhere. <strong>Column mode</strong>
+                    extends one caret into a vertical block that can be widened or narrowed, so the same text can be
+                    typed on every line of a list, a table or an aligned set of declarations.</p>
+                <p>Every cursor moves, selects and edits together, and the whole change is a single undo step.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Write and read comfortably</h3>
+                <ul class="project-features">
+                    <li><strong>Native tabs and documents</strong> &mdash; several files in one window, with the standard Mac document behaviour.</li>
+                    <li><strong>Syntax highlighting</strong> &mdash; eight languages, tuned so that large files stay responsive.</li>
+                    <li><strong>Light and dark themes</strong> &mdash; configurable font, size, cursor colour and ligatures.</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Find anything</h3>
+                <ul class="project-features">
+                    <li><strong>Find and Replace</strong> in the open file, with regular expressions, case and whole-word options.</li>
+                    <li><strong>Find in Files</strong> across a folder, with a list of results, a preview of each match and replace for the whole set.</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Move around fast</h3>
+                <ul class="project-features">
+                    <li><strong>File browser sidebar</strong> &mdash; a tree of the current folder with back, forward, up and home navigation; double-click opens a file in a new tab.</li>
+                    <li><strong>Minimap</strong> &mdash; a colour-coded overview of the document; click or drag to scroll.</li>
+                    <li><strong>Command palette</strong> &mdash; fuzzy search over every command, snippet, transformation and script.</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Automate the boring parts</h3>
+                <ul class="project-features">
+                    <li><strong>Clippings</strong> &mdash; a personal library of reusable snippets.</li>
+                    <li><strong>Text Factories</strong> &mdash; pipelines of text transformations that can be saved, named and run on a selection or a whole file.</li>
+                    <li><strong>Scripts</strong> &mdash; custom commands written in JavaScript show up in the menus and the palette.</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Vim, if you want it</h3>
+                <ul class="project-features">
+                    <li><strong>Modal editing</strong> with normal, insert and visual modes, operators, motions, text objects and counts.</li>
+                    <li><strong>Search and command line</strong> &mdash; Vim-style search and substitute, shown in the status bar.</li>
+                    <li>Optional and off by default, so the editor behaves like a regular Mac app until it is switched on.</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Safe by design</h3>
+                <ul class="project-features">
+                    <li><strong>Encoding and line-ending detection</strong> when opening files.</li>
+                    <li><strong>Sandboxed scripts</strong> &mdash; they can transform the text but cannot touch the file system or the network, and a failing script never alters the document.</li>
+                    <li><strong>Protected user data</strong> &mdash; snippets and transformations are never overwritten if a file is damaged.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Vim-style editing</h2>
+        <div class="project-split">
+            <div>
+                <p>For people who think in motions and operators, BBLite offers an optional Vim mode that covers the
+                    everyday vocabulary: moving by word, line and paragraph, deleting, changing and yanking with
+                    counts, selecting text objects, repeating the last change and searching with regular expressions.
+                    The current mode and any pending keys are always visible in the status bar.</p>
+                <div class="project-callout">
+                    <h3>Best of both worlds</h3>
+                    <p>The usual Mac shortcuts keep working in every mode, so Vim muscle memory and native habits
+                        can live side by side.</p>
+                </div>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/bblite-desktop-application/1.png" alt="BBLite in Vim visual-line mode">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>BBLite is written entirely in Swift and distributed as a Swift Package, without an Xcode project. The
+            code is split in two layers. A platform-independent <strong>editor core</strong> holds the real logic
+            &mdash; tokenizing, search, multi-cursor and column selection, the Vim engine, text transformations, the
+            file browser model and the scripting host &mdash; and is covered by an extensive automated test suite.
+            A thin <strong>AppKit layer</strong> on top provides the windows, tabs, text view, line-number ruler,
+            minimap, sidebar and preferences.</p>
+        <p>Languages and themes are plain data files bundled with the app, user snippets and transformations are
+            stored as readable JSON, and scripting runs on Apple's JavaScriptCore inside a sandbox. The finished
+            app is a universal, ad-hoc-signed bundle shipped in a DMG with an Applications shortcut.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Swift</h3>
+                <p>The whole code base: an editor-core library, the macOS application and an XCTest suite, built as
+                    a Swift Package for macOS 13 and later.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>AppKit</h3>
+                <p>Native windows and tabs, a TextKit-based text view, custom ruler, minimap and sidebar views, a
+                    floating command palette and the preferences window.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p>User scripting through JavaScriptCore, with a small editor API and a sandbox that exposes no
+                    file, network or process access.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="bblite-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/bblite-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>

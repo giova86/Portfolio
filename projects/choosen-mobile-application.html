@@ -83,38 +83,58 @@
     </section>
 
     <section class="project-section fade-in">
-        <h2>Overview</h2>
-        <p>Choosen is a Flutter app built for a card-based mentalism trick: the spectator freely browses through a
-            shuffled 54-card deck and stops on any card they like — the app never shows the card on screen, but
-            privately notifies the magician which one it was.</p>
-        <p>The app opens on a blurred Start screen; tapping Start reveals the full pile, rendered card-by-card with a
-            deterministic offset and rotation so it reads as a real, imperfectly squared deck. The spectator drags
-            the top card off in any direction to reveal the next one underneath, as many times as they like. As soon
-            as they leave a card on top for a configurable delay, Choosen posts to the <a
-                href="https://ntfy.sh" target="_blank" rel="noopener">ntfy</a> push-notification API with that
-            card's rank, suit, and face image as an attachment — delivered straight to the magician's own device,
-            with nothing revealed on the spectator's screen.</p>
-        <p>A triple-tap anywhere on screen opens a hidden Settings panel to configure the ntfy topic and notification
-            delay, and a reset button reshuffles the deck back to the blurred Start screen at any time.</p>
+        <div class="project-stats">
+            <div class="project-stat"><strong>54</strong><span>cards, jokers included</span></div>
+            <div class="project-stat"><strong>0</strong><span>cards ever shown on screen as chosen</span></div>
+            <div class="project-stat"><strong>Push</strong><span>notification to the magician</span></div>
+            <div class="project-stat"><strong>Hidden</strong><span>triple-tap settings</span></div>
+        </div>
     </section>
 
     <section class="project-section fade-in">
-        <h2>Key features</h2>
-        <ul class="project-features">
-            <li>Full 54-card deck (13 ranks × 4 suits + 2 jokers), rendered from individual card face assets rather
-                than a single pre-baked deck image.</li>
-            <li>Free-direction swipe-to-dismiss with a fixed distance threshold, snap-back animation, and a seamless
-                hand-off between the "peeking" card underneath and the newly promoted top card — no visual pop-in.
-            </li>
-            <li>Private, per-card push notifications via the ntfy JSON publish API, including the card's face image
-                as a file attachment.</li>
-            <li>Configurable notification delay (0–300s, with 0 disabling notifications entirely) and ntfy topic,
-                persisted locally with <code>shared_preferences</code>.</li>
-            <li>Hidden triple-tap gesture that reveals a floating Settings panel, animated in from the top.</li>
-            <li>Animated blur/sharp transition between the Start screen and gameplay.</li>
-            <li>Deck-exhaustion handling with a "Ricomincia" (restart) flow that reshuffles and returns to Start.
-            </li>
-        </ul>
+        <h2>Overview</h2>
+        <p class="project-lead">Choosen is a Flutter app built for a card-based mentalism trick: the spectator freely browses through a shuffled 54-card deck and stops on any card they like — the app never shows the chosen card on screen, but privately notifies the magician which one it was.</p>
+        <p>The app opens on a blurred start screen; tapping Start reveals the full pile, drawn card by card with a slight offset and rotation so it reads as a real, imperfectly squared deck. The spectator drags the top card off in any direction to reveal the next one underneath, as many times as they like.</p>
+        <p>A hidden gesture opens the settings, and a reset button reshuffles the deck at any time.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>The effect</h2>
+        <div class="project-split">
+            <div>
+                <p>Cards leave the pile with a free-direction swipe and snap back if the gesture is too short. The card underneath is promoted seamlessly, so the deck feels like a physical object, and when the pile runs out a restart flow reshuffles it.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/choosen-mobile-application/0.png" alt="Choosen - Mobile Application — browsing the deck">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>The deck</h3>
+                <ul class="project-features">
+                    <li>Complete 54-card deck drawn from individual card images</li>
+                    <li>Free-direction swipe with snap-back</li>
+                    <li>Smooth blur-to-sharp transition from the start screen</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Secret channel</h3>
+                <ul class="project-features">
+                    <li>Private push notification of the chosen card, with its image attached</li>
+                    <li>Configurable delay, from instant to five minutes, or off</li>
+                    <li>A hidden triple-tap opens the settings</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The app is written in Flutter and Dart. Notifications are published to the ntfy service, which delivers them to the magician's phone, and the topic and delay are persisted locally.</p>
     </section>
 
     <section class="project-section fade-in">
@@ -122,14 +142,11 @@
         <div class="project-stack-grid">
             <div class="project-stack-item">
                 <h3>Dart &amp; Flutter</h3>
-                <p>The whole app — UI, gesture handling, animations, and state — is a single Flutter codebase (SDK
-                    ^3.9.2) targeting iOS and Android from one source tree.</p>
+                <p>The whole app — UI, gesture handling, animations, and state — is a single Flutter codebase (SDK ^3.9.2) targeting iOS and Android from one source tree.</p>
             </div>
             <div class="project-stack-item">
                 <h3>Ntfy</h3>
-                <p>Notifications are sent by POSTing directly to the public ntfy JSON API with a compact title (e.g.
-                    <code>A♠️</code>, <code>Jolly 🃏</code>) and the card's face image as a file attachment — no
-                    backend of its own, just a self-hostable or public ntfy server.</p>
+                <p>Notifications are sent by POSTing directly to the public ntfy JSON API with a compact title (e.g.</p>
             </div>
             <div class="project-stack-item">
                 <h3>shared_preferences</h3>
