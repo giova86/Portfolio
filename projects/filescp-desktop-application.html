@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileSCP - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A native macOS file transfer client with two-pane browsing, SFTP, FTP/FTPS, WebDAV and S3, a resumable transfer queue, folder sync and a built-in terminal.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FileSCP - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A native macOS file transfer client with two-pane browsing, SFTP, FTP/FTPS, WebDAV and S3, a resumable transfer queue, folder sync and a built-in terminal.">
+    <meta property="og:image" content="../static/filescp.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FileSCP - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A native macOS file transfer client with two-pane browsing, SFTP, FTP/FTPS, WebDAV and S3, a resumable transfer queue, folder sync and a built-in terminal.">
+    <meta name="twitter:image" content="../static/filescp.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/filescp.png" alt="Immagine FileSCP - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>FileSCP - Desktop Application</h1>
+            <p class="project-tagline">A native macOS file transfer client with two-pane browsing, SFTP, FTP/FTPS, WebDAV and S3, a resumable transfer queue, folder sync and a built-in terminal.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Swift</span>
+                <span class="tech-tag">SwiftUI</span>
+                <span class="tech-tag">SFTP</span>
+                <span class="tech-tag">FTP</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>100%</strong><span>native macOS, no Electron or web view</span></div>
+            <div class="project-stat"><strong>5</strong><span>protocols: SFTP, FTP, FTPS, WebDAV, S3</span></div>
+            <div class="project-stat"><strong>2 panes</strong><span>local and remote, Finder or Terminal view</span></div>
+            <div class="project-stat"><strong>Light + Dark</strong><span>follows the system appearance</span></div>
+            <div class="project-stat"><strong>Resumable</strong><span>queue that survives a restart</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">FileSCP is a file transfer client for macOS that brings the power of FileZilla to a
+            modern, Apple-style interface: clean panels, translucent materials, automatic light and dark themes and
+            discreet animations.</p>
+        <p>Your computer sits on the left and the server on the right. Files move between the two with a drag, and
+            every transfer goes through a queue that runs several uploads and downloads in parallel, shows progress
+            and keeps going after an interruption. The same window connects to classic FTP and FTPS servers, to SFTP
+            over SSH, to WebDAV shares and to Amazon S3 or compatible storage.</p>
+        <div class="project-callout">
+            <h3>Design goal</h3>
+            <p>Make moving files feel as natural as using the Finder, while keeping the safety and control
+                of a professional tool: nothing is ever overwritten silently.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Two panes, one queue</h2>
+        <div class="project-split">
+            <figure class="project-figure"><img src="../static/gallery/filescp-desktop-application/1.png" alt="FileSCP with local and server panes and a list of completed transfers"></figure>
+            <div>
+                <p>Each pane can be shown as a familiar Finder-like list or as a terminal: a real local shell, an SSH
+                    session on the server, or a command line for FTP servers that do not offer a shell. A sidebar keeps
+                    favourite and recent servers one click away.</p>
+                <p>Transfers are collected in a panel below the panes, with per-file status, pause, resume and cancel.
+                    Progress also appears on the Dock icon, and a notification tells you when a batch is done.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Compare and synchronise folders</h2>
+        <div class="project-split">
+            <div>
+                <p>A folder comparison lists everything that exists only locally, only on the server or differs in
+                    size or date. From that list a synchronisation plan is built, which can be reviewed before it
+                    runs: choose the direction, decide whether to remove what no longer exists on the other side, then
+                    execute.</p>
+                <p>Because every step is shown first, keeping a website or a backup folder aligned becomes a
+                    controlled, repeatable operation.</p>
+            </div>
+            <figure class="project-figure"><img src="../static/gallery/filescp-desktop-application/2.png" alt="Folder comparison listing files that exist only locally or only on the server"></figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Protocols</h3>
+                <ul class="project-features">
+                    <li>FTP, explicit and implicit FTPS, and SFTP with SSH keys</li>
+                    <li>WebDAV and Amazon S3, including S3-compatible services</li>
+                    <li>Proxy support and IPv6</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Transfers</h3>
+                <ul class="project-features">
+                    <li>Parallel queue with progress, speed limit and automatic retries</li>
+                    <li>Interrupted transfers resume, even after restarting the app</li>
+                    <li>Conflict rules with &ldquo;apply to all&rdquo;, never a silent overwrite</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Browsing</h3>
+                <ul class="project-features">
+                    <li>Drag and drop between panes and from the Finder</li>
+                    <li>Synchronised navigation, bookmarks and name filters</li>
+                    <li>Search on the server by name or pattern</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Site management</h3>
+                <ul class="project-features">
+                    <li>Site manager with folders, import and export</li>
+                    <li>Passwords stored in the macOS Keychain</li>
+                    <li>One-step import of sites from FileZilla</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Everyday tools</h3>
+                <ul class="project-features">
+                    <li>Edit a remote file in your own editor and have it uploaded on save</li>
+                    <li>Rename, delete, create folders and change permissions</li>
+                    <li>Quick connect from the keyboard</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Safety and polish</h3>
+                <ul class="project-features">
+                    <li>Connection log with sensitive data redacted</li>
+                    <li>Dock badge, notifications and accessibility support</li>
+                    <li>Automatic light and dark themes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Search and terminal built in</h2>
+        <div class="project-split">
+            <figure class="project-figure"><img src="../static/gallery/filescp-desktop-application/5.png" alt="Server-side search listing SQL backup files"></figure>
+            <div>
+                <p>Looking for a file on a large server does not mean opening folder after folder: a search by name
+                    or pattern walks the remote tree and lists the matches, ready to reveal in their folder or
+                    download.</p>
+                <p>When a command line is faster, the pane switches to a terminal that talks to the server directly.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>FileSCP is written entirely in Swift. The protocol clients, the transfer queue, synchronisation and
+            security logic live in a core library that knows nothing about the interface, while the app on top is
+            built with SwiftUI. This split keeps the user interface light and lets every protocol be verified against
+            small servers started on the fly for FTP, FTPS, SFTP, WebDAV, S3 and proxies.</p>
+        <p>The app runs outside the sandbox on purpose, so that it can offer a real terminal and free access to the
+            disk, and it relies on two open-source components for the SSH layer and the terminal emulator.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Swift</h3>
+                <p>Whole codebase, with modern concurrency for parallel transfers.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SwiftUI</h3>
+                <p>Panes, sheets, site manager and transfer panel.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SFTP</h3>
+                <p>Secure transfers over SSH with key authentication.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>FTP</h3>
+                <p>Plain, explicit and implicit TLS connections with resume.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="filescp-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/filescp-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
