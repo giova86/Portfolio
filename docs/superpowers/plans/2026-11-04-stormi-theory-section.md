@@ -77,7 +77,16 @@ PY
 
 - [ ] **Step 2: Verify CSS integrity**
 
-Run: `python3 -c "css=open('static/css/project-detail.css').read(); assert css.count('{')==css.count('}'), 'unbalanced braces'; [assert c in css for c in ['math-plate','math-symbols','math-code','project-table','table-wrap','math-note']]; print('OK')"`
+Run:
+```bash
+python3 - <<'PY'
+css = open('static/css/project-detail.css').read()
+assert css.count('{') == css.count('}'), 'unbalanced braces'
+for c in ['math-plate', 'math-symbols', 'math-code', 'project-table', 'table-wrap', 'math-note']:
+    assert c in css, f'missing {c}'
+print('OK')
+PY
+```
 Expected: `OK`
 
 - [ ] **Step 3: Commit**
