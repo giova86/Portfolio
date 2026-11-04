@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac Monitor - Web Application — Giovanni Bocchi</title>
+    <meta name="description" content="A real-time system monitor for Apple Silicon MacBooks: CPU, GPU, temperatures, power, memory, network and disk streamed live to the browser.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mac Monitor - Web Application — Giovanni Bocchi">
+    <meta property="og:description" content="A real-time system monitor for Apple Silicon MacBooks: CPU, GPU, temperatures, power, memory, network and disk streamed live to the browser.">
+    <meta property="og:image" content="../static/MacMonitor.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mac Monitor - Web Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A real-time system monitor for Apple Silicon MacBooks: CPU, GPU, temperatures, power, memory, network and disk streamed live to the browser.">
+    <meta name="twitter:image" content="../static/MacMonitor.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/MacMonitor.png" alt="Immagine Mac Monitor - Web Application" class="project-hero-image">
+        <div>
+            <h1>Mac Monitor - Web Application</h1>
+            <p class="project-tagline">A real-time system monitor for Apple Silicon MacBooks: CPU, GPU, temperatures, power, memory, network and disk, streamed live to the browser.</p>
+            <div class="project-tech">
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Javascript</span>
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">Vite</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>1 Hz</strong><span>live refresh over WebSocket</span></div>
+            <div class="project-stat"><strong>5 min</strong><span>scrolling history on every chart</span></div>
+            <div class="project-stat"><strong>Per-core</strong><span>P/E cluster CPU bars</span></div>
+            <div class="project-stat"><strong>100%</strong><span>local — no cloud, no storage</span></div>
+            <div class="project-stat"><strong>Auto</strong><span>reconnect &amp; self-healing sensors</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">Mac Monitor turns an Apple Silicon MacBook Pro into an instrument panel you can watch in the browser. A small local server reads the machine once per second — silicon sensors, memory, network, battery, disk and processes — and streams every reading to the dashboard over a WebSocket, so all numbers and charts advance together in real time.</p>
+        <p>It covers everything you would check when the machine gets loud or slow: per-core CPU usage split between performance and efficiency clusters with live frequencies, GPU load, CPU and GPU temperatures, power drawn by CPU, GPU, the neural engine and the rest of the system, fan speed, memory with its wired and compressed breakdown and a pressure badge, swap, network throughput, disk activity and the processes behind the load.</p>
+        <p>The design treats numbers as instruments: tabular monospaced digits, colour-coded meters that change hue as temperatures climb, mirrored sparklines for network traffic, and a gradient "pulse" strip under the header that widens and narrows with the CPU. Nothing is stored, uploaded or sent anywhere — the whole stack runs on the laptop itself.</p>
+        <div class="project-callout">
+            <h3>The design goal</h3>
+            <p>One screen, no dashboard sprawl: the state of the whole machine at a glance, readable from across the desk, with five minutes of history available for every trend the moment you want to look back.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>The machine at a glance</h2>
+        <div class="project-split">
+            <div>
+                <p>Six instrument cards fill the top of the page. CPU shows total load, separate meters for the performance and efficiency clusters, a bar for every individual core and the processor frequency. Beside it, GPU usage and clock, memory with its App / Wired + compressed / Swap breakdown and a three-state pressure badge, temperatures whose colour escalates from blue to amber to red, total power split across CPU, GPU, the neural engine and the system with fan speed, and battery with charge state and time remaining.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/mac-monitor-web-application/0.png" alt="Mac Monitor - Web Application — the instrument cards with CPU, GPU, RAM, temperatures, power and battery">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Five minutes, always in motion</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/mac-monitor-web-application/1.png" alt="Mac Monitor - Web Application — CPU, GPU and temperature history charts with network and disk cards">
+            </figure>
+            <div>
+                <p>The centre of the dashboard keeps a rolling five-minute window for every trend: CPU and GPU usage on one chart, CPU and GPU temperatures on another, memory load below, and live sparklines on the network and disk cards. The history lives in the browser and scrolls one sample per second, so a compile or a burst of downloads stays readable long after it is over.</p>
+                <p>Below the charts, the process table ranks the top processes by CPU or by memory with inline load bars and cumulative CPU time, making it easy to connect a spike on the chart to what actually caused it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>CPU</h3>
+                <ul class="project-features">
+                    <li>Total load plus separate meters for the P and E clusters, with the live processor frequency</li>
+                    <li>A bar for every core, grouped by cluster, and the one-minute load average</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>GPU &amp; temperatures</h3>
+                <ul class="project-features">
+                    <li>GPU utilisation, clock speed and power draw</li>
+                    <li>CPU and GPU temperatures with meters that shift from blue to amber to red as they climb</li>
+                    <li>Five-minute temperature history with its own chart</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Power, fans &amp; battery</h3>
+                <ul class="project-features">
+                    <li>Total watts split into CPU, GPU, neural engine and system</li>
+                    <li>Fan speed, or "stopped" when they are idle</li>
+                    <li>Battery percentage, charging state and estimated time remaining</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Memory</h3>
+                <ul class="project-features">
+                    <li>Used versus installed memory with a colour-coded pressure badge: normal, warning or critical</li>
+                    <li>App, wired + compressed and swap figures, plus a five-minute load chart</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Network &amp; disk</h3>
+                <ul class="project-features">
+                    <li>Live receive and send rates with mirrored sparklines showing recent traffic</li>
+                    <li>Disk throughput and operations per second from a continuously running sampler</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Processes</h3>
+                <ul class="project-features">
+                    <li>Top processes ranked by CPU or by memory with a switchable tab</li>
+                    <li>Inline bars relative to the busiest process, memory estimates and cumulative CPU time</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A small Node server keeps the sensor sources alive: a streaming reader for the Apple Silicon telemetry (CPU per core, GPU, temperatures, power, fans) alongside per-second snapshots of memory, network, battery and processes, plus a continuously running disk sampler. Each source restarts itself if it dies, and the dashboard degrades gracefully when a sensor is unavailable rather than failing.</p>
+        <p>Once per second the server merges every source into a single snapshot and broadcasts it to all connected browsers over a WebSocket; the interface reconnects automatically if the connection drops. The browser keeps the five-minute history in memory and renders the charts with ECharts. All of the parsing logic is written as pure functions, separate from the collectors and covered by its own test suite, and nothing requires elevated privileges.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>React</h3>
+                <p>The whole interface: instrument cards, per-core bars, sparklines, the sortable process table and a custom hook that owns the WebSocket connection, automatic reconnection and the rolling five-minute history.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p>ES modules throughout, from the pure metric parsers covered by unit tests to the collector orchestration on the server side.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Node.js</h3>
+                <p>The local server: an Express endpoint set with a health check, a WebSocket broadcast of the once-per-second snapshot, and supervised child processes for the system sensors.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite</h3>
+                <p>Dev server with hot reload and a proxied API/WebSocket target, and the production build that the Node server then serves as static files.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>ECharts</h3>
+                <p>The scrolling usage, temperature and memory charts, tuned to the dashboard's dark instrument theme.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tailwind CSS</h3>
+                <p>The theme tokens — ink, panel, fog and the per-metric accent colours — and the responsive card grid, from three columns on a desktop down to a single column on a phone.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="mac-monitor-web-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/mac-monitor-web-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
