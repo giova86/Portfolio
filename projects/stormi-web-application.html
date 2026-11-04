@@ -190,8 +190,8 @@
             <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
                 <mrow>
                     <msub><mi>N</mi><mi>i</mi></msub><mo>=</mo><mo>{</mo>
-                    <mi>j</mi><mo>≠</mo><mi>i</mi><mo>:</mo>
-                    <mn>0</mn><mo>&lt;</mo>
+                    <mspace width="0.15em"/><mi>j</mi><mo>≠</mo><mi>i</mi><mo>:</mo>
+                    <mspace width="0.2em"/><mn>0</mn><mo>&lt;</mo>
                     <mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow>
                     <mo>≤</mo><msub><mi>r</mi><mtext>per</mtext></msub><mo>,</mo>
                     <mspace width="0.8em"/>
@@ -199,7 +199,7 @@
                     <mo>·</mo>
                     <mover accent="true"><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>^</mo></mover>
                     <mo>≥</mo><mi>cos</mi><mo>(</mo><mfrac><mtext>fov</mtext><mn>2</mn></mfrac><mo>)</mo>
-                    <mo>}</mo>
+                    <mspace width="0.15em"/><mo>}</mo>
                 </mrow>
             </math>
             <figcaption>the neighbourhood of boid i — inside the perception disc and the field-of-view cone</figcaption>
@@ -229,16 +229,16 @@
                             <msub><mi mathvariant="bold">s</mi><mi>i</mi></msub><mo>=</mo>
                             <munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi>P</mi><mi>i</mi></msub></mrow></munder>
                             <mfrac>
-                                <mrow><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>⊟</mo><msub><mi mathvariant="bold">p</mi><mi>j</mi></msub></mrow>
+                                <mrow><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo lspace="0.2em" rspace="0.2em">⊟</mo><msub><mi mathvariant="bold">p</mi><mi>j</mi></msub></mrow>
                                 <msup><mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow><mn>2</mn></msup>
                             </mfrac>
                         </mrow>
                     </math>
                     <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
                         <mrow>
-                            <msub><mi>P</mi><mi>i</mi></msub><mo>=</mo><mo>{</mo><mi>j</mi><mo>:</mo>
+                            <msub><mi>P</mi><mi>i</mi></msub><mo>=</mo><mo>{</mo><mspace width="0.15em"/><mi>j</mi><mo>:</mo><mspace width="0.2em"/>
                             <mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow>
-                            <mo>&lt;</mo><mi>min</mi><mo>(</mo><msub><mi>r</mi><mtext>pro</mtext></msub><mo>,</mo><msub><mi>r</mi><mtext>per</mtext></msub><mo>)</mo><mo>}</mo>
+                            <mo>&lt;</mo><mi>min</mi><mo>(</mo><msub><mi>r</mi><mtext>pro</mtext></msub><mo>,</mo><mspace width="0.15em"/><msub><mi>r</mi><mtext>per</mtext></msub><mo>)</mo><mspace width="0.15em"/><mo>}</mo>
                         </mrow>
                     </math>
                     <figcaption>the push-away grows inversely with the square of the distance</figcaption>
@@ -351,8 +351,8 @@
                 <mrow>
                     <mtext>limit</mtext><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi>c</mi><mo>)</mo>
                     <mo>=</mo><mi mathvariant="bold">x</mi>
-                    <mtext> if </mtext><mo>‖</mo><mi mathvariant="bold">x</mi><mo>‖</mo><mo>≤</mo><mi>c</mi>
-                    <mtext> else </mtext>
+                    <mspace width="0.3em"/><mtext>if</mtext><mspace width="0.3em"/><mo>‖</mo><mi mathvariant="bold">x</mi><mo>‖</mo><mo>≤</mo><mi>c</mi>
+                    <mspace width="0.3em"/><mtext>else</mtext><mspace width="0.3em"/>
                     <mfrac><mi mathvariant="bold">x</mi><mrow><mo>‖</mo><mi mathvariant="bold">x</mi><mo>‖</mo></mrow></mfrac><mo>·</mo><mi>c</mi>
                 </mrow>
             </math>
@@ -377,8 +377,8 @@
             <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
                 <mrow>
                     <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>←</mo>
-                    <mtext>clamp</mtext><mo>(</mo><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>+</mo><msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi><mo>,</mo>
-                    <mn>0.35</mn><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>,</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>)</mo>
+                    <mtext>clamp</mtext><mo>(</mo><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>+</mo><msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi><mo>,</mo><mspace width="0.15em"/>
+                    <mn>0.35</mn><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>,</mo><mspace width="0.15em"/><msub><mi>v</mi><mtext>max</mtext></msub><mo>)</mo>
                 </mrow>
             </math>
             <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
@@ -397,8 +397,8 @@
                     <msub><mi>d</mi><mi>i</mi></msub><mo>=</mo>
                     <mo>‖</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>−</mo><mi mathvariant="bold">P</mi><mo>‖</mo>
                     <mo>&lt;</mo><mi>R</mi>
-                    <mtext> ⇒ </mtext>
-                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>+</mo><mo>=</mo>
+                    <mo>⇒</mo>
+                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo lspace="0.28em" rspace="0.28em">+=</mo>
                     <mn>2.4</mn><mo>·</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mfrac><msub><mi>d</mi><mi>i</mi></msub><mi>R</mi></mfrac><mo>)</mo></mrow>
                     <mo>·</mo><mtext>limit</mtext><mo>(</mo>
                     <mfrac>
@@ -418,7 +418,7 @@
             <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
                 <mrow>
                     <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>←</mo>
-                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mtext> mod </mtext>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mspace width="0.25em"/><mtext>mod</mtext><mspace width="0.25em"/>
                     <mo>(</mo><mi>W</mi><mo>,</mo><mi>H</mi><mo>)</mo>
                 </mrow>
             </math>

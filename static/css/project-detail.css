@@ -406,7 +406,7 @@
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem 1.75rem;
     margin: 1.25rem 0;
     overflow-x: auto;
 }
@@ -416,14 +416,18 @@
     text-align: center;
     margin: 0 auto;
     color: var(--text);
-    font-size: 1.06rem;
+    font-size: 1.12rem;
+}
+
+.math-plate math + math {
+    margin-top: 0.9rem;
 }
 
 .math-plate figcaption {
     font-size: 0.85rem;
     color: var(--text-faint);
     text-align: center;
-    margin-top: 0.6rem;
+    margin-top: 1rem;
 }
 
 .math-note {
