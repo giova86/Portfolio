@@ -183,6 +183,314 @@
         <p>The simulation advances on fixed-timestep ticks with a spiral guard, which is what keeps slow motion and high-refresh displays equally smooth. Rendering is a single canvas pass per frame — trails first, the whole flock as one batched path, then the diagnostic overlays and the predator ring — on a resolution-aware surface. Everything is dependency-free vanilla JavaScript split into engine, renderer, interface and bootstrap, and the app also exposes its live simulation state to the browser console for experimenting.</p>
     </section>
 
+    <section class="project-section fade-in" id="theory">
+        <h2>The mathematics of the flock</h2>
+        <p>Everything below is the model exactly as <em>js/boids.js</em> runs it. Each boid <em>i</em> is a point with position <strong>p</strong><sub>i</sub> and velocity <strong>v</strong><sub>i</sub>; every tick it reads its neighbours, turns three "desires" into capped steering forces, and integrates. Symbols first, then the rules.</p>
+        <p class="math-note">How to read the plates: a stacked fraction reads numerator over denominator; vectors are bold, hats are unit vectors, and ‖·‖ is the Euclidean norm.</p>
+
+        <h3>A bird's world</h3>
+        <p>A boid knows nothing about the flock as a whole — it reacts only to the neighbours <em>j</em> it can actually see: close enough, and inside the cone in front of its head:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi>N</mi><mi>i</mi></msub><mo>=</mo><mo>{</mo>
+                    <mspace width="0.15em"/><mi>j</mi><mo>≠</mo><mi>i</mi><mo>:</mo>
+                    <mspace width="0.2em"/><mn>0</mn><mo>&lt;</mo>
+                    <mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow>
+                    <mo>≤</mo><msub><mi>r</mi><mtext>per</mtext></msub><mo>,</mo>
+                    <mspace width="0.8em"/>
+                    <mover accent="true"><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>^</mo></mover>
+                    <mo>·</mo>
+                    <mover accent="true"><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>^</mo></mover>
+                    <mo>≥</mo><mi>cos</mi><mo>(</mo><mrow><mi>fov</mi><mo>°</mo><mo>/</mo><mn>2</mn></mrow><mo>)</mo>
+                    <mspace width="0.15em"/><mo>}</mo>
+                </mrow>
+            </math>
+            <figcaption>the neighbourhood of boid i — inside the perception disc and the field-of-view cone</figcaption>
+        </figure>
+        <p class="math-note">Δ<sub>ij</sub> = p<sub>j</sub> ⊟ p<sub>i</sub> is the toroidal minimum-image difference: on each axis, when the raw gap exceeds half the screen the neighbour is closer "the other way round" and the screen size is subtracted — so flocks straddling opposite edges still see each other. With fov = 360° the visibility test is always true and no boid has a blind spot.</p>
+        <dl class="math-symbols">
+            <dt>p_i, v_i</dt><dd>position and velocity of boid i (px, px per tick)</dd>
+            <dt>r_per</dt><dd>perception radius — how far a boid sees (20–150 px)</dd>
+            <dt>r_pro</dt><dd>protection radius — personal space (5–60 px)</dd>
+            <dt>fov</dt><dd>field of view (90°–360°; 360° removes the rear blind spot)</dd>
+            <dt>v_max</dt><dd>top speed (1–8 px per tick)</dd>
+            <dt>f_max</dt><dd>steering budget per rule per tick — the "agility" slider (0.02–0.3)</dd>
+            <dt>w_s / w_a / w_c</dt><dd>weights of separation, alignment, cohesion (0–3 each)</dd>
+            <dt>R</dt><dd>predator threat radius (140 px)</dd>
+            <dt>m</dt><dd>soft-wall margin (90 px)</dd>
+        </dl>
+
+        <h3>The three rules</h3>
+        <p>Over that neighbourhood the model computes three vectors — Reynolds' three rules — each later turned into a force:</p>
+
+        <div class="project-split">
+            <div>
+                <p><strong>1 · Separation — avoid the crush.</strong> Each boid watches the neighbours inside its protection zone and steers away from them. It is the most urgent rule — it answers an imminent collision — which is why it carries the largest default weight.</p>
+                <figure class="math-plate">
+                    <math display="block" alttext="s_i = sum over j in P_i of (p_i minus p_j) divided by the squared norm of Delta_ij" xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mrow>
+                            <msub><mi mathvariant="bold">s</mi><mi>i</mi></msub><mo>=</mo>
+                            <munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi>P</mi><mi>i</mi></msub></mrow></munder>
+                            <mfrac>
+                                <mrow><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo lspace="0.2em" rspace="0.2em">⊟</mo><msub><mi mathvariant="bold">p</mi><mi>j</mi></msub></mrow>
+                                <msup><mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow><mn>2</mn></msup>
+                            </mfrac>
+                        </mrow>
+                    </math>
+                    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mrow>
+                            <msub><mi>P</mi><mi>i</mi></msub><mo>=</mo><mo>{</mo><mspace width="0.15em"/><mi>j</mi><mo>:</mo><mspace width="0.2em"/>
+                            <mrow><mo>‖</mo><msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>‖</mo></mrow>
+                            <mo>&lt;</mo><mi>min</mi><mo>(</mo><msub><mi>r</mi><mtext>pro</mtext></msub><mo>,</mo><mspace width="0.15em"/><msub><mi>r</mi><mtext>per</mtext></msub><mo>)</mo><mspace width="0.15em"/><mo>}</mo>
+                        </mrow>
+                    </math>
+                    <figcaption>the push-away grows inversely with the square of the distance</figcaption>
+                </figure>
+            </div>
+            <figure class="project-figure">
+                <svg viewBox="0 0 260 150" role="img" aria-label="Separation diagram: a central boid steers away from two close neighbours">
+                    <circle cx="130" cy="75" r="52" fill="none" stroke="#86B8B1" stroke-opacity=".35" stroke-dasharray="3 5"/>
+                    <g fill="#EAE4D6">
+                        <path d="M118 66l-11 4 4 3-2 4z" transform="rotate(200 118 70)"/>
+                        <path d="M143 84l-11 4 4 3-2 4z" transform="rotate(20 143 88)"/>
+                    </g>
+                    <g stroke="#E5A15C" stroke-width="2.2" fill="none" stroke-linecap="round">
+                        <path d="M124 72l-22-10"/><path d="M103 62l-6 7 8 1"/>
+                        <path d="M137 82l22 10"/><path d="M159 92l6-7-8-1"/>
+                    </g>
+                    <path d="M130 75l-7 4 3 2-1 4z" fill="#EAE4D6"/>
+                </svg>
+                <figcaption>Inside the protection zone the push-away force grows as the distance shrinks (∝ 1/d²).</figcaption>
+            </figure>
+        </div>
+
+        <div class="project-split">
+            <figure class="project-figure">
+                <svg viewBox="0 0 260 150" role="img" aria-label="Alignment diagram: boids with differing headings converge toward a common one">
+                    <circle cx="130" cy="75" r="58" fill="none" stroke="#86B8B1" stroke-opacity=".35" stroke-dasharray="3 5"/>
+                    <g fill="#EAE4D6">
+                        <path d="M88 58l-12 4 4 3-2 4z" transform="rotate(-40 88 62)"/>
+                        <path d="M100 96l-12 4 4 3-2 4z" transform="rotate(35 100 100)"/>
+                        <path d="M168 60l-12 4 4 3-2 4z" transform="rotate(150 168 64)"/>
+                        <path d="M160 100l-12 4 4 3-2 4z" transform="rotate(-15 160 104)"/>
+                    </g>
+                    <g stroke="#86B8B1" stroke-width="2.2" fill="none" stroke-linecap="round">
+                        <path d="M112 78h34"/><path d="M146 78l-8-6v12z" fill="#86B8B1" stroke="none"/>
+                    </g>
+                </svg>
+                <figcaption>The common heading (teal) is the mean of the neighbour velocities inside the perception radius.</figcaption>
+            </figure>
+            <div>
+                <p><strong>2 · Alignment — fly like your neighbours.</strong> Each boid averages the velocities of the companions it sees and gradually bends toward that heading. This is the rule that carries information: a turn born at one edge of the flock propagates through it like a wave.</p>
+                <figure class="math-plate">
+                    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mrow>
+                            <mover accent="true"><mi mathvariant="bold">u</mi><mo>‾</mo></mover><mo>=</mo>
+                            <mrow><mo>(</mo><mn>1</mn><mo>/</mo><mrow><mo>|</mo><msub><mi>N</mi><mi>i</mi></msub><mo>|</mo></mrow><mo>)</mo></mrow>
+                            <munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi>N</mi><mi>i</mi></msub></mrow></munder>
+                            <msub><mi mathvariant="bold">v</mi><mi>j</mi></msub>
+                        </mrow>
+                    </math>
+                    <figcaption>the desire to match the neighbours' mean heading</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="project-split">
+            <div>
+                <p><strong>3 · Cohesion — do not stay alone.</strong> Each boid computes the centroid — the mean position of its neighbours — and is gently drawn toward it. This is the force that holds the flock together and keeps it from fraying.</p>
+                <figure class="math-plate">
+                    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mrow>
+                            <msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>=</mo>
+                            <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>+</mo>
+                            <mrow><mo>(</mo><mn>1</mn><mo>/</mo><mrow><mo>|</mo><msub><mi>N</mi><mi>i</mi></msub><mo>|</mo></mrow><mo>)</mo></mrow>
+                            <munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi>N</mi><mi>i</mi></msub></mrow></munder>
+                            <msub><mi mathvariant="bold">Δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+                        </mrow>
+                    </math>
+                    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mrow>
+                            <mtext>desire</mtext><mo>=</mo>
+                            <msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>−</mo>
+                            <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub>
+                        </mrow>
+                    </math>
+                    <figcaption>steer toward the neighbours' centre of mass</figcaption>
+                </figure>
+            </div>
+            <figure class="project-figure">
+                <svg viewBox="0 0 260 150" role="img" aria-label="Cohesion diagram: scattered boids are attracted toward the centre of mass of their neighbours">
+                    <circle cx="130" cy="75" r="58" fill="none" stroke="#86B8B1" stroke-opacity=".35" stroke-dasharray="3 5"/>
+                    <g fill="#EAE4D6">
+                        <path d="M92 52l-12 4 4 3-2 4z" transform="rotate(140 92 56)"/>
+                        <path d="M172 60l-12 4 4 3-2 4z" transform="rotate(200 172 64)"/>
+                        <path d="M100 106l-12 4 4 3-2 4z" transform="rotate(-60 100 110)"/>
+                        <path d="M164 102l-12 4 4 3-2 4z" transform="rotate(-120 164 106)"/>
+                    </g>
+                    <circle cx="130" cy="78" r="3.4" fill="#E5A15C"/>
+                    <g stroke="#E5A15C" stroke-width="1.6" stroke-opacity=".8" fill="none" stroke-dasharray="4 4">
+                        <path d="M100 60l26 14M164 66l-28 10M108 102l18-18M156 98l-20-14"/>
+                    </g>
+                </svg>
+                <figcaption>The amber point is the neighbours' centre of mass; the dashed arrows are the attraction pushes.</figcaption>
+            </figure>
+        </div>
+
+        <h3>From desire to force: steering</h3>
+        <p>Reynolds never applies the raw desires. Each becomes a <strong>steering force</strong>: the desired velocity — the desire rescaled to top speed — minus the current velocity, capped tick by tick:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <mtext>steer</mtext><mo>(</mo><mi mathvariant="bold">u</mi><mo>)</mo>
+                    <mo>=</mo><mtext>limit</mtext><mo>(</mo>
+                    <mrow><mo>(</mo><mi mathvariant="bold">u</mi><mo>/</mo><mo>‖</mo><mi mathvariant="bold">u</mi><mo>‖</mo><mo>)</mo></mrow>
+                    <mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>−</mo>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>,</mo>
+                    <msub><mi>f</mi><mtext>max</mtext></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <mtext>limit</mtext><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi>c</mi><mo>)</mo>
+                    <mo>=</mo><mi mathvariant="bold">x</mi>
+                    <mspace width="0.3em"/><mtext>if</mtext><mspace width="0.3em"/><mo>‖</mo><mi mathvariant="bold">x</mi><mo>‖</mo><mo>≤</mo><mi>c</mi>
+                    <mspace width="0.3em"/><mtext>else</mtext><mspace width="0.3em"/>
+                    <mrow><mo>(</mo><mi mathvariant="bold">x</mi><mo>/</mo><mo>‖</mo><mi mathvariant="bold">x</mi><mo>‖</mo><mo>)</mo></mrow><mo>·</mo><mi>c</mi>
+                </mrow>
+            </math>
+            <figcaption>desire minus state, capped at the agility budget</figcaption>
+        </figure>
+        <p>The cap is the quiet secret of the realism: no bird can turn on itself in a single frame. <em>f</em><sub>max</sub> is exactly the agility slider in the panel — low values give wide, majestic curves; high values, twitchy reactions.</p>
+
+        <h3>One tick, from top to bottom</h3>
+        <p>The three capped forces blend with the slider weights; a panicked bird adds its fear. All accelerations are computed from the previous shared state — as in the original model — and only then does everyone move at once:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>=</mo>
+                    <msub><mi>w</mi><mi>s</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><msub><mi mathvariant="bold">s</mi><mi>i</mi></msub><mo>)</mo>
+                    <mo>+</mo><msub><mi>w</mi><mi>a</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><mover accent="true"><mi mathvariant="bold">u</mi><mo>‾</mo></mover><mo>)</mo>
+                    <mo>+</mo><msub><mi>w</mi><mi>c</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>−</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>the three rules, blended with the panel's weights</figcaption>
+        </figure>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>←</mo>
+                    <mtext>clamp</mtext><mo>(</mo><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>+</mo><msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi><mo>,</mo><mspace width="0.15em"/>
+                    <mn>0.35</mn><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>,</mo><mspace width="0.15em"/><msub><mi>v</mi><mtext>max</mtext></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>←</mo>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>+</mo>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi>
+                </mrow>
+            </math>
+            <figcaption>a bird never freezes and never outruns the frame; Δt is the fixed tick, scaled by the ½× / ¼× slow motion</figcaption>
+        </figure>
+        <p>A predator <strong>P</strong> that comes within the threat radius <em>R</em> adds a flee force whose urgency grows linearly as you close in — the amber panic in the app is exactly this weight:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi>d</mi><mi>i</mi></msub><mo>=</mo>
+                    <mo>‖</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>−</mo><mi mathvariant="bold">P</mi><mo>‖</mo>
+                    <mo>&lt;</mo><mi>R</mi>
+                    <mo>⇒</mo>
+                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo lspace="0.28em" rspace="0.28em">+=</mo>
+                    <mn>2.4</mn><mo>·</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mrow><msub><mi>d</mi><mi>i</mi></msub><mo>/</mo><mi>R</mi></mrow><mo>)</mo></mrow>
+                    <mo>·</mo><mtext>limit</mtext><mo>(</mo>
+                    <mrow><mo>(</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>−</mo><mi mathvariant="bold">P</mi><mo>)</mo><mo>/</mo><msub><mi>d</mi><mi>i</mi></msub></mrow><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>−</mo>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>,</mo>
+                    <mn>4</mn><mo>·</mo><msub><mi>f</mi><mtext>max</mtext></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>panic fades to zero at the rim of the 140 px threat ring; its force budget is 4× a rule's</figcaption>
+        </figure>
+
+        <h3>Boundaries</h3>
+        <p>In <strong>wrap</strong> mode the screen is a torus: leave through the right edge and you re-enter from the left — and the neighbour maths follows the wrap, so a flock straddling the border is never torn apart:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>←</mo>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mspace width="0.25em"/><mtext>mod</mtext><mspace width="0.25em"/>
+                    <mo>(</mo><mi>W</mi><mo>,</mo><mi>H</mi><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>coordinate-wise wrap on a screen of size W × H</figcaption>
+        </figure>
+        <p>In <strong>soft walls</strong> mode the borders become a force field: within a 90 px margin of an edge, a boid is curved back inward proportionally to how deep it has strayed — the invisible wall of a valley:</p>
+        <figure class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <mi>Δ</mi><msub><mi>v</mi><mtext>wall</mtext></msub><mo>=</mo>
+                    <mn>2.5</mn><mo>·</mo><msub><mi>f</mi><mtext>max</mtext></msub><mo>·</mo><mi>Δt</mi><mo>·</mo>
+                    <mrow><mo>(</mo><mn>1</mn><mo>−</mo><mrow><msub><mi>d</mi><mtext>wall</mtext></msub><mo>/</mo><mi>m</mi></mrow><mo>)</mo></mrow>
+                </mrow>
+            </math>
+            <figcaption>zero at the margin, strongest at the edge</figcaption>
+        </figure>
+
+        <h3>Why hundreds of birds stay cheap</h3>
+        <p>Testing every boid against every other would cost O(n²) distance checks per tick. Instead the flock is bucketed into a spatial grid whose cells are max(28 px, r<sub>per</sub>) wide, and each boid inspects only the 3×3 block of cells around its own — wrap-aware, so the grid is seamless. The neighbour search becomes O(n) in practice, which is what keeps 500+ birds at 60 fps.</p>
+        <div class="project-callout">
+            <h3>Same model, honest cost</h3>
+            <p>The grid is a pure optimisation: it changes no force, no trajectory. Turn the perception radius up and the cells grow with it — the model stays exactly the model.</p>
+        </div>
+
+        <h3>The loop in pseudocode</h3>
+        <p>This is the exact structure of the tick you are watching — simplified, but faithful to <em>js/boids.js</em>:</p>
+        <pre class="math-code"><code>for each boid b:
+    neighbours ← all c with |c.pos − b.pos| ≤ r_per
+                 and angle(b.vel, c − b) ≤ fov/2
+
+    sep ← mean( (b.pos − c.pos) / d² )   for c inside the protection zone
+    ali ← mean( c.vel )                  for c in neighbours
+    coh ← centroid(neighbours) − b.pos
+
+    a ← w_s·steer(sep) + w_a·steer(ali) + w_c·steer(coh)
+    if predator near: a += flee(predator) · panic
+
+    b.vel ← limit(b.vel + a, v_max)
+    b.pos ← b.pos + b.vel                // then: wrap or soft walls</code></pre>
+
+        <h3>The nine knobs</h3>
+        <p>Each slider in the panel drives one quantity of the model. Their identity cards:</p>
+        <div class="table-wrap">
+            <table class="project-table">
+                <thead>
+                    <tr><th>Parameter</th><th>What it sets</th><th>Raise it</th><th>Lower it</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Individuals</strong></td><td>number of boids in the scene</td><td>denser flock, richer waves</td><td>scattered groups, "clumpy" behaviour</td></tr>
+                    <tr><td><strong>Max speed</strong></td><td>speed cap per boid (v_max)</td><td>fast flock, hard to follow</td><td>slow, hypnotic glides</td></tr>
+                    <tr><td><strong>Reactivity</strong></td><td>how fast a boid can turn (f_max)</td><td>sharp, twitchy turns</td><td>wide, almost lazy curves</td></tr>
+                    <tr><td><strong>Cohesion</strong></td><td>weight of the pull toward the neighbours' centre (w_c)</td><td>compact, nearly spherical clumps</td><td>flock frays apart</td></tr>
+                    <tr><td><strong>Alignment</strong></td><td>weight of heading agreement with neighbours (w_a)</td><td>ordered motion, waves and vortices</td><td>random directions, squirming crowd</td></tr>
+                    <tr><td><strong>Separation</strong></td><td>weight of pushing away from too-close neighbours (w_s)</td><td>commotion, birds ejected from the group</td><td>dense clumps and collapses</td></tr>
+                    <tr><td><strong>Perception radius</strong></td><td>how far each boid sees (r_per)</td><td>global coordination, one single flock</td><td>many independent micro-flocks</td></tr>
+                    <tr><td><strong>Protection zone</strong></td><td>minimum "courtesy" distance (r_pro)</td><td>sparse ranks, lattice-like patterns</td><td>near-physical contact</td></tr>
+                    <tr><td><strong>Field of view</strong></td><td>angular width a boid sees ahead (fov)</td><td>360°: no blind spot at all</td><td>blind zone behind the head: predators strike from there</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Emergence, and where to read more</h3>
+        <p>No boid "knows" the shape of the flock: that shape is a property of the system as a whole, not of its parts — a textbook <strong>emergent property</strong>, and the reason boids remain a standard case study for complex systems. Real starling flocks go further still: Cavagna et al. (2010) measured scale-free correlations in the birds' motion — each starling reacts to a fixed number of neighbours (~7), not to a fixed distance — a subtlety Reynolds' model only partly captures.</p>
+        <ul class="project-features">
+            <li>Reynolds, C. W. (1987). <cite>Flocks, Herds, and Schools: A Distributed Behavioral Model</cite>. SIGGRAPH '87 — the original paper.</li>
+            <li>Reynolds, C. W. (1999). <cite>Steering Behaviors for Autonomous Characters</cite>. GDC — the seek/flee/arrive formalism used here.</li>
+            <li>Cavagna, A. et al. (2010). <cite>Scale-free correlations in starling flocks</cite>. PNAS 107(26) — what real flocks say.</li>
+            <li>Shiffman, D. (2012). <cite>The Nature of Code</cite>, ch. 5 — the most pedagogical boids implementation there is (free online).</li>
+        </ul>
+    </section>
+
     <section class="project-section fade-in">
         <h2>Tech stack</h2>
         <div class="project-stack-grid">
