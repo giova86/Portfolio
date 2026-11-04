@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stormi - Web Application — Giovanni Bocchi</title>
+    <meta name="description" content="An interactive Reynolds boids lab: tune the flock live, summon a predator, slow time down and watch collective behaviour emerge.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Stormi - Web Application — Giovanni Bocchi">
+    <meta property="og:description" content="An interactive Reynolds boids lab: tune the flock live, summon a predator, slow time down and watch collective behaviour emerge.">
+    <meta property="og:image" content="../static/Stormi.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stormi - Web Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="An interactive Reynolds boids lab: tune the flock live, summon a predator, slow time down and watch collective behaviour emerge.">
+    <meta name="twitter:image" content="../static/Stormi.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/Stormi.png" alt="Immagine Stormi - Web Application" class="project-hero-image">
+        <div>
+            <h1>Stormi - Web Application</h1>
+            <p class="project-tagline">An interactive Reynolds boids lab: tune the flock live, summon a predator, slow time down and watch collective behaviour emerge.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Javascript</span>
+                <span class="tech-tag">HTML</span>
+                <span class="tech-tag">Canvas</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>9</strong><span>live parameters</span></div>
+            <div class="project-stat"><strong>5</strong><span>one-click presets</span></div>
+            <div class="project-stat"><strong>500+</strong><span>birds at 60 fps</span></div>
+            <div class="project-stat"><strong>¼×</strong><span>slow motion</span></div>
+            <div class="project-stat"><strong>0</strong><span>dependencies or build step</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">Stormi is an interactive playground for Craig Reynolds' Boids algorithm (SIGGRAPH 1987), the classic model in which a flock emerges from three simple local rules — separation, alignment and cohesion — with no leader and no choreography. Every knob of the model is exposed and adjustable while the flock is in flight.</p>
+        <p>One side of the screen is an open sky where hundreds of birds move; the other is a control panel of nine live sliders: number of individuals, top speed, agility, the weights of the three rules, perception radius, protection zone and field of view with a real rear blind spot. A predator that follows the mouse scatters the flock, fading trails and a slow-motion mode let you read trajectories that are too fast to follow at full speed, and a diagnostics overlay reveals exactly what each bird can see.</p>
+        <p>A companion theory view explains where the model comes from and what every parameter does — with diagrams of the three rules, the steering formulation, pseudocode and a parameter-by-parameter guide — so Stormi works as a teaching tool as much as a toy. Settings survive reloads, and the whole app is dependency-free vanilla JavaScript you can open with a double click.</p>
+        <div class="project-callout">
+            <h3>An observatory at night</h3>
+            <p>The interface is built around a deep "observatory night" palette: an almost-black sky, ivory birds, sunset amber for anything urgent and instrument teal for measurement — a quiet stage that keeps the flock itself the centre of attention.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tune the rules, watch them emerge</h2>
+        <div class="project-split">
+            <div>
+                <p>Every slider takes effect immediately on the flying flock, so cause and effect are always visible: raise cohesion and the birds pack into dense spheres, drop alignment and coordinated waves collapse into a squirming crowd, shrink the field of view and predators start sneaking up from the blind spot behind each bird's head. Five tuned presets — Harmonious, Starling, Nervous, Vortex and Formation — jump straight to distinct personalities of the same model.</p>
+            </div>
+            <figure class="project-figure">
+                <img src="../static/gallery/stormi-web-application/0.png" alt="Stormi - Web Application — a 520-bird starling murmuration with trails">
+            </figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A predator you can steer</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/stormi-web-application/1.png" alt="Stormi - Web Application — the predator scatters the flock, fleeing birds glowing amber">
+            </figure>
+            <div>
+                <p>Activate the predator and your cursor becomes a threat with a pulsing danger ring: birds inside it flee with a force that grows as you close in, and those in panic glow amber so the wave of alarm spreading through the flock is easy to follow. It is the same steering mechanism Reynolds used for crowd animations, and the reason real starling murmurations form those famous dark ribbons when a falcon strikes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Live control</h3>
+                <ul class="project-features">
+                    <li>Nine parameters adjustable while the flock is flying, each with a live readout</li>
+                    <li>Settings, presets and panel layout are restored on every reload</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Flock presets</h3>
+                <ul class="project-features">
+                    <li>Five tuned personalities of the same model: Harmonious, Starling, Nervous, Vortex and Formation</li>
+                    <li>Flocks from a dozen lonely birds up to an 800-strong murmuration</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Predator</h3>
+                <ul class="project-features">
+                    <li>Follows the mouse with a pulsing threat ring</li>
+                    <li>Fleeing force grows with proximity; panicking birds glow amber</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Observation aids</h3>
+                <ul class="project-features">
+                    <li>Fading trails behind each bird</li>
+                    <li>Slow motion at ½× and ¼×, smooth at any display refresh rate</li>
+                    <li>Diagnostics overlay: perception and protection radii plus velocity vectors on sampled birds</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Environment</h3>
+                <ul class="project-features">
+                    <li>Toroidal wrapping — with neighbour maths that follows the wrap — or soft walls that curve birds back</li>
+                    <li>Fullscreen mode and keyboard shortcuts for pause, reset, predator, trails, diagnostics and fullscreen</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Theory view</h3>
+                <ul class="project-features">
+                    <li>The three rules explained with dedicated diagrams</li>
+                    <li>Steering formulation, pseudocode and a parameter-by-parameter guide</li>
+                    <li>Notes on emergence, predators and boundaries, plus a reading list back to the 1987 paper</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>On every tick the flock is bucketed into a spatial grid whose cells match the perception radius, so neighbour searches only inspect the cells around each bird — effectively linear time even with hundreds of individuals, where a naïve all-pairs search would be quadratic. Accelerations are computed simultaneously from the previous state, as in the original model, and then integrated with speed clamps that keep every bird gliding: never frozen, never faster than the frame allows.</p>
+        <p>The simulation advances on fixed-timestep ticks with a spiral guard, which is what keeps slow motion and high-refresh displays equally smooth. Rendering is a single canvas pass per frame — trails first, the whole flock as one batched path, then the diagnostic overlays and the predator ring — on a resolution-aware surface. Everything is dependency-free vanilla JavaScript split into engine, renderer, interface and bootstrap, and the app also exposes its live simulation state to the browser console for experimenting.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p>The whole engine in plain vanilla code: the three steering rules, the spatial grid, the predator's flee force, presets, keyboard shortcuts and settings persistence — no framework, no build step.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Canvas 2D</h3>
+                <p>Rendering at any pixel density: the flock drawn as batched paths, fading trails, the diagnostic radii and velocity vectors, and the pulsing predator ring.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>HTML</h3>
+                <p>App shell with two views — simulation and theory — and declarative controls: each slider declares which parameter it drives, keeping the interface and the model in sync without glue code.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>CSS</h3>
+                <p>The "observatory night" design system: a custom-property palette, serif/sans/mono typography trio, a collapsible instrument panel and responsive layout.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="stormi-web-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/stormi-web-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
