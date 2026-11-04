@@ -359,6 +359,135 @@
             <figcaption>desire minus state, capped at the agility budget</figcaption>
         </div>
         <p>The cap is the quiet secret of the realism: no bird can turn on itself in a single frame. <em>f</em><sub>max</sub> is exactly the agility slider in the panel — low values give wide, majestic curves; high values, twitchy reactions.</p>
+
+        <h3>One tick, from top to bottom</h3>
+        <p>The three capped forces blend with the slider weights; a panicked bird adds its fear. All accelerations are computed from the previous shared state — as in the original model — and only then does everyone move at once:</p>
+        <div class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>=</mo>
+                    <msub><mi>w</mi><mi>s</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><msub><mi mathvariant="bold">s</mi><mi>i</mi></msub><mo>)</mo>
+                    <mo>+</mo><msub><mi>w</mi><mi>a</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><mover accent="true"><mi mathvariant="bold">u</mi><mo>‾</mo></mover><mo>)</mo>
+                    <mo>+</mo><msub><mi>w</mi><mi>c</mi></msub><mo>·</mo><mtext>steer</mtext><mo>(</mo><msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>−</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>the three rules, blended with the panel's weights</figcaption>
+        </div>
+        <div class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>←</mo>
+                    <mtext>clamp</mtext><mo>(</mo><msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>+</mo><msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi><mo>,</mo>
+                    <mn>0.35</mn><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>,</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>←</mo>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>+</mo>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>·</mo><mi>Δt</mi>
+                </mrow>
+            </math>
+            <figcaption>a bird never freezes and never outruns the frame; Δt is the fixed tick, scaled by the ½× / ¼× slow motion</figcaption>
+        </div>
+        <p>A predator <strong>P</strong> that comes within the threat radius <em>R</em> adds a flee force whose urgency grows linearly as you close in — the amber panic in the app is exactly this weight:</p>
+        <div class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi>d</mi><mi>i</mi></msub><mo>=</mo>
+                    <mo>‖</mo><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>−</mo><mi mathvariant="bold">P</mi><mo>‖</mo>
+                    <mo>&lt;</mo><mi>R</mi>
+                    <mtext> ⇒ </mtext>
+                    <msub><mi mathvariant="bold">a</mi><mi>i</mi></msub><mo>+</mo><mo>=</mo>
+                    <mn>2.4</mn><mo>·</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mfrac><msub><mi>d</mi><mi>i</mi></msub><mi>R</mi></mfrac><mo>)</mo></mrow>
+                    <mo>·</mo><mtext>limit</mtext><mo>(</mo>
+                    <mfrac>
+                        <mrow><msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>−</mo><mi mathvariant="bold">P</mi></mrow>
+                        <msub><mi>d</mi><mi>i</mi></msub>
+                    </mfrac><mo>·</mo><msub><mi>v</mi><mtext>max</mtext></msub><mo>−</mo>
+                    <msub><mi mathvariant="bold">v</mi><mi>i</mi></msub><mo>,</mo>
+                    <mn>4</mn><mo>·</mo><msub><mi>f</mi><mtext>max</mtext></msub><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>panic fades to zero at the rim of the 140 px threat ring; its force budget is 4× a rule's</figcaption>
+        </div>
+
+        <h3>Boundaries</h3>
+        <p>In <strong>wrap</strong> mode the screen is a torus: leave through the right edge and you re-enter from the left — and the neighbour maths follows the wrap, so a flock straddling the border is never torn apart:</p>
+        <div class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mo>←</mo>
+                    <msub><mi mathvariant="bold">p</mi><mi>i</mi></msub><mtext> mod </mtext>
+                    <mo>(</mo><mi>W</mi><mo>,</mo><mi>H</mi><mo>)</mo>
+                </mrow>
+            </math>
+            <figcaption>coordinate-wise wrap on a screen of size W × H</figcaption>
+        </div>
+        <p>In <strong>soft walls</strong> mode the borders become a force field: within a 90 px margin of an edge, a boid is curved back inward proportionally to how deep it has strayed — the invisible wall of a valley:</p>
+        <div class="math-plate">
+            <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <mi>Δ</mi><msub><mi>v</mi><mtext>wall</mtext></msub><mo>=</mo>
+                    <mn>2.5</mn><mo>·</mo><msub><mi>f</mi><mtext>max</mtext></msub><mo>·</mo><mi>Δt</mi><mo>·</mo>
+                    <mrow><mo>(</mo><mn>1</mn><mo>−</mo><mfrac><msub><mi>d</mi><mtext>wall</mtext></msub><mi>m</mi></mfrac><mo>)</mo></mrow>
+                </mrow>
+            </math>
+            <figcaption>zero at the margin, strongest at the edge</figcaption>
+        </div>
+
+        <h3>Why hundreds of birds stay cheap</h3>
+        <p>Testing every boid against every other would cost O(n²) distance checks per tick. Instead the flock is bucketed into a spatial grid whose cells are max(28 px, r<sub>per</sub>) wide, and each boid inspects only the 3×3 block of cells around its own — wrap-aware, so the grid is seamless. The neighbour search becomes O(n) in practice, which is what keeps 500+ birds at 60 fps.</p>
+        <div class="project-callout">
+            <h3>Same model, honest cost</h3>
+            <p>The grid is a pure optimisation: it changes no force, no trajectory. Turn the perception radius up and the cells grow with it — the model stays exactly the model.</p>
+        </div>
+
+        <h3>The loop in pseudocode</h3>
+        <p>This is the exact structure of the tick you are watching — simplified, but faithful to <em>js/boids.js</em>:</p>
+        <pre class="math-code"><code>for each boid b:
+    neighbours ← all c with |c.pos − b.pos| &lt; r_per
+                 and angle(b.vel, c − b) &lt; fov/2
+
+    sep ← mean( (b.pos − c.pos) / d² )   for c inside the protection zone
+    ali ← mean( c.vel )                  for c in neighbours
+    coh ← centroid(neighbours) − b.pos
+
+    a ← w_s·steer(sep) + w_a·steer(ali) + w_c·steer(coh)
+    if predator near: a += flee(predator) · panic
+
+    b.vel ← limit(b.vel + a, v_max)
+    b.pos ← b.pos + b.vel                // then: wrap or soft walls</code></pre>
+
+        <h3>The nine knobs</h3>
+        <p>Each slider in the panel drives one quantity of the model. Their identity cards:</p>
+        <div class="table-wrap">
+            <table class="project-table">
+                <thead>
+                    <tr><th>Parameter</th><th>What it sets</th><th>Raise it</th><th>Lower it</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Individuals</strong></td><td>number of boids in the scene</td><td>denser flock, richer waves</td><td>scattered groups, "clumpy" behaviour</td></tr>
+                    <tr><td><strong>Max speed</strong></td><td>speed cap per boid (v_max)</td><td>fast flock, hard to follow</td><td>slow, hypnotic glides</td></tr>
+                    <tr><td><strong>Reactivity</strong></td><td>how fast a boid can turn (f_max)</td><td>sharp, twitchy turns</td><td>wide, almost lazy curves</td></tr>
+                    <tr><td><strong>Cohesion</strong></td><td>weight of the pull toward the neighbours' centre (w_c)</td><td>compact, nearly spherical clumps</td><td>flock frays apart</td></tr>
+                    <tr><td><strong>Alignment</strong></td><td>weight of heading agreement with neighbours (w_a)</td><td>ordered motion, waves and vortices</td><td>random directions, squirming crowd</td></tr>
+                    <tr><td><strong>Separation</strong></td><td>weight of pushing away from too-close neighbours (w_s)</td><td>commotion, birds ejected from the group</td><td>dense clumps and collapses</td></tr>
+                    <tr><td><strong>Perception radius</strong></td><td>how far each boid sees (r_per)</td><td>global coordination, one single flock</td><td>many independent micro-flocks</td></tr>
+                    <tr><td><strong>Protection zone</strong></td><td>minimum "courtesy" distance (r_pro)</td><td>sparse ranks, lattice-like patterns</td><td>near-physical contact</td></tr>
+                    <tr><td><strong>Field of view</strong></td><td>angular width a boid sees ahead (fov)</td><td>360°: no blind spot at all</td><td>blind zone behind the head: predators strike from there</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Emergence, and where to read more</h3>
+        <p>No boid "knows" the shape of the flock: that shape is a property of the system as a whole, not of its parts — a textbook <strong>emergent property</strong>, and the reason boids remain a standard case study for complex systems. Real starling flocks go further still: Cavagna et al. (2010) measured scale-free correlations in the birds' motion — each starling reacts to a fixed number of neighbours (~7), not to a fixed distance — a subtlety Reynolds' model only partly captures.</p>
+        <ul class="project-features">
+            <li>Reynolds, C. W. (1987). <cite>Flocks, Herds, and Schools: A Distributed Behavioral Model</cite>. SIGGRAPH '87 — the original paper.</li>
+            <li>Reynolds, C. W. (1999). <cite>Steering Behaviors for Autonomous Characters</cite>. GDC — the seek/flee/arrive formalism used here.</li>
+            <li>Cavagna, A. et al. (2010). <cite>Scale-free correlations in starling flocks</cite>. PNAS 107(26) — what real flocks say.</li>
+            <li>Shiffman, D. (2012). <cite>The Nature of Code</cite>, ch. 5 — the most pedagogical boids implementation there is (free online).</li>
+        </ul>
     </section>
 
     <section class="project-section fade-in">

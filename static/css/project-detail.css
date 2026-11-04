@@ -501,7 +501,7 @@ figure.project-figure svg {
     display: block;
 }
 
-#theory h3 {
+#theory > h3 {
     font-family: var(--font-display);
     font-size: 1.15rem;
     font-weight: 600;
