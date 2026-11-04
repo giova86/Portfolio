@@ -413,7 +413,8 @@
 
 .math-plate math {
     display: block;
-    text-align: center;
+    width: fit-content;
+    max-width: 100%;
     margin: 0 auto;
     color: var(--text);
     font-size: 1.12rem;
