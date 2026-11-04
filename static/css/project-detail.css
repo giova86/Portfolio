@@ -501,6 +501,14 @@ figure.project-figure svg {
     display: block;
 }
 
+#theory h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin: 2rem 0 0.75rem;
+}
+
 @media (max-width: 768px) {
     .project-hero {
         padding: 0 1.25rem 2rem;

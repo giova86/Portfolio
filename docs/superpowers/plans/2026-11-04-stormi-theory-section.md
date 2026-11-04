@@ -138,9 +138,9 @@ git commit -m "feat(stormi): add math section styles to project-detail.css"
 
   Paragraph after the plate: `f_max` is the "Reattività" slider — low values give wide majestic turns, high values snappy reactions (adapt from the app's steering section, `/Users/gbocchi/Documents/GitHub/dev_pers/Boids/index.html:245–250`).
 
-- [ ] **Step 4: Run the verification snippet** (from Global Constraints) plus check no external URLs were added:
-  Run: `grep -c "http" projects/stormi-web-application.html` and compare to before the change (only pre-existing fonts/OG entries allowed; count of *new* lines containing `http` must be 0).
-  Expected: `OK`, no new external URLs.
+- [ ] **Step 4: Run the verification snippet** (from Global Constraints) plus check no new fetched URLs were added — MathML `xmlns="http://www.w3.org/1998/Math/MathML"` namespace attributes are identifiers, never fetched, and are excluded:
+  Run: `diff <(git show <task-base>:projects/stormi-web-application.html | grep -oE 'https?://[^"<> ]+' | grep -v 'w3.org' | sort -u) <(grep -oE 'https?://[^"<> ]+' projects/stormi-web-application.html | grep -v 'w3.org' | sort -u)`
+  Expected: empty diff (only pre-existing fonts/OG URLs).
 
 - [ ] **Step 5: Commit**
 
