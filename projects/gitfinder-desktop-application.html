@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitFinder - Desktop Application — Giovanni Bocchi</title>
+    <meta name="description" content="A native macOS file browser modelled on the Finder, with four view modes, tabs, tags, smart folders and a built-in Git branch switcher.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GitFinder - Desktop Application — Giovanni Bocchi">
+    <meta property="og:description" content="A native macOS file browser modelled on the Finder, with four view modes, tabs, tags, smart folders and a built-in Git branch switcher.">
+    <meta property="og:image" content="../static/GitFinder.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GitFinder - Desktop Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A native macOS file browser modelled on the Finder, with four view modes, tabs, tags, smart folders and a built-in Git branch switcher.">
+    <meta name="twitter:image" content="../static/GitFinder.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/GitFinder.png" alt="Immagine GitFinder - Desktop Application" class="project-hero-image">
+        <div>
+            <h1>GitFinder - Desktop Application</h1>
+            <p class="project-tagline">A native macOS file browser that looks and behaves like the Finder and adds a branch button: when the folder you are in lives inside a Git repository, you can see and switch its branch without leaving the window.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Swift</span>
+                <span class="tech-tag">SwiftUI</span>
+                <span class="tech-tag">AppKit</span>
+                <span class="tech-tag">Git</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>4 views</strong><span>icons, list, columns and gallery, remembered per folder</span></div>
+            <div class="project-stat"><strong>1 button</strong><span>shows the current branch and switches it</span></div>
+            <div class="project-stat"><strong>330+</strong><span>automated tests on the logic layer</span></div>
+            <div class="project-stat"><strong>100%</strong><span>native macOS, SwiftUI with AppKit</span></div>
+            <div class="project-stat"><strong>Zero loss</strong><span>nothing overwritten, nothing discarded silently</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">GitFinder is a file browser for macOS built around the Finder's own habits: the same four views, tabs, Quick Look, tags, smart folders and keyboard shortcuts, with one addition the Finder never had.</p>
+        <p>When the folder on screen belongs to a Git repository, a button in the toolbar names the checked-out branch. Its menu lists the local branches and the remote ones that have no local copy yet, and picking one switches the whole repository. For people who move between a project's files and its branches all day, the two things finally live in the same place.</p>
+        <div class="project-callout">
+            <h3>Design goal</h3>
+            <p>Behave like the Finder wherever it can, and treat the user's files with the same care: nothing is overwritten, and a branch switch that could lose work always asks first.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A branch switcher inside the browser</h2>
+        <div class="project-split">
+            <figure class="project-figure"><img src="../static/gallery/gitfinder-desktop-application/0.png" alt="GitFinder with the branch menu open, listing local branches with the current one checked"></figure>
+            <div>
+                <p>The button shows the current branch, or the short commit hash when the repository is on a detached commit. Choosing a remote branch creates a local one that tracks it. Outside a repository the button simply disappears, and changes made elsewhere, in a terminal or another window, show up as soon as the window becomes active again.</p>
+                <p>If uncommitted changes would be in the way, GitFinder stops and asks. They can be stashed and the switch completed, the switch can be cancelled, or, after a second confirmation, the changes can be discarded. Any other Git error is shown exactly as Git reported it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Four views, remembered per folder</h2>
+        <div class="project-split">
+            <div>
+                <p>Icons, list, columns and gallery are one shortcut apart, and each folder remembers the view it was last shown in, together with its sort order, grouping and display options. The column view adds a preview column with file details; the gallery view pairs a large preview with a thumbnail strip.</p>
+                <p>All four share a single selection, so what is selected stays selected when the view changes. Tabs, a path bar, back and forward history, Go to Folder with path completion and a Spotlight search scoped to the current folder complete the picture.</p>
+            </div>
+            <figure class="project-figure"><img src="../static/gallery/gitfinder-desktop-application/3.png" alt="GitFinder in column view with a preview column showing file details"></figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Git</h3>
+                <ul class="project-features">
+                    <li>Branch button in the toolbar for any folder inside a repository</li>
+                    <li>Local and remote branches, with tracking branches created on demand</li>
+                    <li>Stash and switch, cancel, or a double-confirmed forced switch</li>
+                    <li>Every window on the same repository reloads after a switch</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Browsing</h3>
+                <ul class="project-features">
+                    <li>Icons, list, columns and gallery views with View Options</li>
+                    <li>Tabs and windows, path bar, status bar and Quick Look</li>
+                    <li>Sidebar with Recents, favourites, iCloud Drive, volumes, Network and tags</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>File operations</h3>
+                <ul class="project-features">
+                    <li>Copy, paste, drag and drop, duplicate, alias, compress and Move to Trash</li>
+                    <li>Large transfers run in the background with progress and a Stop button</li>
+                    <li>Collisions get Finder-style &ldquo;copy&rdquo; names instead of overwriting</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Finder compatibility</h3>
+                <ul class="project-features">
+                    <li>Tags stored exactly where the Finder keeps them, so they are shared both ways</li>
+                    <li>Smart folders, built in the app and saved as standard files</li>
+                    <li>Share sheet, AirDrop, Services and Connect to Server</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The project is split in two. A UI-free core holds everything that can be tested without a window: directory loading, file operations and transfers, the Git service and branch-switch policy, tag storage, smart-folder parsing and per-folder settings. It is covered by more than 330 unit tests that use real temporary files and real Git repositories rather than mocks. A thin SwiftUI and AppKit layer sits on top, with one controller per window or tab, and uses AppKit where SwiftUI falls short: Quick Look, drag and drop, the column browser and keyboard handling.</p>
+        <p>Git is reached through the command-line tool, with hardened arguments and a clean environment, so that merely browsing an untrusted repository cannot run its configuration. Saved searches are read as data by a bounded parser, and slow work such as large copies stays off the main thread so the window never freezes.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Swift 6</h3>
+                <p>Language of the whole app, with a core package kept separate from the interface.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SwiftUI</h3>
+                <p>Sidebar, toolbar, list, icon and gallery views, sheets and menus.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>AppKit</h3>
+                <p>Column browser, Quick Look, drag and drop and keyboard handling.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Git CLI</h3>
+                <p>Branch listing and switching, run with hardened, read-only arguments for queries.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Swift Package Manager</h3>
+                <p>Builds the two targets and runs the test suite, with a script that packages the app.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="gitfinder-desktop-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/gitfinder-desktop-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>

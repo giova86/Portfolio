@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis — Giovanni Bocchi</title>
+    <meta name="description" content="A personal assistant in the style of J.A.R.V.I.S.: animated HUD, long-term memory, voice and hot-swappable inference engines.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jarvis — Giovanni Bocchi">
+    <meta property="og:description" content="A personal assistant in the style of J.A.R.V.I.S.: animated HUD, long-term memory, voice and hot-swappable inference engines.">
+    <meta property="og:image" content="../static/Jarvis.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jarvis — Giovanni Bocchi">
+    <meta name="twitter:description" content="A personal assistant in the style of J.A.R.V.I.S.: animated HUD, long-term memory, voice and hot-swappable inference engines.">
+    <meta name="twitter:image" content="../static/Jarvis.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/Jarvis.png" alt="HUD di Jarvis, assistente personale in stile J.A.R.V.I.S." class="project-hero-image">
+        <div>
+            <h1>Jarvis</h1>
+            <p class="project-tagline">A personal assistant in the style of J.A.R.V.I.S., with an animated HUD and a voice.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">FastAPI</span>
+                <span class="tech-tag">SSE</span>
+                <span class="tech-tag">Whisper</span>
+                <span class="tech-tag">Tailscale</span>
+                <span class="tech-tag">PWA</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>2</strong><span>Hot-swappable inference engines, with automatic fallback</span></div>
+            <div class="project-stat"><strong>0</strong><span>API keys required for web search</span></div>
+            <div class="project-stat"><strong>3</strong><span>Selectable HUD layouts</span></div>
+            <div class="project-stat"><strong>100%</strong><span>Local: server listens only on 127.0.0.1</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">A personal assistant that runs on its own Mac and is reachable from every device over Tailscale, with a web interface inspired by the J.A.R.V.I.S. HUD.</p>
+        <p>Jarvis replies in streaming from the browser or from the terminal, in a single continuous conversation, remembers durable facts by searching them semantically, reads the web without needing any API keys, and speaks with macOS's own voices. The inference engines — Groq, OpenAI, LM Studio or an agentic harness like Hermes Agent — are switched from the settings without any restart, with an automatic fallback to the local engine if the chosen one is unreachable.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A HUD, not a chat window</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/jarvis/0.png" alt="Jarvis HUD with a golden sphere, radar rings and the conversation panel">
+            </figure>
+            <div>
+                <p>A golden animated sphere sits at the center of the screen, acting as both compass and status indicator, flanked by a diagnostics panel (CPU, RAM, disk) and the ongoing conversation. Three layouts — full, sphere only, neural brain — are picked from the settings and stay saved on the device.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Conversation</h3>
+                <ul class="project-features">
+                    <li>Streaming chat from browser or terminal, in a single continuous conversation</li>
+                    <li>Voice dictation with Whisper on Groq, and replies read aloud with macOS's own voices</li>
+                    <li>Math formulas in LaTeX, rendered with KaTeX served locally</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Memory and tools</h3>
+                <ul class="project-features">
+                    <li>Long-term memory: durable facts are saved and retrieved by semantic similarity</li>
+                    <li>Web search (DuckDuckGo) and page reading, with no API keys needed</li>
+                    <li>Text coming from the web is treated as untrusted data, never as instructions</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Engines and security</h3>
+                <ul class="project-features">
+                    <li>Hot-swappable engines: Groq, OpenAI, LM Studio or any OpenAI-compatible endpoint</li>
+                    <li>Automatic fallback to LM Studio if the main engine is overloaded or unreachable</li>
+                    <li>Server listening only on 127.0.0.1, remote access over Tailscale HTTPS protected by a token</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A FastAPI server exposes the streaming API (SSE) and serves the static interface. With a plain LLM, Jarvis runs the model → tools loop itself, reading from and writing to a SQLite store (messages, memory facts, engine profiles). With a harness like Hermes Agent instead, Jarvis only sends the persona and the last message: tools, memory and history stay with the harness, and the HUD just shows its activity. <code>start.sh</code> orchestrates the whole startup — it exposes the server over HTTPS with Tailscale Serve, starts LM Studio if needed, and launches the interface.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>FastAPI</h3>
+                <p>Streaming API server (SSE) and static interface, listening only on 127.0.0.1.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SQLite</h3>
+                <p>History, memory facts and engine profiles, editable on the fly.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Groq / LM Studio</h3>
+                <p>Cloud and local inference engines, hot-swappable with automatic fallback.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Whisper</h3>
+                <p>Transcription of voice dictation on Groq.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tailscale</h3>
+                <p>Remote access over HTTPS from every device, without exposing the server publicly.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>PWA</h3>
+                <p>Installable on a phone, with a service worker that never caches <code>/api</code> calls.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="jarvis"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/jarvis/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
