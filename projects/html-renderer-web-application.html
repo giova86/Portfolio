@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Renderer - Web Application — Giovanni Bocchi</title>
+    <meta name="description" content="A live HTML, CSS and JavaScript playground: three syntax-highlighted editors and a sandboxed preview that updates as you type, also packaged as a native macOS app.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HTML Renderer - Web Application — Giovanni Bocchi">
+    <meta property="og:description" content="A live HTML, CSS and JavaScript playground: three syntax-highlighted editors and a sandboxed preview that updates as you type, also packaged as a native macOS app.">
+    <meta property="og:image" content="../static/HTMLRenderer.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HTML Renderer - Web Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A live HTML, CSS and JavaScript playground: three syntax-highlighted editors and a sandboxed preview that updates as you type, also packaged as a native macOS app.">
+    <meta name="twitter:image" content="../static/HTMLRenderer.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/HTMLRenderer.png" alt="Immagine HTML Renderer - Web Application"
+            class="project-hero-image">
+        <div>
+            <h1>HTML Renderer - Web Application</h1>
+            <p class="project-tagline">Write HTML, CSS and JS, see it rendered live.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Javascript</span>
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Vite</span>
+                <span class="tech-tag">CodeMirror</span>
+                <span class="tech-tag">Swift</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>3 editors</strong><span>HTML, CSS and JS</span></div>
+            <div class="project-stat"><strong>Live</strong><span>preview as you type</span></div>
+            <div class="project-stat"><strong>Sandboxed</strong><span>isolated preview</span></div>
+            <div class="project-stat"><strong>Dark + Light</strong><span>themes</span></div>
+            <div class="project-stat"><strong>.app + DMG</strong><span>native macOS build</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">HTML Renderer is a small playground for front-end snippets: write HTML, CSS and JavaScript in three separate, syntax-highlighted editors and see the result rendered next to them as you type.</p>
+        <p>It is meant to be a scratchpad you keep at hand to try a layout, test an idea or debug a snippet, with no project to set up and no server to run.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Type on the left, see it on the right</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/html-renderer-web-application/0.png" alt="HTML Renderer - Web Application — HTML, CSS and JS editors next to the rendered preview">
+            </figure>
+            <div>
+                <p>The preview refreshes a fraction of a second after you stop typing, or on demand with the Run button when live updates are switched off. Your code is saved in the browser, so the next session starts where you left off. Errors raised by your script are reported in a banner under the editors instead of failing silently.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Edit</h3>
+                <ul class="project-features">
+                    <li>Separate editors for HTML, CSS and JavaScript, each with its own clear button</li>
+                    <li>Syntax highlighting with colours that follow the active theme</li>
+                    <li>Line numbers, automatic closing brackets, Tab to indent and undo/redo</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Render</h3>
+                <ul class="project-features">
+                    <li>Live preview with a short delay, or manual run</li>
+                    <li>Scripts run in an isolated frame that cannot reach the app or its saved data</li>
+                    <li>Runtime errors surfaced in a banner</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Comfort</h3>
+                <ul class="project-features">
+                    <li>Dark and light themes, remembered between sessions</li>
+                    <li>Three width modes, from standard to full width</li>
+                    <li>Responsive layout that stacks on small screens</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Native macOS app</h3>
+                <ul class="project-features">
+                    <li>Packaged as a .app and a DMG, for Apple silicon and Intel</li>
+                    <li>Works offline, with nothing to install alongside it</li>
+                    <li>Drop an .html file on the icon to load it into the HTML editor</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>The interface is a React and Vite single-page app that runs entirely in the browser, with no back end. The three sections are combined into one HTML document and loaded into a sandboxed frame, and a small bridge script forwards the errors raised there to the banner. The macOS version wraps the same compiled front end in a thin Swift shell built on WKWebView, which serves the files from inside the app bundle and takes care of file opening, native dialogs and the menu bar.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>Javascript</h3>
+                <p>Language of the whole front end, and of the scripts you run in the preview.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>React</h3>
+                <p>Drives the editors, toolbar, preview and the theme and width toggles.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Vite</h3>
+                <p>Dev server and production build of the front end.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>CodeMirror</h3>
+                <p>The editor component behind syntax highlighting, line numbers, indentation and bracket handling.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Swift</h3>
+                <p>Native macOS shell around a WKWebView, packaged as a universal app and a DMG.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="html-renderer-web-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2026 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/html-renderer-web-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
