@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents Room - Web Application — Giovanni Bocchi</title>
+    <meta name="description" content="A live isometric pixel-art office that shows what your AI coding agents are doing: who is working, who is waiting and who is delegating to whom.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Agents Room - Web Application — Giovanni Bocchi">
+    <meta property="og:description" content="A live isometric pixel-art office that shows what your AI coding agents are doing: who is working, who is waiting and who is delegating to whom.">
+    <meta property="og:image" content="../static/AgentsRoom.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agents Room - Web Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A live isometric pixel-art office that shows what your AI coding agents are doing: who is working, who is waiting and who is delegating to whom.">
+    <meta name="twitter:image" content="../static/AgentsRoom.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/AgentsRoom.png" alt="Immagine Agents Room - Web Application" class="project-hero-image">
+        <div>
+            <h1>Agents Room - Web Application</h1>
+            <p class="project-tagline">A pixel-art isometric office that shows your AI agents at work, live.</p>
+            <div class="project-tech">
+                <span class="tech-tag">TypeScript</span>
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">Canvas</span>
+                <span class="tech-tag">SSE</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>Live</strong><span>real-time agent status</span></div>
+            <div class="project-stat"><strong>12</strong><span>desks for sub-agents</span></div>
+            <div class="project-stat"><strong>Read-only</strong><span>safe session viewer</span></div>
+            <div class="project-stat"><strong>100%</strong><span>drawn in code</span></div>
+            <div class="project-stat"><strong>Retina</strong><span>sharp at any zoom</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">Agents Room turns the invisible work of AI coding agents into a small isometric office you can simply watch: every running session sits at a desk, types, waits or hands work over to a colleague.</p>
+        <p>When an orchestrating agent delegates tasks to specialists such as reviewers, planners or build fixers, each delegated session walks in through the door, takes a free desk and gets to work, showing the tool it is currently using in a speech bubble. When it finishes, the desk is released and the office quietly dims when nobody is working.</p>
+        <div class="project-callout">
+            <h3>Design goal</h3>
+            <p>Make a flood of parallel agent activity understandable at a glance, with something that feels more like a living scene than a log.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>One desk per session</h2>
+        <div class="project-split">
+            <figure class="project-figure"><img src="../static/gallery/agents-room-web-application/0.png" alt="The isometric office with several agents working at their desks"></figure>
+            <div>
+                <p>The unit of the office is the session, not the agent type: two sub-agents of the same kind occupy two desks. A main desk hosts the root conversation, while twelve slots take the delegated sessions as they start.</p>
+                <p>Each person has a distinct look and a colour-coded desk carpet, a name tag, and a bubble with the last tool in use. Seated and typing means active; a sleeping "zzz" means waiting for input.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Click a desk, read the story</h2>
+        <div class="project-split">
+            <div>
+                <p>Selecting an occupied desk opens a side panel with the agent portrait, its role and description, who delegated the work and what it is delegating, plus a read-only view of that session chat.</p>
+                <p>Nothing can be sent or changed from the panel: it is a window onto the work, never a remote control.</p>
+            </div>
+            <figure class="project-figure"><img src="../static/gallery/agents-room-web-application/1.png" alt="Side panel with the agent portrait, description and read-only chat"></figure>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group"><h3>Live office</h3><ul class="project-features"><li>Sessions appear, work and leave in real time</li><li>Arrivals walk in from the door and find their own desk</li><li>Free desks have switched-off monitors and a neutral carpet</li><li>Rooms dim smoothly when nobody is working</li></ul></div>
+            <div class="project-feature-group"><h3>Agent details</h3><ul class="project-features"><li>Status badge: active or waiting</li><li>Role, description and delegation links</li><li>Read-only chat of the selected session</li><li>Portrait matching the character at the desk</li></ul></div>
+            <div class="project-feature-group"><h3>Navigation</h3><ul class="project-features"><li>Zoom in and out, or fit the office to the window</li><li>Sharp rendering at the real pixel density of the screen</li><li>Legend of who sits where, grouped by agent type</li><li>Top bar with connection state and desk usage</li></ul></div>
+            <div class="project-feature-group"><h3>Resilience</h3><ul class="project-features"><li>Works with any agent, including ones created on the fly</li><li>Extra sessions queue when all desks are taken</li><li>Reconnects automatically and resyncs after a drop</li><li>Demo mode with a simulated team, no server needed</li></ul></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Zoomed in</h2>
+        <div class="project-split">
+            <figure class="project-figure"><img src="../static/gallery/agents-room-web-application/2.png" alt="Close-up of a sleeping agent in the dimmed office"></figure>
+            <div>
+                <p>Zoomed in, the pixel art shows its detail: furniture, plants, shelves and a character resting at the keyboard with a sleeping bubble while it waits.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A lightweight backend discovers the local agent server, authenticates with it and turns its event stream into a compact state model of sessions and agents. Credentials stay on the server and never reach the browser. The state is pushed to the page over a single live stream, where a reducer keeps it up to date.</p>
+        <p>The front end draws the isometric office on a canvas entirely from code, with pathfinding for people walking in and out and a small choreographer that turns state changes into movement. The same pipeline can be fed by a simulated source, which makes the project easy to try without any agent running.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item"><h3>TypeScript</h3><p>Shared types end to end, from the server event model to the canvas renderer.</p></div><div class="project-stack-item"><h3>Node.js + Fastify</h3><p>A small backend that talks to the agent server, keeps the state and fans it out to the browser.</p></div><div class="project-stack-item"><h3>Server-Sent Events</h3><p>A single live stream pushes every change to the page, with automatic reconnection.</p></div><div class="project-stack-item"><h3>HTML Canvas</h3><p>The whole office is drawn in code at the real pixel density of the screen, with no image assets.</p></div><div class="project-stack-item"><h3>Vite</h3><p>Fast front-end tooling with instant reload while developing.</p></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="agents-room-web-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/agents-room-web-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
