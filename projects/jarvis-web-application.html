@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis - Web Application — Giovanni Bocchi</title>
+    <meta name="description" content="A personal assistant PWA with an animated HUD: long-term memory, web search, voice dictation, hot-swappable inference engines and full control of coding agents.">
+    <meta name="author" content="Giovanni Bocchi">
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jarvis - Web Application — Giovanni Bocchi">
+    <meta property="og:description" content="A personal assistant PWA with an animated HUD: long-term memory, web search, voice dictation, hot-swappable inference engines and full control of coding agents.">
+    <meta property="og:image" content="../static/Jarvis.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jarvis - Web Application — Giovanni Bocchi">
+    <meta name="twitter:description" content="A personal assistant PWA with an animated HUD: long-term memory, web search, voice dictation, hot-swappable inference engines and full control of coding agents.">
+    <meta name="twitter:image" content="../static/Jarvis.png">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0e16'/><text x='50' y='70' font-size='58' font-family='monospace' font-weight='700' text-anchor='middle' fill='%2338bdf8'>G</text></svg>">
+
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta name="theme-color" content="#0a0e16">
+    <link rel="apple-touch-icon" href="../static/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="G. Bocchi">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared site styles (variables, nav, buttons, footer, animations) -->
+    <link rel="stylesheet" href="../static/css/shared.css">
+    <!-- Styles specific to project detail pages -->
+    <link rel="stylesheet" href="../static/css/project-detail.css">
+</head>
+
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">Giovanni Bocchi</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#about">About me</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experiences</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#hobbies">Miscellanea</a></li>
+                <li><a href="../index.html#contact">Contacts</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <a href="../index.html#projects" class="project-detail-back fade-in">← Back to projects</a>
+
+    <section class="project-hero fade-in">
+        <img src="../static/Jarvis.png" alt="Illustration of Jarvis, a personal assistant PWA with an animated HUD driving AI engines and coding agents" class="project-hero-image">
+        <div>
+            <h1>Jarvis - Web Application</h1>
+            <p class="project-tagline">A personal assistant in the style of J.A.R.V.I.S.: one cockpit for every model, and for coding agents that ask before touching anything.</p>
+            <div class="project-tech">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">FastAPI</span>
+                <span class="tech-tag">SSE</span>
+                <span class="tech-tag">OpenCode</span>
+                <span class="tech-tag">Whisper</span>
+                <span class="tech-tag">Tailscale</span>
+                <span class="tech-tag">PWA</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <div class="project-stats">
+            <div class="project-stat"><strong>8</strong><span>Engine kinds, switched without restarts</span></div>
+            <div class="project-stat"><strong>3</strong><span>Selectable HUD layouts</span></div>
+            <div class="project-stat"><strong>0</strong><span>API keys needed for web search</span></div>
+            <div class="project-stat"><strong>Always asks</strong><span>Before file edits and commands</span></div>
+            <div class="project-stat"><strong>Local-first</strong><span>The server binds to 127.0.0.1 only</span></div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Overview</h2>
+        <p class="project-lead">Jarvis is a personal assistant that runs on its own Mac and is reached from every personal device over a private network: a web app — installable on the phone as a PWA — whose face is an animated HUD rather than a chat window, replying in formal Italian with streamed answers.</p>
+        <p>Under the hood it is a cockpit for AI engines. Plain language models (Groq, OpenAI, LM Studio, Ollama, Unsloth, any OpenAI-compatible endpoint) and full agentic harnesses (Hermes Agent and OpenCode) are added, tested and made default from the settings, at any time and without restarting anything; if the main engine is saturated or unreachable, answers fall back to the local one. Long-term memory keeps durable facts and retrieves them by semantic similarity with local embeddings, web search works without any API key, dictation is transcribed by Whisper and math renders as LaTeX — even offline.</p>
+        <div class="project-callout">
+            <h3>Design goal</h3>
+            <p>Commanding both a plain model and a coding agent from the same console: the harness keeps its own tools and history, Jarvis keeps the visibility — live activity, per-action permissions, sub-agents — and the human keeps the last word on every file edit and command.</p>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>The agent asks, you decide</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/jarvis-web-application/1.png" alt="A permission card asking to run a command, with the once, always and refuse buttons, while the HUD turns red waiting for the answer">
+            </figure>
+            <div>
+                <p>Every chat of the OpenCode engine lives in one project folder, chosen with a folder picker and fixed for the chat's whole life. The left column groups all the chats into a project tree, so several projects and conversations can work at the same time, each with its own streaming turn in the background.</p>
+                <p>Nothing destructive happens silently: file edits, shell commands and access to folders outside the project each raise a permission card in the conversation — allow once, always, or refuse — and the HUD glows red while the assistant waits for you. Tool calls appear as live activity lines, sub-agents show up as animated cards, and a stop button interrupts the agent at any moment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>A HUD, not a chat window</h2>
+        <div class="project-split">
+            <figure class="project-figure">
+                <img src="../static/gallery/jarvis-web-application/0.png" alt="The full HUD with the golden sphere, the diagnostics panel with CPU and RAM bars and the conversation with a formatted table">
+            </figure>
+            <div>
+                <p>A golden sphere sits at the centre of the screen as compass and status light: calm when idle, spinning while it thinks, red when it is waiting for a permission. Three layouts — full, sphere only, neural brain — are picked in the settings and remembered on each device.</p>
+                <p>Around it, a real cockpit: a diagnostics panel with live CPU, RAM, disk and network trends, a quick-action bar, the engine chip showing who is answering, and a conversation panel that renders streamed answers with tables, code and formulas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>What it does</h2>
+        <div class="project-feature-groups">
+            <div class="project-feature-group">
+                <h3>Conversation</h3>
+                <ul class="project-features">
+                    <li>Streaming chat from browser or terminal, with attachments, rename, delete and resend of your last message</li>
+                    <li>Voice dictation transcribed by Whisper, and LaTeX formulas rendered with KaTeX served locally</li>
+                    <li>Slash commands and skill mentions when the chat is driven by a coding agent</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Memory and web</h3>
+                <ul class="project-features">
+                    <li>Long-term memory: durable facts are stored and recalled by semantic similarity, with local embeddings</li>
+                    <li>Web search and page reading without API keys, with search results shown as cards</li>
+                    <li>Text coming from the web is treated as untrusted data, never as instructions</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Engines</h3>
+                <ul class="project-features">
+                    <li>Hot-swappable engine profiles with a connection test that lists the real available models</li>
+                    <li>Automatic fallback to the local engine when the main one is saturated or unreachable</li>
+                    <li>API keys never leave the server: the interface only knows whether one exists</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Coding agents</h3>
+                <ul class="project-features">
+                    <li>One project per folder, chats grouped in a project tree, activity and permissions shown live</li>
+                    <li>Session rules that force a request for confirmation on edits, commands and external folders, without overriding your own configuration</li>
+                    <li>Sub-agents as animated cards, an inspector for file changes and stop at any point</li>
+                </ul>
+            </div>
+            <div class="project-feature-group">
+                <h3>Access and deployment</h3>
+                <ul class="project-features">
+                    <li>Installable PWA whose service worker never caches API calls</li>
+                    <li>Remote access over a private HTTPS network, protected by a token compared in constant time</li>
+                    <li>A Docker Compose setup runs the assistant together with both agentic harnesses</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>How it is built</h2>
+        <p>A single server exposes a streaming API over server-sent events and serves the interface; each chat has its own history, token counter, cancellation flag and turn lock, so several conversations — including agent turns — can run in background at the same time. History, memory facts and engine profiles live in one SQLite file, while embeddings are computed locally.</p>
+        <p>With a plain model the assistant runs the model-and-tools loop itself. With a harness it plays a different role: only your persona and the last message are forwarded, the harness keeps its own tools and history, and the server watches its event stream to repaint activity, permissions and sub-agents in real time. The frontend is a dependency-free vanilla-JS PWA — canvas HUD, local fonts, local math rendering — so the whole thing works even with the network cut, apart from the model itself.</p>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Tech stack</h2>
+        <div class="project-stack-grid">
+            <div class="project-stack-item">
+                <h3>FastAPI</h3>
+                <p>Streaming API server and static interface, listening only on the local loopback.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>SQLite</h3>
+                <p>Chats, memory facts and engine profiles, editable on the fly from the settings.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>OpenCode &amp; Hermes Agent</h3>
+                <p>Agentic harnesses driven as engines, with their tools, sessions and permission flow.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Whisper</h3>
+                <p>Transcription of voice dictation, so you can speak to the assistant.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>Tailscale</h3>
+                <p>Private HTTPS access from every device without exposing the server publicly.</p>
+            </div>
+            <div class="project-stack-item">
+                <h3>PWA &amp; KaTeX</h3>
+                <p>Installable on the phone, with math formulas rendered locally from bundled assets.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section fade-in">
+        <h2>Gallery</h2>
+        <div class="project-gallery" data-gallery="jarvis-web-application"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Giovanni Bocchi, PhD Portfolio.</p>
+    </footer>
+
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/gallery/jarvis-web-application/images.js"></script>
+    <script src="../static/js/project-gallery.js"></script>
+</body>
+
+</html>
